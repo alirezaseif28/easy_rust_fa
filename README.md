@@ -343,10 +343,10 @@ fn main() {
     let cat_face = '😺'; // Emojis are chars too
 }
 ```
+کاراکتر های مرسوم شماره هایی کمتر از `256` دارند، و به همین دلیل میتوانند در نوع `u8` ذخیره شوند. اگر یادتون باشه `u8` بازه‌ای از `0` تا `256` رو پوشش میداد. پس `Rust` میتونه به راحتی یک `u8` رو به یک `char` تبدیل کنه.
 
-The characters that are used most have numbers less than 256, and they can fit into a `u8`. Remember, a `u8` is 0 plus all the numbers up to 255, for 256 in total. This means that Rust can safely **cast** a `u8` into a `char`, using `as`. ("Cast `u8` as `char`" means "pretend `u8` is a `char`")
-
-Casting with `as` is useful because Rust is very strict. It always needs to know the type, and won't let you use two different types together even if they are both integers. For example, this will not work:
+با استفاده از کلمه‌کلیدی `as` میتونیم یک نوع رو به یک نوع دیگه تبدیل کنیم،‌ البته اگه امکانش وجود داشته باشه. تبدیل با استفاده از `as` کاربردی هست به این دلیل که راست خیلی سخت‌گیر است و به همین دلیل میتونه ایمنی رو رعایت کنه.
+همچنین `Rust` برای تبدیل با استفاده از `as` همیشه باید نوع متغییر هارو به درستی بدونه. به همین دلیل کد زیر کامپایل نمیشه:
 
 ```rust
 fn main() { // main() is where Rust programs start to run. Code goes inside {} (curly brackets)
@@ -360,8 +360,7 @@ fn main() { // main() is where Rust programs start to run. Code goes inside {} (
 }
 ```
 
-Here is the reason:
-
+دلیلش رو میتونید در پیغام خطایی که کامپایلر داده ببینید:
 ```text
 error[E0604]: only `u8` can be cast as `char`, not `i32`
  --> src\main.rs:3:20
@@ -369,8 +368,10 @@ error[E0604]: only `u8` can be cast as `char`, not `i32`
 3 |     println!("{}", my_number as char);
   |                    ^^^^^^^^^^^^^^^^^
 ```
+همونطور که میبینید کامپایلر میگه که نمیتونم یک `i32` رو به `char` تبدیل کنم و فقط میتونم `u8` رو به `char` تبدیل کنم. دلیلش این هست که امکان این وجود داره که مقداری که درون `i32 ` ذخیره شده برابر یک کاراکتری نباشه.
+برای مثال ما میتونیم مقدار `666-` رو در یک `i32` ذخیره کنیم اما هیچ کاراکتری با این مقدار وجود نداره، پس کامپایلر نمیتونه اون مقدار رو به کاراکتر تبدیل کنه.
 
-Fortunately we can easily fix this with `as`. We can't cast `i32` as a `char`, but we can cast an `i32` as a `u8`. And then we can do the same from `u8` to `char`. So in one line we use `as` to make my_number a `u8`, and again to make it a `char`. Now it will compile:
+اما خوشبختانه ما میتونیم این مشکل رو جل کنیم، به این صورت که اول `i32` رو به `u8` تبدیل میکنیم و بعد، `u8` رو به `char` تبدیل میکنیم.
 
 ```rust
 fn main() {
@@ -379,9 +380,9 @@ fn main() {
 }
 ```
 
-It prints `d` because that is the `char` in place 100.
+الان کاراکتر `d` رو چاپ میکنه به این دلیل که کاراکتر `d` برابر عدد `100` هست.
 
-The easier way, however, is just to tell Rust that `my_number` is a `u8`. Here's how you do it:
+البته روش اسون ترش این هست که در هنگام تعریف متغییر به کامپایلر بگیم این متغییر نوعش `u8` هست.(در غیر این صورت همانطور که دیدیم، کامپایلر به طور پیشفرض مقدار هر عدد صحیحی که نوعش مشخص نباشه رو `i32` در نظر میگیره)
 
 ```rust
 fn main() {
@@ -389,26 +390,34 @@ fn main() {
     println!("{}", my_number as char);
 }
 ```
+<div dir="rtl">
 
-So those are two reasons for all the different number types in Rust. Here is another reason: `usize` is the size that Rust uses for *indexing*. (Indexing means "which item is first", "which item is second", etc.) `usize` is the best size for indexing because:
 
-- An index can't be negative, so it needs to be a number with a u
-- It should be big, because sometimes you need to index many things, but
-- It can't be a u64 because 32-bit computers can't use u64.
+زبان `Rust` نوع `usize` رو برای *`indexing`* استفاده میکنه.(`indexing` یعنی کدوم ایتم اول هست، کدوم دوم و ...)
 
-So Rust uses `usize` so that your computer can get the biggest number for indexing that it can read.
+به دلایل زیر، برای اینکار نوع `usize` بهترین انتخاب هست: 
 
-Let's learn some more about `char`. You saw that a `char` is always one character, and uses `''` instead of `""`.
+- یک `index` نمیتونه مقدار منفی داشته باشه، پس باید `Unsigned` باشه.
+- باید بتونه مقدار های بزرگ رو در خودش نگه داره، چون امکان داره چیز های زیادی رو `index` کنیم. **اما**
+- نوعش نمیتونه `u64` باشه، به این دلیل که سیستم های x32 نمیتونند از `u64` استفاده کنند
 
-All `chars` use 4 bytes of memory, since 4 bytes are enough to hold any kind of character:
+پس `Rust` از `usize` استفاده میکنه که سیستم بتونه بزرگ ترین عددی که میتونه استفاده کنه رو برای `indexing` استفاده کنه.
 
-- Basic letters and symbols usually need 1 out of 4 bytes: `a b 1 2 + - = $ @`
-- Other letters like German Umlauts or accents need 2 out of 4 bytes: `ä ö ü ß è é à ñ`
-- Korean, Japanese or Chinese characters need 3 or 4 bytes: `国 안 녕`
+### بیاید کمی بیشتر در مورد `char` یاد بگیریم.
+دیدید که `char` همیشه یک کاراکتر هست ، هنگام تعریف به جای `""` از `''` استفاده میکنیم.
 
-When using characters as part of a string, the string is encoded to use the least amount of memory needed for each character.
 
-We can use `.len()` to see this for ourselves:
+نوع `char` همیشه `4` بایت هست (`32bit`)، به این دلیل که `4` بایت برای ذخیره‌ی هر نوع کاراکتری کافی هست.
+
+- حروف پایه‌ای و سمبول‌ ها معمولا به `1` تا `4` بایت نیاز دارند: `a b 12 + - = $ @`
+- باقی حروف مثل حروف خاص المانی به `2` تا `4` بایت نیاز دارند: `ä ö ü ß è é à ñ`
+- حروف کره‌ای، ژاپنی یا چینی به `3` تا `4` بایت نیاز دارند: `国 안 녕`
+
+
+هنگام استفاده از کاراکترها به عنوان بخشی از یک رشته(`String`)، رشته به گونه ای کدگذاری می شود که کمترین مقدار حافظه مورد نیاز برای هر کاراکتر را استفاده کنند.
+
+با استفاده از `.len()` میتونیم سایز یک `String` رو بگیریم.
+</div>
 
 ```rust
 fn main() {
@@ -420,7 +429,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Size of a char: 4
@@ -430,7 +439,7 @@ Size of string containing '国': 3
 Size of string containing '𓅱': 4
 ```
 
-You can see that `a` is one byte, the German `ß` is two, the Japanese `国` is three, and the ancient Egyptian `𓅱` is 4 bytes.
+میتونید ببینید که `a` یک بایت هست، `ß` دو بایت هست، `国` سه بایت هست، و `𓅱` چهار بایت هست.
 
 ```rust
 fn main() {
@@ -441,16 +450,17 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Slice is 6 bytes.
 Slice2 is 7 bytes.
 ```
+متغییر `slice` شش کاراکتر هست و سایزش `6` بایت هست، **اما** ``slice2`` سه کاراکتر هست و سایزش `7` بایت هست.
 
-`slice` is 6 characters in length and 6 bytes, but `slice2` is 3 characters in length and 7 bytes.
+خب اگه `.len()` سایز یک `String` رو به بایت میده، چطوری میتونیم بفهمیم یک سایز(طول کاراکترهاش چقدر هست ؟)
 
-If `.len()` gives the size in bytes, what about the size in characters? We will learn about these methods later, but you can just remember that `.chars().count()` will do it. `.chars().count()` turns what you wrote into characters and then counts how many there are.
+بعدا مفصل در مورد اینها صحبت میکنیم اما چون پرسیدی میگم. با استفاده از `.chars().count()` میتونیم طول تعدار کاراکتر های یک `String` رو بدست بیاریم.
 
 ```rust
 fn main() {
@@ -461,7 +471,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Slice is 6 bytes and also 6 characters.
