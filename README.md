@@ -1,19 +1,13 @@
-## Introduction
+## مقدمه
+"راست" (Rust) یک زبان جدید هست که کتاب های اموزشی خوبی هم داره، اما گاهی اوقات خوندن اونها سخت هست، بدلیل اینکه اکثرا برای کسانی که انگلیسی زیان اولشون هست نوشته شده‌اند.
 
-Rust is a new language that already has good textbooks. But sometimes its textbooks are difficult because they are for native English speakers. Many companies and people now learn Rust, and they could learn faster with a book that has easy English. This textbook is for these companies and people to learn Rust with simple English.
+این کتاب سعی میکنه زبان Rust رو به شیوا ترین شکل ممکن اموزش بده.
 
-Rust is a language that is quite new, but already very popular. It's popular because it gives you the speed and control of C or C++ but also the memory safety of other newer languages like Python. It does this with some new ideas that are sometimes different from other languages. That means that there are some new things to learn, and you can't just "figure it out as you go along". Rust is a language that you have to think about for a while to understand. But it still looks pretty familiar if you know another language and it is made to help you write good code.
+"راست" زیانی کاملا جدید است‌‌،اما در حال حاضر خیلی محبوب شده، دلیلش این هست که سرعت و کنترلی مثل زبان های C/C++ رو میده و همچنین امنیت حافظه‌(Memory Safety) زبان های سطح بالا داره. "راست" این کار های را با چند ایده‌ی جدید انجام میده که گاهی با روش های زبان های دیگه متفاوت هست، این یعنی چیز های جدیدی برای یادگیری وجود داره.
+"راست" زیانی هست که برای درک مفاهیم آن باید کمی در مورد انها فکر کنید.
+اما اگر قبلا تجربه کار با زیانی که برای کد خوب نوشتن ساخته شده دارید، احتمالا مشکلی نخواهید داشت.
 
-## Who am I?
-
-I am a Canadian who lives in Korea, and I wrote Easy Rust while thinking of how to make it easy for companies here to start using it. I hope that other countries that don't use English as a first language can use it too.
-
-## Writing Rust in Easy English
-
-*Rust in Easy English* was written from July to August 2020, and is over 400 pages long. You can contact me here or [on LinkedIn](https://www.linkedin.com/in/davemacleod) or [on Twitter](https://twitter.com/mithridates) if you have any questions. If you see anything wrong or have a pull request to make, go ahead. Over 20 people have already helped out by fixing typos and problems in the code, so you can too. I'm not the world's best Rust expert so I always like to hear new ideas or see where I can make the book better.
-
-
-
+## فهرست
 - [Part 1 - Rust in your browser](#part-1---rust-in-your-browser)
   - [Rust Playground](#rust-playground)
   - [🚧 and ⚠️](#-and-️)
