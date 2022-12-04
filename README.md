@@ -17,7 +17,7 @@
   - [زمین‌بازی راست | Rust Playground](#زمین‌بازی-راست)
   - [🚧 و ⚠️](#🚧-و-⚠️)
   - [نظرات | Comments](#comments)
-  - [Types](#types)
+  - [نوع ها | Types](#types)
     - [Primitive types](#primitive-types)
   - [Type inference](#type-inference)
     - [Floats](#floats)
@@ -172,7 +172,13 @@
 
 ## 🚧 و ⚠️
 
-Sometimes the code examples in the book don't work. If an example doesn't work, it will have a 🚧 or a ⚠️ in it. 🚧 is like "under construction": it means that the code is not complete. Rust needs a `fn main()` (a main function) to run, but sometimes we just want to look at small pieces of code so it won't have a `fn main()`. Those examples are correct, but need a `fn main()` for you to run them. And some code examples show you a problem that we will fix. Those ones might have a `fn main()` but generate an error, and so they will have a ⚠️.
+در این کتاب در بعضی مواقع با کد هایی روبرو میشیم که کار نمیکنند، یعنی کامپایل نمیشند. اون کد ها همیشه علامت 🚧 یا ⚠️ رو دارند.
+
+علامت 🚧 به معنای این هست که کد کامل نیست.
+
+علامت ⚠️ به معنای این هست که کد و کامپایل نمیشود.
+
+زبان `Rust` برای اجرای کد ها نیاز به `fn main()` (تابع اصلی) دارد، گاهی در این کتاب فقط تکه کد هایی را میبینیم که درون `fn main()` نیستند. ان کد ها مشکلی ندارند و کار میکنند، فقط نیاز دارند درون `fn main()` باشند.
 
 ## نظرات
 **[See this chapter on YouTube](https://youtu.be/fJ7jBZG_Rpo)**
