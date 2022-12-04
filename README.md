@@ -1,6 +1,7 @@
 <div dir="rtl">
 
 ## مقدمه
+
 `"راست"` (`Rust`) یک زبان جدید هست که کتاب های اموزشی خوبی هم داره، اما گاهی اوقات خوندن اونها سخت هست، بدلیل اینکه اکثرا برای کسانی که انگلیسی زیان اولشون هست نوشته شده‌اند.
 
 این کتاب سعی میکنه زبان `Rust` رو به شیوا ترین شکل ممکن اموزش بده.
@@ -9,43 +10,41 @@
 `Rust` زیانی هست که برای درک مفاهیم آن باید کمی در مورد انها فکر کنید.
 اما اگر قبلا تجربه کار با زیانی که برای کد خوب نوشتن ساخته شده دارید، احتمالا مشکلی نخواهید داشت.
 
-
-
 ## فهرست
 
 - [بخش ۱ - راست در مرورگر](#بخش-۱---راست-در-مرورگر)
   - [زمین‌بازی راست | Rust Playground](#زمین‌بازی-راست)
   - [🚧 و ⚠️](#🚧-و-⚠️)
-  - [نظرات | Comments](#comments)
+  - [نظرات | Comments](#نظرات-|-Comments)
   - [نوع ها | Types](#types)
-    - [Primitive types](#primitive-types)
-  - [Type inference](#type-inference)
-    - [Floats](#floats)
-  - [Printing 'hello, world!'](#printing-hello-world)
-    - [Declaring variables and code blocks](#declaring-variables-and-code-blocks)
-  - [Display and debug](#display-and-debug)
-    - [Smallest and largest numbers](#smallest-and-largest-numbers)
-  - [Mutability (changing)](#mutability-changing)
-    - [Shadowing](#shadowing)
-  - [The stack, the heap, and pointers](#the-stack-the-heap-and-pointers)
-  - [More about printing](#more-about-printing)
-  - [Strings](#strings)
-  - [const and static](#const-and-static)
-  - [More on references](#more-on-references)
-  - [Mutable references](#mutable-references)
-    - [Shadowing again](#shadowing-again)
-  - [Giving references to functions](#giving-references-to-functions)
-  - [Copy types](#copy-types)
-    - [Variables without values](#variables-without-values)
-  - [Collection types](#collection-types)
-    - [Arrays](#arrays)
-  - [Vectors](#vectors)
-  - [Tuples](#tuples)
-  - [Control flow](#control-flow)
-  - [Structs](#structs)
-  - [Enums](#enums)
-    - [Enums to use multiple types](#enums-to-use-multiple-types)
-  - [Loops](#loops)
+    - [نوع های ابتدایی | Primitive types](#primitive-types)
+  - [استنتاج نوع | Type inference](#type-inference)
+    - [اعداد اعشاری | Floats](#floats)
+  - [چاپ کردن 'سلام، دنیا' | Printing 'hello, world!'](#printing-hello-world)
+    - [تعریف متغییر و بلوک کد | Declaring variables and code blocks](#declaring-variables-and-code-blocks)
+  - [نمایش و رفع‌اشکال | Display and debug](#display-and-debug)
+    - [کوچیک‌ترین و بزرگ‌ترین اعداد | Smallest and largest numbers](#smallest-and-largest-numbers)
+  - [تغییر‌پذیری | Mutability (changing)](#mutability-changing)
+    - [سایه زدن | Shadowing](#shadowing)
+  - [استک، هیپ و اشاره‌گر | The stack, the heap, and pointers](#the-stack-the-heap-and-pointers)
+  - [باز هم چاپ کردن | More about printing](#more-about-printing)
+  - [استرینگ ها | Strings](#strings)
+  - [ثابت و ایستا | const and static](#const-and-static)
+  - [در مورد رفرنس ها | More on references](#more-on-references)
+  - [رفرنس های تغییر‌پذیر | Mutable references](#mutable-references)
+    - [باز هم سایه زدن | Shadowing again](#shadowing-again)
+  - [دادن رفرنس ها به فانکشن ها | Giving references to functions](#giving-references-to-functions)
+  - [کپی کردن نوع ها | Copy types](#copy-types)
+    - [متغییر هایی بدون مقدار | Variables without values](#variables-without-values)
+  - [نوع های مجموعه‌ای | Collection types](#collection-types)
+    - [ارایه‌ها | Arrays](#arrays)
+  - [وکتورها | Vectors](#vectors)
+  - [تاپل‌ها | Tuples](#tuples)
+  - [کنترل جریان | Control flow](#control-flow)
+  - [استراکت‌ها | Structs](#structs)
+  - [اینام‌ها | Enums](#enums)
+    - [اینام‌ها برای استفاده از چندین مقدار | Enums to use multiple types](#enums-to-use-multiple-types)
+  - [حلقه‌ها | Loops](#loops)
   - [Implementing structs and enums](#implementing-structs-and-enums)
   - [Destructuring](#destructuring)
   - [References and the dot operator](#references-and-the-dot-operator)
@@ -154,9 +153,7 @@
 
 &emsp;-> در حالت `Release،` کد کند کامپایل میشه اما سریع اجرا میشه. (در مقایسه با حالت `Debug`)
 
-
 \- با کلیک بر روی `Share`  میتونید `URL` کدی که نوشتید را دریافت کنید و اون رو با دیگران به اشتراک بزارید.
-
 
 \- ابزار ها:
 
@@ -164,11 +161,9 @@
 
 &emsp;-> ابزار، `Clippy` اطلاعات و جزئیاتی در مورد کد میده.
 
-
 \- گزینه‌ی `Config` هم برای تنظیم کردن محیط به کار میره.
 
-
-### اگر میخواهید `Rust` رو نصب کنید، این لینک ([https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)) رو دنبال کنید. به طور معمول باید از `rustup` برای نصب `Rust` استفاده کنید.
+### اگر میخواهید `Rust` رو نصب کنید، این لینک ([https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)) رو دنبال کنید. به طور معمول باید از `rustup` برای نصب `Rust` استفاده کنید
 
 ## 🚧 و ⚠️
 
@@ -180,10 +175,12 @@
 
 زبان `Rust` برای اجرای کد ها نیاز به `fn main()` (تابع اصلی) دارد، گاهی در این کتاب فقط تکه کد هایی را میبینیم که درون `fn main()` نیستند. ان کد ها مشکلی ندارند و کار میکنند، فقط نیاز دارند درون `fn main()` باشند.
 
-## نظرات
-**[See this chapter on YouTube](https://youtu.be/fJ7jBZG_Rpo)**
+## نظرات | Comments
 
-Comments are made for programmers to read, not the computer. It's good to write comments to help other people understand your code.  It's also good to help you understand your code later.  (Many people write good code but then forget why they wrote it.) To write comments in Rust you usually use `//`:
+کامنت ها متن هایی هستند که به برنامه‌نویس‌ها کمک میکنند کد را بهتر و سریعتر درک کنند.
+همچنین کمک میکنند در اینده کدتون رو بهتر بفهمید. (خیلی‌ها کد خوبی مینویسند اما بعد فراموش میکنند که اصلا چی نوشتند !)
+
+برای کامنت نوشتن در `Rust` معمولا از `//` استفاده میکنیم.
 
 ```rust
 fn main() {
@@ -193,9 +190,9 @@ fn main() {
 }
 ```
 
-When you do this, the compiler won't look at anything to the right of the `//`.
+کامپایلر با دیدن `//` میفهمه که قراره یک خط کامنت نوشته بشه، و به طور کلی خط رو نادیده میگیره چون کامنت ها به برنامه‌نویس ها کمک میکنند و کامپیوتر نیازی به اونها نداره.
 
-There is another kind of comment that you write with `/*` to start and `*/` to end. This one is useful to write in the middle of your code.
+یک نوع دیگه کامنت هم هست که با `/*` شروع میشه و با `*/` تموم میشه، این نوع کامنت ها برای نوشتن بین کد ها کاربرد دارند.
 
 ```rust
 fn main() {
@@ -203,9 +200,12 @@ fn main() {
 }
 ```
 
-To the compiler, `let some_number/*: i16*/ = 100;` looks like `let some_number = 100;`.
+برای کامپایلر, `;let some_number/*: i16*/ = 100` میشه `;let some_number = 100`.
 
-The `/* */` form is also useful for very long comments over more than one line. In this example you can see that you need to write `//` for every line. But if you type `/*`, it won't stop until you finish it with `*/`.
+همچنین این روش کامنت گذاری برای زمان هایی که نیاز به نوشتن کامنت هایی چند خطی  هست، کاربردی هست.
+در مثال زیر ما میتونستیم برای هم خط از `//`  استفاده کنیم, اما اینطوری بهتره :)
+
+کامپایلر زمانی که `/*` رو میبینه هرچیزی که بعدش باشه رو نادیده میگیره تا زمانی که به `*/` برسه، اونوقت میفهمه که کامنت تموم شده.
 
 ```rust
 fn main() {
@@ -221,30 +221,119 @@ fn main() {
 }
 ```
 
-## Types
+## نوع ها | Types
 
-Rust has many types that let you work with numbers, characters, and so on. Some are simple, others are more complicated, and you can even create your own.
+زبان `Rust` نوع های زیادی داده که با اون ها میتونیم با اعداد، کاراکترها، و... کار کنیم. بعضی ها ساده هستند و بعضی ها پیچیده، شما حتی میتونید نوع خودتونم بسازید. (اره شما هم که اصلا نمیدونستید struct چیه !)
 
-### Primitive types
-**[See this chapter on YouTube](https://youtu.be/OxTPU5UGMhs)**
+### نوع های اولیه | Primitive types
 
-Rust has simple types that are called **primitive types** (primitive = very basic). We will start with integers and `char` (characters). Integers are whole numbers with no decimal point. There are two types of integers:
+زبان `Rust` نوع های ساده‌ای داره که بهشون میگیم **`primitive types` (نوع های اولیه)**.
 
-- Signed integers,
-- Unsigned integers.
+با نوع `integer` (عدد صحیح) و `char` (کاراکتر) شروع میکنیم.
 
-Signed means `+` (plus sign) and `-` (minus sign), so signed integers can be positive or negative (e.g. +8, -8). But unsigned integers can only be positive, because they do not have a sign.
+دو نوع کلی `integer` وجود داره :
 
-The signed integers are: `i8`, `i16`, `i32`, `i64`, `i128`, and `isize`.
-The unsigned integers are: `u8`, `u16`, `u32`, `u64`, `u128`, and `usize`.
+\* اول از همه بزارید بفهمیم علامت چی هست ! ما به طور کلی دو علامت برای اعداد داریم، `+` و `-` که منفی یا مثبت بودن یک عدد رو نشون میدن.
 
-The number after the i or the u means the number of bits for the number, so numbers with more bits can be larger. 8 bits = one byte, so `i8` is one byte, `i64` is 8 bytes, and so on. Number types with larger sizes can hold larger numbers. For example, a `u8` can hold up to 255, but a `u16` can hold up to 65535. And a `u128` can hold up to 340282366920938463463374607431768211455.
+- Unsigned (بدون علامت)
 
-So what is `isize` and `usize`? This means the number of bits on your type of computer. (The number of bits on your computer is called the **architecture** of your computer.) So `isize` and `usize` on a 32-bit computer is like `i32` and `u32`, and `isize` and `usize` on a 64-bit computer is like `i64` and `u64`.
+مقداری که میخواد رد این نوع ذخیره بشه **نباید** علامت داشته باشه، **یعنی فقط اعداد مثبت درون این نوع ذخیره میشند**.
+- Signed (علامت دار)
 
-There are many reasons for the different types of integers. One reason is computer performance: a smaller number of bytes is faster to process. For example, the number -10 as an `i8` is `11110110`, but as an `i128` it is `11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110110`. But here are some other uses:
+مقداری که میخواد در این نوع ذخیره بشه میتونه علامت داشته، **یعنی میتونه مثبت یا منفی باشه**.
 
-Characters in Rust are called `char`. Every `char` has a number: the letter `A` is number 65, while the character `友` ("friend" in Chinese) is number 21451. The list of numbers is called "Unicode". Unicode uses smaller numbers for characters that are used more, like A through Z, or digits 0 through 9, or space.
+
+نوع های `Signed integer` اینها هستند: `i8`, `i16`, `i32`, `i64`, `i128`, and `isize`.
+
+نوع های `Unsigned integer` اینها هستند: `u8`, `u16`, `u32`, `u64`, `u128`, and `usize`.
+
+عدد بعد از حرف `i` یا `u` میزان فضایی که اون نوع اشغال میکنه رو بر حسب بیت(`bit`) نشون میده.
+
+هرچه میزان فضای اشغال شده بیشتر باشد، ان متغییر میتواند عدد بزرگ‌تری را در حافظه نگهداری کند.
+
+برای مثال :
+
+نوع `u8` میتواند اعداد بین بازه‌ی `0` تا `255` را نگهداری کند.
+
+نوع `u16` میتواند اعداد بین بازه‌ی `0` تا `65535` را نگهداری کند.
+
+نوع `u128` میتواند اعداد بین بازه‌ی `0` تا `340282366920938463463374607431768211455` را نگهداری کند.
+
+نوع `i8` میتواند اعداد بین بازه‌ی `128-` تا `127` را نگهداری کند.
+
+نوع `i16` میتواند اعداد بین بازه‌ی `32768-` تا `32767` را نگهداری کند.
+
+نوع `i128` میتواند اعداد بین بازه‌ی `170141183460469231731687303715884105728-` تا `170141183460469231731687303715884105727` را نگهداری کند.
+
+### خب فهمیدیم `Signed` و `Unsigned` چیه ! حالا این `isize` و `usize` جی هستند؟
+
+خب، حرف `` و `` اولشون که مشخص هست که `Signed` و `Unsigned` بودن رو مشخص میکنند اما این ها چه مقدار فضا از حافظه اشغال میکنند ؟!
+
+خب اون بستگی به **معماری** سیستم عاملی که برنامه روش اجرا میشه داره، برای مثال:
+
+در یک سیستم x64:
+
+`isize` -> `i64`
+
+`usize` -> `u64`
+
+در یک سیستم x32:
+
+`isize` -> `i32`
+
+`usize` -> `u32`
+
+### خب چرا باید سایز رو خودمون مشخص کنیم و به طور کل چرا سایز های مختلفی وجود دارند؟
+
+خب برنامه هایی که ما مینویسیم با داده ها سروکار دارند و داده ها باید ذخیره و پردازش بشند، این دو عمل، منابع محدود سیستم رو مصرف میکنند، پس به عنوان برنامه‌نویس باید در مصرف منابع سیستم تا جایی که میتونیم صرفه‌جویی کنیم، یکی از مزیت های `Rust` این است که قابلیت این کار را به برنامه‌نویس میدهد.
+
+جواب سرراست نبود؟
+
+<div dir="rtl">
+خب به دو نکته توجه کنید:
+
+- منابع برای ذخیره سازی داده در یک سیستم محدود هست
+
+- هر چه داده سایز داده کمتر باشه، پردازش اون اسون‌تر هست
+
+با توحه به دو نکته بالا، بیاید فکر کنیم که نیاز داریم عدد `10-` رو ذخیره کنیم و بعد هم روش پردازشی انجام بدیم، در این نقطه باید تصمیم بگیریم که برای دخیره این داده چه نوع و سایزی انتخاب کنیم.
+
+خب این داده یک عدد صحیح هست، پس باید `Integer` انتخاب کنیم. اما دو نکته دیگر هم وجود دارد، اولا این `Integer` باید `Signed` باشد یا `Unsigned` و دوما اینکه چه سایزی باید داشته باشد؟!
+
+خب این عدد منفی است‌، به معنای دیگر یغنی علامت‌دار(`Signed`) است، پس باید اون رو باید در یک نوع `Signed` ذخیره کرد.
+
+و اما چه سایزی برای این مقدار مناسب هست، عدد کوچیکی است پس باید هشت بیت برایش کافی باشد.
+
+خب همه این اطلاعاتی که میدونستید رو گفتم که به این اشاره کنم که اهمیت سایز میتونه چقدر در کارایی برنامه تآثیرگذار باشد.
+
+اگر همین مقدار کوچک را در یک نوع `i8` ذخیره کنیم چنین فضایی را اشغال خواهد کرد:
+
+`11110110`
+
+اما اگر همین مقدار را در یک نوع `i128` ذخیره کنیم، چنین فضایی را در حافظه اشغال خواهد کرد:
+`11111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111110110`
+
+اون دو نکته‌ای که گفته بودم رو یادتون هست؟
+ایناهاش :
+
+- منابع برای ذخیره سازی داده در یک سیستم محدود هست
+
+- هر چه داده سایز داده کمتر باشه، پردازش اون اسون‌تر هست
+
+خب فکر کنم الان واضح هست که انتخاب کدوم نوع میتونه باید بشه که ما در مصرف منابع سیستم صرفه کنیم؟
+(اگه حواست نبود باید بگم که `i8` جواب بود!)
+
+
+### خب برسیم به نوع `char`، در `Rust` کاراکتر ها در نوع `char` ذخیره میشوند.
+هر `char` برابر یک عدد است، برای مثال:
+
+کاراکتر `A` برابر عدد `65` است.
+
+و میگن کاراکتر `友` هم برابر با عدد `21451` است. (مثل اینکه این کاراکتر در چینی یعنی **دوست** !)
+
+
+و خب این یعنی `Rust` به صورت پیشفرض از `Unicode` برای نمایش کاراکتر ها استفاده میکنه.
+</div>
 
 ```rust
 fn main() {
@@ -309,11 +398,10 @@ So those are two reasons for all the different number types in Rust. Here is ano
 
 So Rust uses `usize` so that your computer can get the biggest number for indexing that it can read.
 
-
-
 Let's learn some more about `char`. You saw that a `char` is always one character, and uses `''` instead of `""`.
 
 All `chars` use 4 bytes of memory, since 4 bytes are enough to hold any kind of character:
+
 - Basic letters and symbols usually need 1 out of 4 bytes: `a b 1 2 + - = $ @`
 - Other letters like German Umlauts or accents need 2 out of 4 bytes: `ä ö ü ß è é à ñ`
 - Korean, Japanese or Chinese characters need 3 or 4 bytes: `国 안 녕`
@@ -364,7 +452,6 @@ Slice2 is 7 bytes.
 
 If `.len()` gives the size in bytes, what about the size in characters? We will learn about these methods later, but you can just remember that `.chars().count()` will do it. `.chars().count()` turns what you wrote into characters and then counts how many there are.
 
-
 ```rust
 fn main() {
     let slice = "Hello!";
@@ -382,6 +469,7 @@ Slice2 is 7 bytes but only 3 characters.
 ```
 
 ## Type inference
+
 **[See this chapter on YouTube](https://youtu.be/q1D2vpy3kEI)**
 
 Type inference means that if you don't tell the compiler the type, but it can decide by itself, it will decide. The compiler always needs to know the type of the variables, but you don’t always need to tell it. Actually, usually you don't need to tell it. For example, for `let my_number = 8`, `my_number` will be an `i32`. That is because the compiler chooses i32 for integers if you don't tell it. But if you say `let my_number: u8 = 8`, it will make `my_number` a `u8`, because you told it `u8`.
@@ -508,6 +596,7 @@ fn main() {
 ```
 
 ## Printing 'hello, world!'
+
 **See this chapter on YouTube: [Video 1](https://youtu.be/yYlPHRl2geQ), [Video 2](https://youtu.be/DTCSfBJJZb8)**
 
 When you start a new Rust program, it always has this code:
@@ -535,7 +624,6 @@ fn main() {
 ```
 
 The `{}` in `println!` means "put the variable inside here". This prints `Hello, world number 8!`.
-
 
 We can put more in, just like we did before:
 
@@ -676,6 +764,7 @@ fn main() {
 So why did we write `{:?}` and not `{}`? We will talk about that now.
 
 ## Display and debug
+
 **[See this chapter on YouTube](https://youtu.be/jd3pC248c0o)**
 
 Simple variables in Rust can be printed with `{}` inside `println!`. But some variables can't, and you need to **debug print**. Debug print is printing for the programmer, because it usually shows more information. Debug sometimes doesn't look pretty, because it has extra information to help you.
@@ -755,6 +844,7 @@ The smallest u128 is 0 and the biggest u128 is 340282366920938463463374607431768
 ```
 
 ## Mutability (changing)
+
 **[See this chapter on YouTube](https://youtu.be/Nyyd6qn7dZY)**
 
 When you declare a variable with `let`, it is immutable (cannot be changed).
@@ -793,6 +883,7 @@ fn main() {
 You will see the same "expected" message from the compiler: `expected integer, found &str`. `&str` is a string type that we will learn soon.
 
 ### Shadowing
+
 **[See this chapter on YouTube](https://youtu.be/InULHyRGw7g)**
 
 Shadowing means using `let` to declare a new variable with the same name as another variable. It looks like mutability, but it is completely different. Shadowing looks like this:
@@ -1057,8 +1148,6 @@ Here is your number.
 
 So you probably won't need it, but if you really need to use a keyword for a variable then you can use `r#`.
 
-
-
 If you want to print the bytes of a `&str` or a `char`, you can just write `b` before the string. This works for all ASCII characters. These are all the ASCII characters:
 
 ```text
@@ -1081,7 +1170,6 @@ Here is the result:
 
 For a `char` this is called a *byte*, and for a `&str` it's called a *byte string*.
 
-
 You can also put `b` and `r` together if you need to:
 
 ```rust
@@ -1091,8 +1179,6 @@ fn main() {
 ```
 
 That will print `[73, 32, 108, 105, 107, 101, 32, 116, 111, 32, 119, 114, 105, 116, 101, 32, 34, 35, 34, 46]`.
-
-
 
 There is also a Unicode escape that lets you print any Unicode character inside a string: `\u{}`. A hexadecimal number goes inside the `{}` to print it. Here is a short example of how to get the Unicode number, and how to print it again.
 
@@ -1106,8 +1192,6 @@ fn main() {
     println!("\u{D589}, \u{48}, \u{5C45}, \u{3044}"); // Try printing them with unicode escape \u
 }
 ```
-
-
 
 We know that `println!` can print with `{}` (for Display) and `{:?}` (for Debug), plus `{:#?}` for pretty printing. But there are many other ways to print.
 
@@ -1147,7 +1231,6 @@ fn main() {
 
 `father_name` is in position 0, `son_name` is in position 1, and `family_name` is in position 2. So it prints `This is Adrian Fahrenheit Țepeș, son of Vlad Țepeș`.
 
-
 Maybe you have a very complex string to print with too many variables inside the `{}` curly brackets. Or maybe you need to print a variable more than one time. Then it can help to add names to the `{}`:
 
 ```rust
@@ -1169,7 +1252,6 @@ That will print:
 Seoul is in Korea and Busan is also in Korea,
 but Tokyo is not in Korea.
 ```
-
 
 Very complex printing is also possible in Rust if you want to use it. Here is how to do it:
 
@@ -1223,6 +1305,7 @@ SEOUL--------------------TOKYO
 ```
 
 ## Strings
+
 **[See this chapter on YouTube](https://youtu.be/pSyaGzGg26o)**
 
 Rust has two main types of strings: `String` and `&str`. What is the difference?
@@ -1281,8 +1364,6 @@ And 'Adrian Fahrenheit Țepeș' is 25 bytes. It is not Sized.
 
 That is why we need a &, because `&` makes a pointer, and Rust knows the size of the pointer. So the pointer goes on the stack. If we wrote `str`, Rust wouldn't know what to do because it doesn't know the size.
 
-
-
 There are many ways to make a `String`. Here are some:
 
 - `String::from("This is the string text");` This is a method for String that takes text and creates a String.
@@ -1333,6 +1414,7 @@ fn main() {
 And now you get a String.
 
 ## const and static
+
 **[See this chapter on YouTube](https://youtu.be/Ky3HqkWUcI0)**
 
 There are two other ways to declare values, not just with `let`. These are `const` and `static`. Also, Rust won't use type inference: you need to write the type for them. These are for values that don't change (`const` means constant). The difference is that:
@@ -1347,6 +1429,7 @@ You write them with ALL CAPITAL LETTERS, and usually outside of `main` so that t
 Two examples are: `const NUMBER_OF_MONTHS: u32 = 12;` and `static SEASONS: [&str; 4] = ["Spring", "Summer", "Fall", "Winter"];`
 
 ## More on references
+
 **[See this chapter on YouTube](https://youtu.be/R13sQ8SNoEQ)**
 
 References are very important in Rust. Rust uses references to make sure that all memory access is safe. We know that we use `&` to create a reference:
@@ -1384,6 +1467,7 @@ The function `return_str()` creates a String, then it creates a reference to the
 This is the important part about the "owned" type that we talked about above. Because you own a `String`, you can pass it around. But a `&String` will die if its `String` dies, so you don't pass around "ownership" with it.
 
 ## Mutable references
+
 **[See this chapter on YouTube](https://youtu.be/G48z6Rv76vc)**
 
 If you want to use a reference to change data, you can use a mutable reference. For a mutable reference, you write `&mut` instead of `&`.
@@ -1427,7 +1511,6 @@ Rust has two rules for mutable and immutable references. They are very important
 - **Rule 2**: If you have a mutable reference, you can only have one. Also, you can't have an immutable reference **and** a mutable reference together.
 
 This is because mutable references can change the data. You could get problems if you change the data when other references are reading it.
-
 
 A good way to understand is to think of a Powerpoint presentation.
 
@@ -1511,6 +1594,7 @@ fn main() {
 ```
 
 ## Giving references to functions
+
 **See this chapter on YouTube: [immutable references](https://youtu.be/mKWXt9YTavc) and [mutable references](https://youtu.be/kJV1wIvAbyk)**
 
 References are very useful for functions. The rule in Rust on values is: a value can only have one owner.
@@ -1735,8 +1819,6 @@ fn main() {
 
 Instead of 50 clones, it's zero.
 
-
-
 ### Variables without values
 
 A variable without a value is called an "uninitialized" variable. Uninitialized means "hasn't started yet". They are simple: just write `let` and the variable name:
@@ -1904,6 +1986,7 @@ So `[0..2]` means the first index and the second index (0 and 1). Or you can cal
 You can also have an **inclusive** range, which means it includes the last number too. To do this, add `=` to write `..=` instead of `..`. So instead of `[0..2]` you can write `[0..=2]` if you want the first, second, and third item.
 
 ## Vectors
+
 **[See this chapter on YouTube](https://youtu.be/Eh-DsRnDKmw)**
 
 In the same way that we have `&str` and `String`, we have arrays and vectors. Arrays are faster with less functionality, and vectors are slower with more functionality. (Of course, Rust is always very fast so vectors are not slow, just slow*er* than arrays.) The type is written `Vec`, and you can also just call it a "vec".
@@ -2026,6 +2109,7 @@ fn main() {
 ```
 
 ## Tuples
+
 **[See this chapter on YouTube](https://youtu.be/U67Diy6SlTg)**
 
 Tuples in Rust use `()`. We have seen many empty tuples already, because *nothing* in a function actually means an empty tuple:
@@ -2085,7 +2169,6 @@ Sixth item: 7.7
 
 That tuple is of type `(&str, i32, Vec<char>, char, [i32; 3], f64)`.
 
-
 You can use a tuple to create multiple variables. Take a look at this code:
 
 ```rust
@@ -2122,6 +2205,7 @@ Now it only creates a variable called `variable` but doesn't make a variable for
 There are many more collection types, and many more ways to use arrays, vecs, and tuples. We will learn more about them too, but first we will learn control flow.
 
 ## Control flow
+
 **See this chapter on YouTube: [Part 1](https://youtu.be/UAymDOpv_us) and [Part 2](https://youtu.be/eqysTfiiQZs)**
 
 Control flow means telling your code what to do in different situations. The simplest control flow is `if`.
@@ -2170,7 +2254,6 @@ fn main() {
 ```
 
 This prints `It's a positive odd number` because when you divide it by 2 you have a remainder of 1, and it's greater than 0.
-
 
 You can see that too much `if`, `else`, and `else if` can be difficult to read. In this case you can use `match` instead, which looks much cleaner. But you must match for every possible result. For example, this will not work:
 
@@ -2233,7 +2316,6 @@ fn main() {
 ```
 
 `second_number` will be 10. Do you see the semicolon at the end? That is because, after the match is over, we actually told the compiler this: `let second_number = 10;`
-
 
 You can match on more complicated things too. You use a tuple to do it.
 
@@ -2383,6 +2465,7 @@ Looks like a normal number
 ```
 
 ## Structs
+
 **See this chapter on YouTube: [Part 1](https://youtu.be/W23uQghBOFk) and [Part 2](https://youtu.be/GSVhrjLCuNA)**
 
 With structs, you can create your own type. You will use structs all the time in Rust because they are so convenient. Structs are created with the keyword `struct`. The name of a struct should be in UpperCamelCase (capital letter for each word, no spaces). If you write a struct in all lowercase, the compiler will tell you.
@@ -2466,7 +2549,6 @@ fn main() {}
 
 But it is not very important either way so you can choose whether to use a comma or not.
 
-
 Let's create a `Country` struct to give an example. The `Country` struct has the fields `population`, `capital`, and `leader_name`.
 
 ```rust
@@ -2512,6 +2594,7 @@ fn main() {
 ```
 
 ## Enums
+
 **See this chapter on YouTube: [Part 1](https://youtu.be/SRnqNTJUgjs), [Part 2](https://youtu.be/F_EcbWM63lk), [Part 3](https://youtu.be/2uh64U9JesA) and [Part 4](https://youtu.be/LOHVUYTc5Us)**
 
 An `enum` is short for enumerations. They look very similar to a struct, but are different. Here is the difference:
@@ -2652,7 +2735,6 @@ fn main() {
 }
 ```
 
-
 Parts of an `enum` can also be turned into an integer. That's because Rust gives each arm of an `enum` a number that starts with 0 for its own use. You can do things with it if your enum doesn't have any other data in it.
 
 ```rust
@@ -2707,7 +2789,6 @@ fn main() {
 ```
 
 This prints:
-
 
 ```text
 Not the biggest star.
@@ -2771,7 +2852,6 @@ This prints what we wanted to see:
 It's an i32 with the value -800
 It's a u32 with the value 8
 ```
-
 
 ## Loops
 
@@ -3088,7 +3168,6 @@ Changing animal to cat!
 The animal is a cat
 ```
 
-
 Remember that Self (the type Self) and self (the variable self) are abbreviations. (abbreviation = short way to write)
 
 So in our code, Self = Animal. Also, `fn change_to_dog(&mut self)` means `fn change_to_dog(&mut Animal)`.
@@ -3198,7 +3277,6 @@ fn main() {
 
 This prints `The city's two names are ["Tallinn", "Reval"]`.
 
-
 ## References and the dot operator
 
 We learned that when you have a reference, you need to use `*` to get to the value. A reference is a different type, so this won't work:
@@ -3294,9 +3372,6 @@ fn main() {
 ```
 
 So just remember: when you use the `.` operator, you don't need to worry about `*`.
-
-
-
 
 ## Generics
 
@@ -3762,7 +3837,6 @@ This prints `It's an error, guys`. So we just handled our first error.
 
 Remember, the four methods to easily check are `.is_some()`, `is_none()`, `is_ok()`, and `is_err()`.
 
-
 Sometimes a function with Result will use a `String` for the `Err` value. This is not the best method to use, but it is a little better than what we've done so far.
 
 ```rust
@@ -3918,7 +3992,7 @@ The number is: 20
 
 ## Other collections
 
-Rust has many more types of collections. You can see them at https://doc.rust-lang.org/beta/std/collections/ in the standard library. That page has good explanations for why to use one type, so go there if you don't know what type you want. These collections are all inside `std::collections` in the standard library. The best way to use them is with a `use` statement, like we did with our `enums`. We will start with `HashMap`, which is very common.
+Rust has many more types of collections. You can see them at <https://doc.rust-lang.org/beta/std/collections/> in the standard library. That page has good explanations for why to use one type, so go there if you don't know what type you want. These collections are all inside `std::collections` in the standard library. The best way to use them is with a `use` statement, like we did with our `enums`. We will start with `HashMap`, which is very common.
 
 ### HashMap (and BTreeMap)
 
@@ -4117,7 +4191,6 @@ But that's not exactly what we want. Maybe it would be better to count the numbe
 pub fn entry(&mut self, key: K) -> Entry<K, V> // 🚧
 ```
 
-
 [Here is the page for Entry](https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html). Here is a simple version of its code. `K` means key and `V` means value.
 
 ```rust
@@ -4162,7 +4235,6 @@ fn main() {
 }
 ```
 
-
 The important part is `let return_value = book_hashmap.entry(book).or_insert(0);`. If you take out the `let`, you get `book_hashmap.entry(book).or_insert(0)`. Without `let` it does nothing: it inserts 0, and nobody takes the mutable reference to 0. So we bind it to `return_value` so we can keep the 0. Then we increase the value by 1, which gives at least 1 for every book in the `HashMap`. Then when `.entry()` looks at *Eye of the World* again it doesn't insert anything, but it gives us a mutable 1. Then we increase it to 2, and that's why it prints this:
 
 ```text
@@ -4171,9 +4243,7 @@ Le Petit Prince, 1
 Eye of the World, 2
 ```
 
-
 You can also do things with `.or_insert()` like insert a vec and then push into the vec. Let's pretend that we asked men and women on the street what they think of a politician. They give a rating from 0 to 10. Then we want to put the numbers together to see if the politician is more popular with men or women. It can look like this:
-
 
 ```rust
 use std::collections::HashMap;
@@ -4378,7 +4448,6 @@ You need to: Watch some YouTube
 ### VecDeque
 
 A `VecDeque` is a `Vec` that is good at popping items both off the front and the back. Rust has `VecDeque` because a `Vec` is great for popping off the back (the last item), but not so great off the front. When you use `.pop()` on a `Vec`, it just takes off the last item on the right and nothing else is moved. But if you take it off another part, all the items to the right are moved over one position to the left. You can see this in the description for `.remove()`:
-
 
 ```text
 Removes and returns the element at position index within the vector, shifting all elements after it to the left.
@@ -4780,7 +4849,6 @@ fn main() {
 
 So that is a bit better: `thread 'main' panicked at 'The first unwrap had a None!', src\main.rs:2:32`. We have the line number as well so we can find it.
 
-
 You can also use `unwrap_or` if you want to always have a value that you want to choose. If you do this it will never panic. That's:
 
 - 1) good because your program won't panic, but
@@ -4929,7 +4997,6 @@ fn main() {
 
 Now it prints `Rover is running!`. This is okay because we are returning `()`, or nothing, which is what the trait says.
 
-
 When you are writing a trait, you can just write the function signature. But if you do that, the user will have to write the function. Let's try that. Now we change `bark()` and `run()` to just say `fn bark(&self);` and `fn run(&self);`. This is not a full function, so the user must write it.
 
 ```rust
@@ -5071,7 +5138,6 @@ fn main() {
 
 Success! Now when we use `{}` to print, we get `Reggie Mantle is a cat who is 4 years old.`. This looks much better.
 
-
 By the way, if you implement `Display` then you get the `ToString` trait for free. That's because you use the `format!` macro for the `.fmt()` function, which lets you make a `String` with `.to_string()`. So we could do something like this where we pass `reggie_mantle` to a function that wants a `String`, or anything else.
 
 ```rust
@@ -5108,9 +5174,6 @@ This prints:
 Reggie Mantle is a cat who is 4 years old.
 Mr. Mantle's String is 42 letters long.
 ```
-
-
-
 
 The thing to remember about traits is that they are about the behaviour of something. How does your `struct` act? What can it do? That's what traits are for. If you think of some of the traits we've seen so far, they are all about behaviour: `Copy` is something that a type can do. `Display` is also something that a type can do. `ToString` is another trait, and it's also something that a type can do: it can change into a `String`. In our `Dog` trait the word *dog* doesn't mean something you can do, but it gives some methods that let it do things. You could also implement it for a `struct Poodle` or `struct Beagle` and they would all get `Dog` methods.
 
@@ -5184,7 +5247,6 @@ You attack with your bow. Your opponent now has 20 health left.
 ```
 
 We pass `self` inside our trait all the time, but we can't do much with it right now. That's because Rust doesn't know what type is going to use it. It could be a `Wizard`, it could be a `Ranger`, it could be a new struct called `Toefocfgetobjtnode` or anything else. To give `self` some functionality, we can add necessary traits to the trait. If we want to print with `{:?}` for example then we need `Debug`. You can add it to the trait just by writing it after `:` (a colon). Now our code looks like this:
-
 
 ```rust
 struct Monster {
@@ -5260,8 +5322,6 @@ You attack with your bow. Your opponent now has 20 health left.  You are now at:
 ```
 
 In a real game it might be better to rewrite this for each type, because `You are now at: Wizard { health: 60 }` looks funny. That's also why methods inside traits are usually simple, because you don't know what type is going to use it. You can't write things like `self.0 += 10` for example. But this example shows that we can use other traits inside a trait we are writing. And when we do that, we get some methods that we can use.
-
-
 
 One other way to use a trait is with what are called `trait bounds`. That means "limitations by a trait". Trait bounds are easy because a trait actually doesn't need any methods, or anything at all. Let's rewrite our code with something similar but different. This time our trait doesn't have any methods, but we have other functions that require traits to use.
 
@@ -5700,7 +5760,6 @@ Then we used `into_iter` to get an iterator by value from `vector1`. This destro
 
 Finally we used `.iter_mut()` for `vector2`. It is mutable, so we don't need to use `.collect()` to create a new Vec. Instead, we change the values in the same Vec with mutable references. So `vector2` is still there. Because we don't need a new Vec, we use `for_each`: it's just like a `for` loop.
 
-
 ### How an iterator works
 
 An iterator works by using a method called `.next()`, which gives an `Option`. When you use an iterator, Rust calls `next()` over and over again. If it gets `Some`, it keeps going. If it gets `None`, it stops.
@@ -5949,7 +6008,6 @@ But people will often call all `||` functions closures, so you don't have to wor
 
 Why is it good to know the difference? It's because an anonymous function actually makes the same machine code as a function with a name. They feel "high level", so sometimes people think that the machine code will be complicated. But the machine code that Rust makes from it is just as fast as a regular function.
 
-
 So let's look at some more things that closures can do. You can also do this:
 
 ```rust
@@ -6068,7 +6126,6 @@ All we did was make a more and more complicated structure. So this `Map<Enumerat
 
 Rust only wants to do one calculation, so it creates the structure and waits. Then if we say `.collect::<Vec<i32>>()` it knows what to do, and starts moving. This is what `iterators are lazy and do nothing unless consumed` means. The iterators don't do anything until you "consume" them (use them up).
 
-
 You can even create complicated things like `HashMap` using `.collect()`, so it is very powerful. Here is an example of how to put two vecs into a `HashMap`. First we make the two vectors, and then we will use `.into_iter()` on them to get an iterator of values. Then we use the `.zip()` method. This method takes two iterators and attaches them together, like a zipper. Finally, we use `.collect()` to make the `HashMap`.
 
 Here is the code:
@@ -6126,7 +6183,6 @@ fn main() {
 ```
 
 This prints `140     399     923     481     800     622     623     218     009     598    281`.
-
 
 ### |_| in a closure
 
@@ -6186,8 +6242,6 @@ fn main() {
 ```
 
 This prints `["June", "July"]`.
-
-
 
 `.filter_map()`. This is called `filter_map()` because it does `.filter()` and `.map()`. The closure must return an `Option<T>`, and then `filter_map()` takes the value out of each `Option` if it is `Some`. So for example if you were to `.filter_map()` a `vec![Some(2), None, Some(3)]`, it would return `[2, 3]`.
 
@@ -6378,7 +6432,6 @@ Err("No CEO found for The Red-Headed League")
 Err("No CEO found for Stark Enterprises")
 ```
 
-
 `.and_then()` is a helpful method that takes an `Option`, then lets you do something to its value and pass it on. So its input is an `Option`, and its output is also an `Option`. It is sort of like a safe "unwrap, then do something, then wrap again".
 
 An easy example is a number that we get from a vec using `.get()`, because that returns an `Option`. Now we can pass it to `and_then()`, and do some math on it if it is `Some`. If it is `None`, then the `None` just gets passed through.
@@ -6404,9 +6457,6 @@ fn main() {
 ```
 
 This prints `[Some(14), Some(15), Some(6), None, None]`. You can see that `None` isn't filtered out, just passed on.
-
-
-
 
 `.and()` is sort of like a `bool` for `Option`. You can match many `Option`s to each other, and if they are all `Some` then it will give the last one. And if one of them is a `None`, then it will give `None`.
 
@@ -6449,8 +6499,6 @@ None
 ```
 
 The first one (index 0) is `None` because there is a `None` for index 0 in `second_try`. The second is `None` because there is a `None` in `first_try`. The next is `Some("success!")` because there is no `None` for `first_try`, `second try`, or `third_try`.
-
-
 
 `.any()` and `.all()` are very easy to use in iterators. They return a `bool` depending on your input. In this example we make a very large vec (about 20,000 items) with all the characters from `'a'` to `'働'`. Then we make a function to check if a character is inside it.
 
@@ -6547,9 +6595,6 @@ fn main() {
 
 This prints `Final counter is: 1001` so we know that it had to call `.next()` 1001 times before it found 5.
 
-
-
-
 `.find()` tells you if an iterator has something, and `.position()` tells you where it is. `.find()` is different from `.any()` because it returns an `Option` with the value inside (or `None`). Meanwhile, `.position()` is also an `Option` with the position number, or `None`. In other words:
 
 - `.find()`: "I'll try to get it for you"
@@ -6578,8 +6623,6 @@ None // No number inside times 2 == 30
 Some(2) // This is the position
 None
 ```
-
-
 
 With `.cycle()` you can create an iterator that loops forever. This type of iterator works well with `.zip()` to create something new, like this example which creates a `Vec<(i32, &str)>`:
 
@@ -6619,7 +6662,6 @@ Both print ten characters, but the second one skipped 1300 places and prints ten
 ['յ', 'ն', 'շ', 'ո', 'չ', 'պ', 'ջ', 'ռ', 'ս', 'վ']
 ```
 
-
 Another popular method is called `.fold()`. This method is used a lot to add together the items in an iterator, but you can also do a lot more. It is somewhat similar to `.for_each()`. In `.fold()`, you first add a starting value (if you are adding items together, then 0), then a comma, then the closure. The closure gives you two items: the total so far, and the next item. First here is a simple example showing `.fold()` to add items together.
 
 ```rust
@@ -6640,7 +6682,6 @@ So:
 - Then it takes that 15, and adds the 9: 24.
 - Then it takes that 24, and adds the 10: 34.
 - Finally it takes that 34, and adds the 11: 45. So it prints `45`.
-
 
 But you don't just need to add things with it. Here is an example where we add a '-' to every character to make a `String`.
 
@@ -6666,8 +6707,6 @@ This prints:
 -I- -d-o-n-'-t- -h-a-v-e- -a-n-y- -d-a-s-h-e-s- -i-n- -m-e-.-
 ```
 
-
-
 There are many other convenient methods like:
 
 - `.take_while()` which takes into an iterator as long as it gets `true` (`take while x > 5` for example)
@@ -6675,8 +6714,6 @@ There are many other convenient methods like:
 - `.by_ref()` which makes an iterator take a reference. This is good to make sure that you can use a `Vec` or something similar after you use it to make an iterator.
 - Many other `_while` methods: `.skip_while()`, `.map_while()`, and so on
 - `.sum()`: just adds everything together.
-
-
 
 `.chunks()` and `.windows()` are two ways of cutting up a vector into a size you want. You put the size you want into the brackets. Let's say you have a vector with 10 items, and you want a size of 3. It will work like this:
 
@@ -6720,8 +6757,6 @@ This prints:
 
 By the way, `.chunks()` will panic if you give it nothing. You can write `.chunks(1000)` for a vector with one item, but you can't write `.chunks()` with anything with a length of 0. You can see that right in the function if you click on [src] because it says `assert!(chunk_size != 0);`.
 
-
-
 `.match_indices()` lets you pull out everything inside a `String` or `&str` that matches your input, and gives you the index too. It is similar to `.enumerate()` because it returns a tuple with two items.
 
 ```rust
@@ -6737,8 +6772,6 @@ This prints:
 ```text
 [(0, "Rule"), (28, "Rule"), (62, "Rule")]
 ```
-
-
 
 `.peekable()` lets you make an iterator where you can see (peek at) the next item. It's like calling `.next()` (it gives an `Option`) except that the iterator doesn't move, so you can use it as many times as you want. You can actually think of peekable as "stoppable", because you can stop for as long as you want. Here is an example of us using `.peek()` three times for every item. We can use `.peek()` forever until we use `.next()` to move to the next item.
 
@@ -6771,7 +6804,6 @@ I really love the number 100
 ```
 
 Here is another example where we use `.peek()` to match on an item. After we are done using it, we call `.next()`.
-
 
 ```rust
 fn main() {
@@ -6854,7 +6886,6 @@ This will print:
 Names { one_word: ["Caesar", "Data"], two_words: ["Frodo Baggins", "Bilbo Baggins", "Jean-Luc Picard", "Rand Al\'Thor", "Paul Atreides"], three_words:
 ["Barack Hussein Obama", "Bill Jefferson Clinton"] }
 ```
-
 
 ## The dbg! macro and .inspect
 
@@ -8328,7 +8359,6 @@ So if there are strong pointers, are there weak pointers? Yes, there are. Weak p
 
 If you use multiple threads, you can do many things at the same time. Modern computers have more than one core so they can do more than one thing at the same time, and Rust lets you use them. Rust uses threads that are called "OS threads". OS thread means the operating system creates the thread on a different core. (Some other languages use "green threads", which are less powerful)
 
-
 You create threads with `std::thread::spawn` and then a closure to tell it what to do. Threads are interesting because they run at the same time, and you can test it to see what happens. Here is a simple example:
 
 ```rust
@@ -8567,14 +8597,11 @@ fn main() {
 
 So just remember: if you need a value in a thread from outside the thread, you need to use `move`.
 
-
-
 ## Closures in functions
 
 Closures are great. So how do we put them into our own functions?
 
 You can make your own functions that take closures, but inside them it is less free and you have to decide the type. Outside a function a closure can decide by itself between `Fn`, `FnMut` and `FnOnce`, but inside you have to choose one. The best way to understand is to look at a few function signatures. Here is the one for `.all()`. We remember that it checks an iterator to see if everything is `true` (depending on what you decide is `true` or `false`). Part of its signature says this:
-
 
 ```rust
     fn all<F>(&mut self, f: F) -> bool    // 🚧
@@ -8711,7 +8738,6 @@ Years left are [1372, 1851, 1881, 1897, 1925, 1959, 1989, 2000, 2005, 2010, 2020
 Populations left are [3250, 24000, 45900, 58800, 119800, 283071, 478974, 400378, 401694, 406703, 437619, 500000]
 ```
 
-
 ## impl Trait
 
 `impl Trait` is similar to generics. You remember that generics use a type `T` (or any other name) which then gets decided when the program compiles. First let's look at a concrete type:
@@ -8810,7 +8836,6 @@ fn main() {
 ```
 
 Here is a bit longer example. Let's imagine a game where your character is facing monsters that are stronger at night. We can make an enum called `TimeOfDay` to keep track of the day. Your character is named Simon and has a number called `character_fear`, which is an `f64`. It goes up at night and down during the day. We will make a `change_fear` function that changes his fear, but also does other things like write messages. It could look like this:
-
 
 ```rust
 enum TimeOfDay { // just a simple enum
@@ -9319,7 +9344,7 @@ fn main() {
 
 It's important to know how to read documentation in Rust so you can understand what other people wrote. Here are some things to know in Rust documentation:
 
-### assert_eq!
+### assert_eq
 
 You saw that `assert_eq!` is used when doing testing. You put two items inside the function and the program will panic if they are not equal. Here is a simple example where we need an even number.
 
@@ -9557,7 +9582,6 @@ One other example using `cfg` is `#[cfg(target_os = "windows")]`. With that you 
 
 You can see many more attributes [here](https://doc.rust-lang.org/reference/attributes.html).
 
-
 ## Box
 
 `Box` is a very convenient type in Rust. When you use a `Box`, you can put a type on the heap instead of the stack. To make a new `Box`, just use `Box::new()` and put the item inside.
@@ -9590,7 +9614,6 @@ fn main() {
 This is why Box is called a "smart pointer", because it is like a `&` reference (a kind of pointer) but can do more things.
 
 You can also use a Box to create structs with the same struct inside. These are called *recursive*, which means that inside Struct A is maybe another Struct A. Sometimes you can use Boxes to create linked lists, although these lists are not very popular in Rust. But if you want to create a recursive struct, you can use a `Box`. Here's what happens if you try without a `Box`:
-
 
 ```rust
 struct List {
@@ -10283,8 +10306,6 @@ Could not create character. Characters must have:
 Character { name: "Billybrobby", age: 15, height: 180, weight: 100, lifestate: Alive, can_use: true }
 ```
 
-
-
 ## Deref and DerefMut
 
 `Deref` is the trait that lets you use `*` to dereference something. We saw the word `Deref` before when using a tuple struct to make a new type, and now it's time to learn it.
@@ -10319,7 +10340,6 @@ fn main() {
     println!("{}", value == *reference);
 }
 ```
-
 
 Now let's imagine a simple type that just holds a number. It will be like a `Box`, and we have some ideas for some extra functions for it. But if we just give it a number, it won't be able to do much with it.
 
@@ -10370,7 +10390,6 @@ fn main() {
     assert_eq!('a', *x);
 }
 ```
-
 
 So we follow that and now our `Deref` looks like this:
 
@@ -10533,7 +10552,6 @@ fn main() {
 
 Now let's imagine that we want to keep character hit points in a big vec. Maybe we'll put monster data in there too, and keep it all together. Since `hit_points` is an `i8`, we implement `Deref` so we can do all sorts of math on it. But look at how strange it looks in our `main()` function now:
 
-
 ```rust
 use std::ops::Deref;
 
@@ -10608,8 +10626,6 @@ This just prints `[5, 5]`. Our code is now very strange for someone to read. We 
 
 Of course, it is not illegal to write `hit_points_vec.push(*billy)`, but it makes the code look very strange. Probably a simple `.get_hp()` method would be much better, or another struct that holds the characters. Then you could iterate through and push the `hit_points` for each one. `Deref` gives a lot of power but it's good to make sure that the code is logical.
 
-
-
 ## Crates and modules
 
 Every time you write code in Rust, you are writing it in a `crate`. A `crate` is the file, or files, that go together for your code. Inside the file you write you can also make a `mod`. A `mod` is a space for functions, structs, etc. and is used for a few reasons:
@@ -10676,6 +10692,7 @@ note: the function `prints_one_thing` is defined here
 4  |     fn prints_one_thing<T: Display>(input: T) {
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
+
 It's easy to understand that function `prints_one_thing` is private. It also shows us with `src\main.rs:4:5` where to find the function. This is helpful because you can write `mod`s not just in one file, but over a lot of files as well.
 
 Now we just write `pub fn` instead of `fn` and everything works.
@@ -10764,7 +10781,6 @@ Inside a `mod` you can create other mods. A child mod (a mod inside of a mod) ca
 
 You can think of the structure like this: even if you are in a country, you might not be in a province. And even if you are in a province, you might not be in a city. But if you are in a city, you are in its province and you are in its country.
 
-
 ```rust
 mod country { // The main mod doesn't need pub
     fn print_country(country: &str) { // Note: this function isn't public
@@ -10826,8 +10842,6 @@ fn main() {
 }
 ```
 
-
-
 ## Testing
 
 Testing is a good subject to learn now that we understand modules. Testing your code is very easy in Rust, because you can write tests right next to your code.
@@ -10841,7 +10855,7 @@ fn two_is_two() {
 }
 ```
 
-But if you try to run it in the Playground, it gives an error: ``error[E0601]: `main` function not found in crate `playground``. That's because you don't use _Run_ for tests, you use _Test_. Also, you don't use a `main()` function for tests - they go outside. To run this in the Playground, click on `···` next to _RUN_ and change it to _Test_. Now if you click on it, it will run the test. (If you have Rust installed already, you will type `cargo test` to do this)
+But if you try to run it in the Playground, it gives an error: ``error[E0601]: `main` function not found in crate `playground``. That's because you don't use *Run* for tests, you use *Test*. Also, you don't use a `main()` function for tests - they go outside. To run this in the Playground, click on `···` next to *RUN* and change it to *Test*. Now if you click on it, it will run the test. (If you have Rust installed already, you will type `cargo test` to do this)
 
 Here is the output:
 
@@ -11133,7 +11147,6 @@ test tests::one_plus_one_is_two ... FAILED
 ```
 
 One succeeded! Our `math()` function will only accept good input now.
-
 
 The next step is to write the actual calculator. This is the interesting part about having tests first: the actual code starts much later. First we will put the logic together for the calculator. We want the following:
 
@@ -11564,8 +11577,6 @@ mod tests {
 
 This is probably good enough for now. We could write more methods but lines like `calculator.results.push(calculator.current_input.clone());` are already very clear. Refactoring is best when you can still easily read the code after you are done. You don't want to just refactor to make the code short: `clc.clr()` is much worse than `calculator.clear()`, for example.
 
-
-
 ## External crates
 
 An external crate means "someone else's crate".
@@ -11639,7 +11650,6 @@ fn main() {
 ```
 
 It will print a different `u16` number every time, like `42266 52873 56528 46927 6867`.
-
 
 The main functions in `rand` are `random` and `thread_rng` (rng means "random number generator"). And actually if you look at `random` it says: "This is simply a shortcut for `thread_rng().gen()`". So it's actually just `thread_rng` that does almost everything.
 
@@ -11783,7 +11793,6 @@ charisma: 10
 
 The character with four dice is usually a bit better at most things.
 
-
 ### rayon
 
 `rayon` is a popular crate that lets you speed up your Rust code. It's popular because it creates threads without needing things like `thread::spawn`. In other words, it is popular because it is effective but easy to write. For example:
@@ -11794,6 +11803,7 @@ The character with four dice is usually a bit better at most things.
 Other methods are the same: `.chars()` is `.par_chars()`, and so on.
 
 Here is an example of a simple piece of code that is making the computer do a lot of work:
+
 ```rust
 fn main() {
     let mut my_vec = vec![0; 200_000];
@@ -11837,7 +11847,6 @@ The [regex](https://crates.io/crates/regex) crate lets you search through text u
 ### chrono
 
 [chrono](https://crates.io/crates/chrono) is the main crate for people who need more functionality for time. We will look at the standard library now which has functions for time, but if you need more then this is a good crate to use.
-
 
 ## A tour of the standard library
 
@@ -11898,8 +11907,6 @@ Tel Aviv
 Nicosia
 ```
 
-
-
 If you want to get variables from an array, you can put their names inside `[]` to destructure it. This is the same as using a tuple in `match` statements or to get variables from a struct.
 
 ```rust
@@ -11926,7 +11933,6 @@ fn main() {
 ```
 
 This prints `\u{ccad} \u{cd98} \u{c608} \u{cc2c}`.
-
 
 You can get a char from `u8` using the `From` trait, but for a `u32` you use `TryFrom` because it might not work. There are many more numbers in `u32` than characters in Unicode. We can see this with a simple demonstration.
 
@@ -11970,12 +11976,9 @@ So it's a good thing you need to use `TryFrom`.
 
 Also, as of late August 2020 you can now get a `String` from a `char`. (`String` implements `From<char>`) Just write `String::from()` and put a `char` inside.
 
-
 ### Integers
 
 There are a lot of math methods for these types, plus some others. Here are some of the most useful ones.
-
-
 
 `.checked_add()`, `.checked_sub()`, `.checked_mul()`, `.checked_div()`. These are good methods if you think you might get a number that won't fit into a type. They return an `Option` so you can safely check that your math works without making the program panic.
 
@@ -11995,7 +11998,6 @@ This prints:
 None
 Some(201)
 ```
-
 
 You'll notice that on the page for integers it says `rhs` a lot. This means "right hand side", which is the right hand side when you do some math. For example, in `5 + 6`, `5` is on the left and `6` is on the right, so it's the `rhs`. This is not a keyword, but you will see it a lot so it's good to know.
 
@@ -12092,7 +12094,6 @@ In Nauru and Vanuatu and Micronesia are 422953 people and a GDP of $1347000000
 Later on in this code we could change `.fmt()` to display a number that is easier to read.
 
 The three others are called `Sub`, `Mul`, and `Div`, and they are basically the same to implement. For `+=`, `-=`, `*=` and `/=`, just add `Assign`: `AddAssign`, `SubAssign`, `MulAssign`, and `DivAssign`. You can see the full list [here](https://doc.rust-lang.org/std/ops/index.html#structs), because there are many more. `%` for example is called `Rem`, `-` is called `Neg`, and so on.
-
 
 ### Floats
 
@@ -12251,7 +12252,6 @@ fn main() {
 
 This prints `[0, 0, 0, 0, 0, 80, 90, 100]`. But there is one more interesting way to sort called `.sort_unstable()`, and it is usually faster. It can be faster because it doesn't care about the order of numbers if they are the same number. In regular `.sort()`, you know that the last `0, 0, 0, 0, 0` will be in the same order after `.sort()`. But `.sort_unstable()` might move the last zero to index 0, then the third last zero to index 2, etc.
 
-
 `.dedup()` means "de-duplicate". It will remove items that are the same in a vector, but only if they are next to each other. This next code will not just print `"sun", "moon"`:
 
 ```rust
@@ -12276,7 +12276,6 @@ fn main() {
 ```
 
 Result: `["moon", "sun"]`.
-
 
 ### String
 
@@ -12403,7 +12402,6 @@ This prints:
 [src\main.rs:4] my_string = "Age  Height  Weight "
 ```
 
-
 ### OsString and CString
 
 `std::ffi` is the part of `std` that helps you use Rust with other languages or operating systems. It has types like `OsString` and `CString`, which are like `String` for the operating system or `String` for the language C. They each have their own `&str` type too: `OsStr` and `CStr`. `ffi` means "foreign function interface".
@@ -12459,7 +12457,6 @@ We can see that the type of `valid` is `String` and the type of `not_valid` is `
 ### mem
 
 `std::mem` has some pretty interesting methods. We saw some of them already, such as `.size_of()`, `.size_of_val()` and `.drop()`:
-
 
 ```rust
 use std::mem;
@@ -12599,7 +12596,6 @@ And as you can see, it replaced all the numbers with 0: no index was deleted.
 [8, 7, 0, 2, 49, 9999]
 ```
 
-
 Of course, for your own type you can implement `Default` to whatever you want. Let's look at an example where we have a `Bank` and a `Robber`. Every time he robs the `Bank`, he gets the money at the desk. But the desk can take money from the back any time, so it always has 50. We will make our own type for this so it will always have 50. Here is how it works:
 
 ```rust
@@ -12704,7 +12700,6 @@ There is $4900 in the back and $50 at the desk.
 
 You can see that there is always $50 at the desk.
 
-
 ### prelude
 
 The standard library has a prelude too, which is why you don't have to write things like `use std::vec::Vec` to create a `Vec`. You can see all the items [here](https://doc.rust-lang.org/std/prelude/index.html#prelude-contents), and will already know almost all of them:
@@ -12788,8 +12783,6 @@ extern crate rand;
 
 and then `use` statements for the mods, traits, etc. that you wanted to use. But the Rust compiler now doesn't need this help anymore - you can just use `use` and it knows where to find it. So you almost never need `extern crate` anymore, but in other people's Rust code you might still see it on the top.
 
-
-
 ### time
 
 `std::time` is where you can get functions for time. (If you want even more functions, a crate like `chrono` can work.) The simplest function is just getting the system time with `Instant::now()`.
@@ -12859,7 +12852,7 @@ fn main() {
 }
 ```
 
-That prints something like `Instant { tv_sec: 2740773, tv_nsec: 632821036 }`. That's not useful, but if we use `.iter()` and `.rev()` and `.skip(2)`, we can skip the `}` and ` ` at the end. We can use it to make a random number generator.
+That prints something like `Instant { tv_sec: 2740773, tv_nsec: 632821036 }`. That's not useful, but if we use `.iter()` and `.rev()` and `.skip(2)`, we can skip the `}` and `` at the end. We can use it to make a random number generator.
 
 ```rust
 use std::time::Instant;
@@ -12922,9 +12915,7 @@ Did I miss anything?
 
 but the thread will do nothing for three seconds. You usually use `.sleep()` when you have many threads that need to try something a lot, like connecting. You don't want the thread to use your processor to try 100,000 times in a second when you just want it to check sometimes. So then you can set a `Duration`, and it will try to do its task every time it wakes up.
 
-
 ### Other macros
-
 
 Let's take a look at some other macros.
 
@@ -12991,8 +12982,6 @@ warning: unreachable pattern
 
 But `unreachable!()` is for when the compiler can't know, like our other example.
 
-
-
 `column!`, `line!`, `file!`, `module_path!`
 
 These four macros are kind of like `dbg!()` because you just put them in to give you debug information. But they don't take any variables - you just use them with the brackets and nothing else. They are easy to learn together:
@@ -13054,8 +13043,6 @@ On line 23 we got the country Finland
 The next country is Czechia on line 32 and column 9.
 The last country is Portugal inside the module rust_book::something::third_mod
 ```
-
-
 
 `cfg!`
 
@@ -13123,8 +13110,6 @@ test testing::check_if_five ... ok
 
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
-
-
 
 ## Writing macros
 
@@ -13392,7 +13377,6 @@ This prints:
 this, is, really, nice
 ```
 
-
 So now we can start to understand other macros. You can see that some of the macros we've already been using are pretty simple. Here's the one for `write!` that we used to write to files:
 
 ```rust
@@ -13407,8 +13391,6 @@ So to use it, you enter this:
 - everything after that. If it wrote `$arg:tt` then it would only take one, but because it wrote `$($arg:tt)*` it takes zero, one, or any number.
 
 Then it takes `$dst` and uses a method called `write_fmt` on it. Inside that, it uses another macro called `format_args!` that takes all `$($arg)*`, or all the arguments we put in.
-
-
 
 Now let's take a look at the `todo!` macro. That's the one you use when you want the program to compile but haven't written your code yet. It looks like this:
 
@@ -13443,7 +13425,6 @@ This will print:
 ```text
 thread 'main' panicked at 'not yet implemented: Not done yet because of lack of time. Check back in 8 hours', src/main.rs:4:5
 ```
-
 
 Inside a macro you can even call the same macro. Here's one:
 
@@ -13516,7 +13497,7 @@ fn main() {
 }
 ```
 
-This will match the next arm, because it's one expression. It will then call the input `tmp` and use this code: ` $crate::eprintln!("[{}:{}] {} = {:#?}", $crate::file!(), $crate::line!(), $crate::stringify!($val), &tmp);`. So it will print with `file!` and `line!`, then `$val` made into a `String`, and pretty print with `{:#?}` for `tmp`. So for our input it will write this:
+This will match the next arm, because it's one expression. It will then call the input `tmp` and use this code: `$crate::eprintln!("[{}:{}] {} = {:#?}", $crate::file!(), $crate::line!(), $crate::stringify!($val), &tmp);`. So it will print with `file!` and `line!`, then `$val` made into a `String`, and pretty print with `{:#?}` for `tmp`. So for our input it will write this:
 
 ```text
 [src/main.rs:2] vec![8, 9, 10] = [
@@ -13529,7 +13510,6 @@ This will match the next arm, because it's one expression. It will then call the
 And for the rest of it it just calls `dbg!` on itself even if you put in an extra comma.
 
 As you can see, macros are very complicated! Usually you only want a macro to automatically do something that a simple function can't do very well. The best way to learn about macros is to look at other macro examples. Not many people can quickly write macros without problems. So don't think that you need to know everything about macros to know how to write in Rust. But if you read other macros, and change them a little, you can easily borrow their power. Then you might start to get comfortable with writing your own.
-
 
 # Part 2 - Rust on your computer
 
@@ -13608,7 +13588,6 @@ Some other things you need to know are:
 
 One more thing about the compiler: it only takes the most time when you use `cargo build` or `cargo run` the first time. After that it will remember, and it will compile fast again. But if you use `cargo clean` and then run `cargo build`, it will have to compile slowly one more time.
 
-
 ## Taking user input
 
 One easy way to take input from the user is with `std::io::stdin`. This means "standard in", which is the input from the keyboard. With `stdin()` you can get user input, but then you will want to put it in a `&mut String` with `.read_line()`. Here is a simple example of that, but it both works and doesn't work:
@@ -13663,8 +13642,6 @@ x
 You wrote "x\r\n"
 ```
 
-
-
 This is because the keyboard input is actually not just `something`, it is `something` and the `Enter` key. There is an easy method to fix this called `.trim()`, which removes all the whitespace. Whitespace, by the way, is all [these characters](https://doc.rust-lang.org/reference/whitespace.html):
 
 ```text
@@ -13714,8 +13691,6 @@ You wrote x
 
 See you later!
 ```
-
-
 
 There is another kind of user input called `std::env::Args` (env means environment). `Args` is what the user types when starting the program. There is actually always at least one `Arg` in a program. Let's write a program that only prints them using `std::env::args()` to see what they are.
 
@@ -13853,8 +13828,6 @@ work
 too?
 ```
 
-
-
 Besides `Args` given by the user, available in `std::env::args()`, there are also `Vars` which are the system variables. Those are the basic settings for the program that the user didn't type in. You can use `std::env::vars()` to see them all as a `(String, String)`. There are very many. For example:
 
 ```rust
@@ -13920,8 +13893,6 @@ Can't find ROOT
 ```
 
 So `option_env!` is always going to be the safer macro. `env!` is better if you actually want the program to crash when you can't find the environment variable.
-
-
 
 ## Using files
 
@@ -14031,7 +14002,6 @@ Don't forget the `Ok(())` at the end: this is very common in Rust. It means `Ok`
 5
 ```
 
-
 This wasn't very useful when just using `.parse()`, but it will be with files. That's because `?` also changes error types for us. Here's what [the page for the ? operator](https://doc.rust-lang.org/std/macro.try.html) says in simple English:
 
 ```text
@@ -14102,8 +14072,6 @@ Dad: Yep. The world didn't turn color until sometimes in the 1930s...")?;
 ```
 
 So that's the file we will use. It's a conversation with a comic book character named Calvin and his dad, who is not serious about his question. With this we can create a file to use every time.
-
-
 
 Opening a file is just as easy as creating one. You just use `open()` instead of `create()`. After that (if it finds your file), you can do things like `read_to_string()`. To do that you can create a mutable `String` and read the file into there. It looks like this:
 
@@ -14248,7 +14216,6 @@ impl PrintThing {
 fn main() {}
 ```
 
-
 But if you type `cargo doc --open`, you can see a lot more information than you expected. First it shows you this:
 
 ```text
@@ -14325,7 +14292,6 @@ impl PrintThing {
 
 fn main() {}
 ```
-
 
 Now it will print:
 
