@@ -124,7 +124,14 @@
 
 # Part 1 - Rust in your browser
 
-This book has two parts. In Part 1, you will learn as much Rust as you can just in your browser. You can actually learn almost everything you need to know without installing Rust, so Part 1 is very long. Then at the end is Part 2. It is much shorter, and is about Rust on your computer. That's where you will learn everything else you need to know that you can only do outside of a browser. Some examples are: working with files, taking user input, graphics, and personal settings. Hopefully, by the end of Part 1 you will like Rust enough that you will install it. And if you don't, no problem - Part 1 teaches you so much that you won't mind.
+این کتاب دو بخش داره:
+
+در بخش اول هر چقدر که میشه Rust رو توی مرورگر یاد میگیریم. میتونیم خیلی چیزها رو رو بدون نصب کردن Rust یاد بگیریم. پس بخش اول طولانی هست.
+
+در بخش  دوم که کار هایی رو انجام میدیم که بدون نصب کردن Rust امکانش رو نداریم، برای مثال:
+کار با فایل ها، تغامل با کاربر، تنظیمات شخصی و...
+
+پس بخش دوم کوتاه تر هست :)
 
 ## Rust Playground
 **[See this chapter on YouTube](https://youtu.be/-lYeJeQ11OI)**
