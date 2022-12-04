@@ -7,11 +7,14 @@
 `Rust` زیانی هست که برای درک مفاهیم آن باید کمی در مورد انها فکر کنید.
 اما اگر قبلا تجربه کار با زیانی که برای کد خوب نوشتن ساخته شده دارید، احتمالا مشکلی نخواهید داشت.
 
+<div dir="rtl">
+
 ## فهرست
-- [Part 1 - Rust in your browser](#part-1---rust-in-your-browser)
-  - [Rust Playground](#rust-playground)
-  - [🚧 and ⚠️](#-and-️)
-  - [Comments](#comments)
+
+- [بخش ۱ - راست در مرورگر](#بخش-۱---راست-در-مرورگر)
+  - [زمین‌بازی راست](#زمین‌بازی-راست)
+  - [🚧 و ⚠️](#🚧-و-⚠️)
+  - [Comments | نظرات](#comments)
   - [Types](#types)
     - [Primitive types](#primitive-types)
   - [Type inference](#type-inference)
@@ -122,7 +125,9 @@
   - [Cargo doc](#cargo-doc)
   - [The end?](#the-end?)
 
-# Part 1 - Rust in your browser
+</div>
+
+# بخش ۱ - راست در مرورگر
 
 این کتاب دو بخش داره:
 
@@ -133,7 +138,7 @@
 
 پس بخش دوم کوتاه تر هست :)
 
-## زمین بازی راست
+## زمین‌بازی راست
 
 شاید نخواید فعلا `Rust` رو نصب کنید، مشکلی نیست. میتونید به این لینک ([https://play.rust-lang.org](https://play.rust-lang.org/)) برید و کد `Rust` بنویسید و اجرا کنید، تقریبا اکثر تمرین هایی که در این کتاب هست رو میتونید در مرورگر اجرا کنید و نتیجه‌اش رو ببینید.
 
@@ -163,11 +168,11 @@
 
 ### اگر میخواهید `Rust` رو نصب کنید، این لینک ([https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)) رو دنبال کنید. به طور معمول باید از `rustup` برای نصب `Rust` استفاده کنید.
 
-## 🚧 and ⚠️
+## 🚧 و ⚠️
 
 Sometimes the code examples in the book don't work. If an example doesn't work, it will have a 🚧 or a ⚠️ in it. 🚧 is like "under construction": it means that the code is not complete. Rust needs a `fn main()` (a main function) to run, but sometimes we just want to look at small pieces of code so it won't have a `fn main()`. Those examples are correct, but need a `fn main()` for you to run them. And some code examples show you a problem that we will fix. Those ones might have a `fn main()` but generate an error, and so they will have a ⚠️.
 
-## Comments
+## نظرات
 **[See this chapter on YouTube](https://youtu.be/fJ7jBZG_Rpo)**
 
 Comments are made for programmers to read, not the computer. It's good to write comments to help other people understand your code.  It's also good to help you understand your code later.  (Many people write good code but then forget why they wrote it.) To write comments in Rust you usually use `//`:
