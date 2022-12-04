@@ -133,21 +133,35 @@
 
 پس بخش دوم کوتاه تر هست :)
 
-## Rust Playground
-**[See this chapter on YouTube](https://youtu.be/-lYeJeQ11OI)**
+## زمین بازی راست
 
-Maybe you don't want to install Rust yet, and that's okay. You can go to [https://play.rust-lang.org/](https://play.rust-lang.org/) and start writing Rust without leaving your browser. You can write your code there and click Run to see the results. You can run most of the samples in this book inside the Playground in your browser. Only near the end you will see samples that go beyond what you can do in the Playground (like opening files).
+شاید نخواید فعلا راست رو نصب کنید، مشکلی نیست. میتونید به این لینک ([https://play.rust-lang.org](https://play.rust-lang.org/)) برید و کد Rust بنویسید و اجرا کنید، تقریبا اکثر تمرین هایی که در این کتاب هست رو میتونید در مرورگر اجرا کنید و نتیجه‌اش رو ببینید.
 
-Here are some tips when using the Rust Playground:
+یکسری نکات در مورد زمین بازی `Rust`:
 
-- Run your code with Run
-- Change Debug to Release if you want your code to be faster. Debug: compiles faster, runs slower, contains debug information. Release: compiles slower, runs much faster, removes debug information.
-- Click on Share to get a url link. You can use that to share your code if you want help. After you click share, you can click on `Open a new thread in the Rust user forum` to ask people there for help right away.
-- Tools: Rustfmt will format your code nicely.
-- Tools: Clippy will give you extra information about how to make your code better.
-- Config: here you can change your theme to dark mode so you can work at night, and many other configurations.
+\- با `Run` میتونید کدتون رو اجرا کنید.
 
-If you want to install Rust, go here [https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install) and follow the instructions. Usually you will use `rustup` to install and update Rust.
+\- دو حالت برای کامپایل کردن کد وجود داره:
+
+&emsp;-> در حالت `Debug،` کد سریع کامپایل میشه اما کند اجرا میشه. (در مقایسه با حالت `Release`)
+
+&emsp;-> در حالت `Release،` کد کند کامپایل میشه اما سریع اجرا میشه. (در مقایسه با حالت `Debug`)
+
+
+\- با کلیک بر روی `Share`  میتونید `URL` کدی که نوشتید را دریافت کنید و اون رو با دیگران به اشتراک بزارید.
+
+
+\- ابزار ها:
+
+&emsp;-> ابزار، `Rustfmt` فرمت به کد میده و تمیز و مرتبش میکنه.
+
+&emsp;-> ابزار، `Clippy` اطلاعات و جزئیاتی در مورد کد میده.
+
+
+\- گزینه‌ی `Config` هم برای تنظیم کردن محیط به کار میره.
+
+
+#### اگر میخواهید `Rust` رو نصب کنید، این لینک ([https://www.rust-lang.org/tools/install](https://www.rust-lang.org/tools/install)) رو دنبال کنید. به طور معمول باید از `rustup` برای نصب `Rust` استفاده کنید.
 
 ## 🚧 and ⚠️
 
