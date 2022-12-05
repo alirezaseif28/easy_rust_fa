@@ -892,13 +892,11 @@ The smallest i128 is -170141183460469231731687303715884105728 and the biggest i1
 The smallest u128 is 0 and the biggest u128 is 340282366920938463463374607431768211455.
 ```
 
-## Mutability (changing)
+## تغییر‌پذیری | Mutability (changing)
 
-**[See this chapter on YouTube](https://youtu.be/Nyyd6qn7dZY)**
+وقتی یک متغییر با استفاده از `let` تعریف میکنی، به طور پیشفرض تغییر‌ناپذیر هست (مقدارش عوض نمیشه)
 
-When you declare a variable with `let`, it is immutable (cannot be changed).
-
-This will not work:
+پس کد زیر کار نمیکنه:
 
 ```rust
 fn main() {
@@ -907,9 +905,9 @@ fn main() {
 }
 ```
 
-The compiler says: `error[E0384]: cannot assign twice to immutable variable my_number`. This is because variables are immutable if you only write `let`.
+کامپایلر میگه: `error[E0384]: cannot assign twice to immutable variable my_number`.
 
-But sometimes you want to change your variable. To make a variable that you can change, add `mut` after `let`:
+اما بعضی وقت‌ها لازم داریم که متغییر تغییرپذیر باشه، برای اینکار میتونیم کلمه‌کلیدی ‌`mut` رو بعد از `let` بنویسیم:
 
 ```rust
 fn main() {
@@ -918,9 +916,9 @@ fn main() {
 }
 ```
 
-Now there is no problem.
+حالا برنامه کامپایل میشه.
 
-However, you cannot change the type: even `mut` doesn't let you do that. This will not work:
+اما همچنان نمیتونیم نوع یک متغییر رو عوض کنیم، حتی اضافه کردن `mut` هم این اجازه رو به ما نمیده. پس این کد کار نمیکنه:
 
 ```rust
 fn main() {
@@ -928,8 +926,9 @@ fn main() {
     my_variable = "Hello, world!"; // ⚠️
 }
 ```
+کامپایلر این خطا رو میده: `expected integer, found &str`
 
-You will see the same "expected" message from the compiler: `expected integer, found &str`. `&str` is a string type that we will learn soon.
+در مورد `&str` بعدا یاد میگیریم.
 
 ### Shadowing
 
