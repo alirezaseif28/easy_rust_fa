@@ -932,9 +932,9 @@ fn main() {
 
 ### Shadowing
 
-**[See this chapter on YouTube](https://youtu.be/InULHyRGw7g)**
+سایه زدن (`Shadowing`) یعنی، با استفاده از `let` یک متغییر جدید بسازیم اما **همنام متغییری که وجود داره**. این عمل به نظر میاد شبیه به `Mutability` هست، **`اما کامل متفاوت هست`**.
 
-Shadowing means using `let` to declare a new variable with the same name as another variable. It looks like mutability, but it is completely different. Shadowing looks like this:
+قابلیت `Shadownig` چیزی شبیه به این هست:
 
 ```rust
 fn main() {
@@ -944,12 +944,11 @@ fn main() {
     println!("{}", my_number) // Prints 9.2
 }
 ```
+خب حالا متغییر `my_number` اولی نابود شده؟ **به هیچ وجه، فقط رفته زیر سایه‌ی `my_number` دومی**
 
-Here we say that we "shadowed" `my_number` with a new "let binding".
+چون این دو متغییر در یک بلوک هستند، `my_number` اولی غیرقابل دسترس هست و با صدا زدن اسمش به `my_number` دومی دسترسی پیدا میکنیم.
 
-So is the first `my_number` destroyed? No, but when we call `my_number` we now get `my_number` the `f64`. And because they are in the same scope block (the same `{}`), we can't see the first `my_number` anymore.
-
-But if they are in different blocks, we can see both. For example:
+اما اگه در بلوک های مختلف باشند، به هر کدام در بلوک خودشان دسترسی داریم:
 
 ```rust
 fn main() {
@@ -965,9 +964,11 @@ fn main() {
 }
 ```
 
-So when you shadow a variable, you don't destroy it. You **block** it.
+پس وقتی یک متغییر رو سایه میزنید (خودتون میفهمید چی میگم)، اون رو از بین نمیبرید فقط غیرقابل دسترسیش میکنید، و از اون به بعد اسم اون متغییر به متغییر جدیدی که ساختید اشاره میکنه، البته تا زمانی که متغییر جدید نابود نشده، بعد از اینکه متغییر جدید همه چی به روال سابق بر میگرده.
 
 So what is the advantage of shadowing? Shadowing is good when you need to change a variable a lot. Imagine that you want to do a lot of simple math with a variable:
+
+خب حالا مزیت سایه زنی چی هست؟ وقتی خوبه که لازم دارید یک مقدار یک متغییر رو بار ها تغییر بدید، مثلا عملیات ریاضی انجام بدید باهاش:
 
 ```rust
 fn times_two(number: i32) -> i32 {
@@ -986,7 +987,7 @@ fn main() {
 }
 ```
 
-Without shadowing you would have to think of different names, even though you don't care about x:
+بدون `Shadowing` میتونست چیزی شبیه به این کد بشه:
 
 ```rust
 fn times_two(number: i32) -> i32 {
@@ -1005,8 +1006,6 @@ fn main() {
     println!("The number is now: {}", final_number)
 }
 ```
-
-In general, you see shadowing in Rust in this case. It happens where you want to quickly take variable, do something to it, and do something else again. And you usually use it for quick variables that you don't care too much about.
 
 ## The stack, the heap, and pointers
 
