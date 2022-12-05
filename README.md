@@ -857,9 +857,9 @@ fn main() {
 
 این رو پرینت میکنه: `This will not print a new line so this will be on the same line`.
 
-### Smallest and largest numbers
+### کوچک‌ترین و بزرگ‌ترین اعداد |‌ Smallest and largest numbers
 
-If you want to see the smallest and biggest numbers, you can use MIN and MAX after the name of the type:
+اگه میخوای کوچیک‌ترین و بزرگ‌ترین عددی که نوع های `Integer` میتونند نگهداری کنند رو ببینی، میتونی بعد از اسم نوع از `MIN` و `MAX` استفاده کنی:
 
 ```rust
 fn main() {
@@ -877,7 +877,7 @@ fn main() {
 }
 ```
 
-This will print:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 The smallest i8 is -128 and the biggest i8 is 127.
