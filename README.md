@@ -1005,43 +1005,55 @@ fn main() {
 }
 ```
 
-## The stack, the heap, and pointers
+## استک، هیپ و اشاره‌گر‌ ها | The stack, the heap, and pointers
 
-The stack, the heap, and pointers are very important in Rust.
+<div dir="rtl">
+           
+در `Rust`، `Stack`، `Heap` و `Pointers`، بسیار مهم هستند.
 
-The stack and the heap are two places to keep memory in computers. The important differences are:
+خب، `Stack` و `Heap` دو مکان مختلف در حافظه(`RAM`) هستند، تفاوت های مهم‌شون اینها هستند:
 
-- The stack is very fast, but the heap is not so fast. It's not super slow either, but the stack is always faster. But you can't just use the stack all the time, because:
-- Rust needs to know the size of a variable at compile time. So simple variables like `i32` go on the stack, because we know their exact size. You always know that an `i32` is going to be 4 bytes, because 32 bits = 4 bytes. So `i32` can always go on the stack.
-- But some types don't know the size at compile time. But the stack needs to know the exact size. So what do you do? First you put the data in the heap, because the heap can have any size of data. And then to find it a pointer goes on the stack. This is fine because we always know the size of a pointer. So then the computer first goes to the stack, reads the pointer, and follows it to the heap where the data is.
+- قسمت `Stack` خیلی سریع هست، اما `Heap` به اندازه‌ی `Stack` سریع نیست، اما نمیتونیم برای همه چیز از `Stack` استفاده کنیم، به دلیل اینکه:
 
-Pointers sound complicated, but they are easy. Pointers are like a table of contents in a book. Imagine this book:
+- راست لازم داره که سایز یک متغییر رو در زمان کامپایل بدونه، پس نوع های اولیه مثل `i32` همیشه میرند توی `Stack`، به این دلیل که سایزشون مشخص هست. همیشه میدونیم که `i32` چهار بایت فضا اشغال میکنه، پس `i32` میتونه بره داخل `Stack`
+
+- اما بعضی نوع ها  وجود دارند که سایزشون در زمان کامپایل مشخص نیستند، و خب `Stack` هم که به سایز نیاز داره. پس چیکار کنیم؟ اول از همه داده رو داخل `Heap` قرار میدیم، به این دلیل که برای ذخیره سازی داده در `Heap` نیازی به سایز داده نداریم. و بعد برای پیدا کردن اون داده، یک `Pointer` به اون داده درست میکنیم و این `Pointer` رو میتونیم در `Stack` ذخیره کنیم، به این دلیل که سایز `Pointer` مشخص هست. و بعد برای دسترسی به داده، اول میریم سراغ `Pointer` اون به ما میگه که ادرس داده در `Heap` کجاست، و خب بعد میتونیم به اون داده دسترسی داشته باشیم.
+
+اشاره گر (`Pointer`)، به نظر پیچیده میاند، اما خب میتونیم فکر کنیم که شبیه به فهرست مطالب کتاب ها هستند، یک کتاب رو تصور کن:
 
 ```text
-MY BOOK
+کتاب من
 
-TABLE OF CONTENTS
+فهرست مطالب
 
-Chapter                        Page
-Chapter 1: My life              1
-Chapter 2: My cat               15
-Chapter 3: My job               23
-Chapter 4: My family            30
-Chapter 5: Future plans         43
+فصل                             صفحه
+
+فصل اول  : زندگی‌ام                    1
+فصل دوم  : گربه‌ام                    15
+فصل سوم : شغلم                     23
+فصل چهارم: خانواده‌ام                   30
+فصل پنجم : برنامه های اینده‌ام            43
 ```
 
-So this is like five pointers. You can read them and find the information they are talking about. Where is the chapter "My life"? It's on page 1 (it *points* to page 1). Where is the chapter "My job?" It's on page 23.
+خب میتونید بهش مثل پنجتا `Pointer` نگاه کنیدِ، میتونید به اطلاعاتی که بهش اشاره میکنند دسترسی داشته باشید، برای مثال: فصل `زندگیم` کجاست؟ در ادرس `43` (به ادرس `43` **اشاره** میکنه).
 
-The pointer you usually see in Rust is called a **reference**. This is the important part to know: a reference points to the memory of another value. A reference means you *borrow* the value, but you don't own it. It's the same as our book: the table of contents doesn't own the information. It's the chapters that own the information. In Rust, references have a `&` in front of them. So:
+به `Pointer` هایی که در `Rust` استفاده میشود، معمولا **`Reference`** میگن.(در کلمه `Reference` یعنی "`مرجع`")
 
-- `let my_variable = 8` makes a regular variable, but
-- `let my_reference = &my_variable` makes a reference.
+نکته‌ی مهمی که باید در موردش بدونید این هست که یک `Reference` به ادرس حافظه‌ی یک "مقدار" اشاره میکند. وقتی از یک `Reference` استفاده میکنیم به این معنی هست که  **مقدار** رو به امانت(قرض) گرفتیم، اما صاحبش نیستیم. مثل همون مثال کتاب هست: **فهرست مطالب** صاحب اطلاعاتی نیست، بلکه این یک فصل هست که صاحب اطلاعات هست.
 
-You read `my_reference = &my_variable` like this: "my_reference is a reference to my_variable". Or: "my_reference refers to my_variable".
+در `Rust` قبل یک `Reference` یک علامت `&` وجود داره. پس:
 
-This means that `my_reference` is only looking at the data of `my_variable`. `my_variable` still owns its data.
+- کد `;let my_var = 8` یک متغییر میسازه، اما
+- کد `;let my_ref = &my_var` یک `Reference` میسازه
+میتونید کد `;my_ref = &my_var` رو اینطوری بخونید: "متغییر `my_ref` یک `Reference` به متغییر `my_var` هست"
 
-You can also have a reference to a reference, or any number of references.
+این به این معنی هست که `my_ref` فقط به داده‌ی درون `my_var` دسترسی داره، اما صاحبش همچنان متغییر `my_var` هست.
+
+**`بحث مالکیت در "Rust" بسیار مهم هست`**
+
+ما همچنین میتونیم `Reference` یک `Reference`، داشته باشیم. تعدادش هم مهم نیست.
+
+</div>
 
 ```rust
 fn main() {
@@ -1051,8 +1063,7 @@ fn main() {
     let five_references = &&&&&my_number; // This is a &&&&&i32
 }
 ```
-
-These are all different types, just in the same way that "a friend of a friend" is different from "a friend".
+در کد بالا همه متغییر ها نوع متفاوتی از دیگری دارند، مثل اینکه "دوست یک دوست" با خود دوست فرق داره.
 
 ## More about printing
 
