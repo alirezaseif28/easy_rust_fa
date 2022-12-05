@@ -748,18 +748,18 @@ fn main() {
 }
 ```
 
-### Declaring variables and code blocks
+### تعریف متغییر و بلوک کد | Declaring variables and code blocks
 
-Use `let` to declare a variable (declare a variable = tell Rust to make a variable).
-
+با استفاده از `let` میتونیم متغییر بسازیم:
 ```rust
 fn main() {
     let my_number = 8;
     println!("Hello, number {}", my_number);
 }
 ```
+متغییر ها فقط درون بلوکی که تعریف میشند در دسترس هستند و به محض اتمام اون بلوک از بین میرند.
 
-Variables start and end inside a code block `{}`. In this example, `my_number` ends before we call `println!`, because it is inside its own code block.
+در مثال زیر، `my_number` در انتهای بلوکی که تعریف شده از بین میره و دیگه در دسترس نیست. به همین دلیل کد زیر کامپایل نمشه.
 
 ```rust
 fn main() {
@@ -773,8 +773,7 @@ fn main() {
 }
 ```
 
-You can use a code block to return a value:
-
+ما میتونیم از یک بلوک کد مقداری رو هم برگردونیم:
 ```rust
 fn main() {
     let my_number = {
@@ -786,8 +785,7 @@ fn main() {
     println!("My number is: {}", my_number);
 }
 ```
-
-If you add a semicolon inside the block, it will return `()` (nothing):
+اگه `;` رو به کد اضافه کنیم، اون بلاک چیزی بر نمیگردونه (البته ما میدونیم که `()` برمیگردونه)
 
 ```rust
 fn main() {
@@ -801,12 +799,9 @@ fn main() {
     println!("My number is: {:?}", my_number); // my_number is ()
 }
 ```
+این چی بود؟ چرا برای چاپ متغییر از `{:?}` به جای `{}` استفاده کردیم؟ الان در موردش صحبت میکنیم...
 
-So why did we write `{:?}` and not `{}`? We will talk about that now.
-
-## Display and debug
-
-**[See this chapter on YouTube](https://youtu.be/jd3pC248c0o)**
+## نمایش و اشکال‌زدایی | Display and debug
 
 Simple variables in Rust can be printed with `{}` inside `println!`. But some variables can't, and you need to **debug print**. Debug print is printing for the programmer, because it usually shows more information. Debug sometimes doesn't look pretty, because it has extra information to help you.
 
