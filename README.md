@@ -478,35 +478,34 @@ Slice is 6 bytes and also 6 characters.
 Slice2 is 7 bytes but only 3 characters.
 ```
 
-## Type inference
+## استنتاج تایپ | Type inference
 
-**[See this chapter on YouTube](https://youtu.be/q1D2vpy3kEI)**
+استنتاج نوع یعنی شما میتونید نوع یک متغییر رو مشخص نکنید، اما کامپیایلر اون رو بر اساس مقدارش انتخاب کنه. کامپایلر برای کامپایل کد همیشه لازم داره نوع هم متغییر رو بدونه، اما همیشه لازم نیست به طور مشخص برنامه‌نویس نوع رو مشخص کنه، معمولا هم برنامه‌نویس همیشه نوع رو مشخص نمیکنه و از قابلیت استنتاج نوع استفاده میکنه.برای مثال در کد `;let number = 8`، نوع متغییر `number` میشه `i32`. این به دلیل این اتفاق میوفته که کامپایلر این نوع رو انتخاب میکنه.اما در کد `;let number: u8 = 8`، همیشه نوع متغییر `number` یک `u8` هست. چون ما مشخص کردیم که `u8` باشه.
 
-Type inference means that if you don't tell the compiler the type, but it can decide by itself, it will decide. The compiler always needs to know the type of the variables, but you don’t always need to tell it. Actually, usually you don't need to tell it. For example, for `let my_number = 8`, `my_number` will be an `i32`. That is because the compiler chooses i32 for integers if you don't tell it. But if you say `let my_number: u8 = 8`, it will make `my_number` a `u8`, because you told it `u8`.
+<div dir="rtl">
+پس معمولا کامپایلر میتونه نوع متغییر رو انتخاب کنه، اما بعضی وقت ها به دلایل زیر لازم هست که برنامه‌نویس نوع رو مشخص کنه:
 
-So usually the compiler can guess. But sometimes you need to tell it, for two reasons:
+- زمانی که داریم یک عمل پیچیده انجام میدیم که کامپایلر نمیتونه نوع رو مشخص کنه
 
-1) You are doing something very complex and the compiler doesn't know the type you want.
-2) You want a different type (for example, you want an `i128`, not an `i32`).
+- زمانی که یک نوع دیگه به غیر از نوعی که کامپایلر مشخص میکنه رو لازم دارید، مثلا `i128` و نه `i32`
 
-To specify a type, add a colon after the variable name.
+برای مشخص کردن نوع یک متغییر باید یک `:` بعد از اسم متغییر بزارید و بعد نوع رو بنویسیم.
+
+</div>
 
 ```rust
 fn main() {
     let small_number: u8 = 10;
 }
 ```
-
-For numbers, you can say the type after the number. You don't need a space - just type it right after the number.
+برای مشخص کردن نوع اعداد میتونیم نوع رو بعد از مقدار هم بنویسیم.
 
 ```rust
 fn main() {
     let small_number = 10u8; // 10u8 = 10 of type u8
 }
 ```
-
-You can also add `_` if you want to make the number easy to read.
-
+همچنین برای اینکه عدد راحت خونده بشه میتونیم از `_` در بین اعداد استفاده کنیم.
 ```rust
 fn main() {
     let small_number = 10_u8; // This is easier to read
@@ -514,7 +513,7 @@ fn main() {
 }
 ```
 
-The `_` does not change the number. It is only to make it easy for you to read. And it doesn't matter how many `_` you use:
+استفاده از `_`، عدد رو تغییر نمیده و فقط برای راحت‌تر خونده شدن عدد استفاده میشه و همچنین مهم نیست که از چند‌تا `_` استفاده میکنیم.
 
 ```rust
 fn main() {
@@ -524,21 +523,22 @@ fn main() {
 }
 ```
 
-This prints `0, 1624`.
+کد بالا مقدار `0, 1624` رو چاپ میکنه.
 
 ### Floats
-
-Floats are numbers with decimal points. 5.5 is a float, and 6 is an integer. 5.0 is also a float, and even 5. is a float.
+نوع `Float` برای نگهداری اعداد اعشاری/ممیز‌دار استفاده میشه. برای مثال `5.5` یک `Float` هست. `6` یک `Integer` و `6.0` یک `Float` و همچنین حتی `6.` هم یک `Float` هست.
 
 ```rust
 fn main() {
     let my_float = 5.; // Rust sees . and knows that it is a float
 }
 ```
+در `Rust`، دو نوع `Float` داریم: `f32` و `f64`
 
-But the types are not called `float`, they are called `f32` and `f64`. It is the same as integers: the number after `f` shows the number of bits. If you don't write the type, Rust will choose `f64`.
+مثل `Integer` ها عدد بعد از `f` تعداد بیت هایی که نوع میتونه نگهداری کنه رو مشخص میکنه. و همچنین اگر نوع رو مشخص نکنید کامپایلر به طور پیشفرض از `f64` استفاده میکنه.
 
-Of course, only floats of the same type can be used together. So you can't add an `f32` to an `f64`.
+یک نکته این هست که، `Rust` به طور پیشفرض اجازه نمیده نوع های غیر همسان در کنار هم استفاده بشند. پس نمیتونیم یک `f32` رو با `f64` جمع بزنیم.
+
 
 ```rust
 fn main() {
@@ -548,8 +548,7 @@ fn main() {
     let third_float = my_float + my_other_float; // ⚠️
 }
 ```
-
-When you try to run this, Rust will say:
+وقتی سعی بر اینکار کنید، `Rust` چنین چیزی میگه:
 
 ```text
 error[E0308]: mismatched types
@@ -558,8 +557,8 @@ error[E0308]: mismatched types
 5 |     let third_float = my_float + my_other_float;
   |                                  ^^^^^^^^^^^^^^ expected `f64`, found `f32`
 ```
+کامپایلر میگه که `expected 'f64', found 'f32'` (`من فلان نوع رو انتظار داشتم، اما فلان نوع رو گرفتم`)
 
-The compiler writes "expected (type), found (type)" when you use the wrong type. It reads your code like this:
 
 ```rust
 fn main() {
@@ -569,10 +568,9 @@ fn main() {
     let third_float = my_float + my_other_float;  // ⚠️ but it found an f32. It can't add them.
 }
 ```
+پس وقتی کامپایلر میگه که `"expected (type), found (type)"` (`من فلان نوع رو انتظار داشتم، اما فلان نوع رو گرفتم`). میتونیم بفهمیم که مشکل از نوع ها هست و کامپایلر فلان رو انتظار داشت اما فلان رو بهش دادیم.
 
-So when you see "expected (type), found (type)", you must find why the compiler expected a different type.
-
-Of course, with simple numbers it is easy to fix. You can cast the `f32` to an `f64` with `as`:
+البته در مورد که در مورد `Integer` ها هست راحت میشه درستش کرد، با استفاده از `as` میتونیم نوع `f32` رو به یک `f64` تبدیل کنیم:
 
 ```rust
 fn main() {
@@ -583,7 +581,7 @@ fn main() {
 }
 ```
 
-Or even more simply, remove the type declarations. ("to declare a type" = "to tell Rust to use the type") Rust will choose types that can add together.
+یا حتی از قابلیت استنتاج نوع (اره واقعا اسم غریبیه) استفاده کنیم. پس `Rust` (بهتره بگیم کامپایلر) نوع هر دو متغییر رو `f64` مشخص میکنه و خب پس هر دو یک عدد هستند و مشکلی برای استفاده اونها کنار هم دیگه نداریم.
 
 ```rust
 fn main() {
@@ -593,8 +591,7 @@ fn main() {
     let third_float = my_float + my_other_float;
 }
 ```
-
-The Rust compiler is smart and will not choose f64 if you need f32:
+کامپایلر `Rust` باهوش هست و زمانی که `f32` لازم هست از `f64` استفاده نمیکنه:
 
 ```rust
 fn main() {
@@ -605,37 +602,48 @@ fn main() {
 }
 ```
 
-## Printing 'hello, world!'
+## چاپ کردن 'سلام، دنیا' | Printing 'hello, world!'
 
-**See this chapter on YouTube: [Video 1](https://youtu.be/yYlPHRl2geQ), [Video 2](https://youtu.be/DTCSfBJJZb8)**
+وقتی یک پروژه‌ی جدید با استفاده از `cargo` شروع میکنید همیشه این کد درش هست.
 
-When you start a new Rust program, it always has this code:
+بعدا میبینیم `cargo` چی هست، فعلا بدونید که یک `package manager` هست. یه چیزی مثل `pip` در `python`.
 
 ```rust
 fn main() {
     println!("Hello, world!");
 }
 ```
+<div dir="rtl">
 
-- `fn` means function,
-- `main` is the function that starts the program,
-- `()` means that we didn't give the function any variables to start.
 
-`{}` is called a **code block**. This is the space where code lives.
+- `fn` یعنی میخوام یک فانکشن بسازم,
+- `main` اسم فانکشنی هست که برنامه از اونجا شروع میشه,
+- `()` یعنی این فانکشن برای اجرا به ورودی نیاز نداره.
 
-`println!` is a **macro** that prints to the console. A **macro** is like a function that writes code for you. Macros have a `!` after them. We will learn about making macros later. For now, remember that `!` means that it is a macro.
+`{}` یک  **`code block`** ایجاد میکنه. این فضایی هست که کد درش قرار میگیره.
 
-To learn about the `;`, we will create another function. First, in `main` we will print a number 8:
+`println!` یک ماکرو(**`macro`**) هست که چیزی رو توی `stdout` چاپ میکنه. یک **`macro`** مثل یک فانکشن هست. ماکرو ها یک `!` بعد از اسمشون دارند، بعدا در مورد ماکرو بیشتر میخونیم، اما فعلا یادتون باشه که `!` نشون میده که ما در حال اجرای یک ماکرو هستیم.
+
+
+در ادامه کمی در مورد `";"` یاد میگیریم، اما فعلا بزارید یکم روی چاپ تمرکز کنیم و عدد `8` رو با متن دلخواه چاپ کنیم:
+
+</div>
 
 ```rust
 fn main() {
     println!("Hello, world number {}!", 8);
 }
 ```
+<div dir="rtl">
 
-The `{}` in `println!` means "put the variable inside here". This prints `Hello, world number 8!`.
+علامت `{}` در `println!` یه این معنی هست که "متغییر رو بزار اینجا"، خروجی کد با این هست:
 
-We can put more in, just like we did before:
+`Hello, world number 8!`
+
+
+میتونیم هر چندتا چیز که میخواییم پرینت کنیم، همونطور که قبلا هم کردیم:
+
+</div>
 
 ```rust
 fn main() {
@@ -643,9 +651,9 @@ fn main() {
 }
 ```
 
-This prints `Hello, worlds number 8 and 9!`.
+چنین چیزی رو پرینت میکنه:  `Hello, worlds number 8 and 9!`.
 
-Now let's create the function.
+خب بیاید یک فانکشن درست کنیم:
 
 ```rust
 fn number() -> i32 {
@@ -657,12 +665,22 @@ fn main() {
 }
 ```
 
-This also prints `Hello, world number 8!`. When Rust looks at `number()` it sees a function. This function:
+<div dir="rtl">
 
-- Does not take anything (because it has `()`)
-- Returns an `i32`. The `->` (called a "skinny arrow") shows what the function returns.
 
-Inside the function is just `8`. Because there is no `;`, this is the value it returns. If it had a `;`, it would not return anything (it would return a `()`). Rust will not compile this if it has a `;`, because the return is `i32` and `;` returns `()`, not `i32`:
+این کد هم همچنان `Hello, world number 8!` رو پرینت میکنه.
+
+وقتی راست `number()` رو میبینه، میفهمه که یک فانکشن هست که:
+
+- چیزی به عنوان ورودی **نمیگیره**
+
+- یک `i32` به عنوان خروجی برمیگردونه. علامت `->` (بهش میگن "فلش لاغر") نشون میده که خروجی فانکشن چی هست
+
+نکته، فانکشن ها همیشه خروجی دارند، حتی اگه یک فانکشن رو بدون خروجی هم تعریف کنیم باز هم یک `()` بر میگردونه. که این یعنی `()` به معنای هیچی هست.
+
+توی فانکشن فقط مقدار `8` هست. به این دلیل که `;`‌ای وجود نداره این مقدار به عنوان خروجی برمیگرده. اگر `;` میزاشتیم چیزی به عنوان خروجی برنمیگردوند (بهتره بگیم یک `()` برمیگردوند). اما اگه `;` میزاشتیم `Rust` این کد رو کامپایل نمیکرد، به این دلیل که خروجی این فانکشن باید `i32` باشه اما اونوقت یک `()` بر میگردوند:
+
+</div>
 
 ```rust
 fn main() {
@@ -682,10 +700,26 @@ fn number() -> i32 {
 6 |     8;
   |      - help: consider removing this semicolon
 ```
+این خطا به این معنی هست که "تو به من گفتی که `()number` یک `i32` برمیگردونه اما `;` رو گذاشتی که باعث میشه این فانکشن `()` برگردونه"، پس کامپایلر پیشنهاد میکنه که `;` رو پاک کنیم.
 
-This means "you told me that `number()` returns an `i32`, but you added a `;` so it doesn't return anything". So the compiler suggests removing the semicolon.
+دلیل اینکه این فانکشن `()` برمیگردونه این نیست که جلوی یک مقدار `;` گذاشتیم، بلکه دلیلش این هست که فانکشن تموم شده و هنوز چیزی به عنوان خروجی برنگردونده شده.
 
-You can also write `return 8;` but in Rust it is normal to just remove the `;` to `return`.
+نکته اگه فانکشن تموم بشه و چیزی به عنوان خروجی برگردونده نشه، `()` به عنوان خروجی در نظر گرفته میشه.
+
+### ما معمولا نمیگیم که یک فانکشن `()` برمیگردونه، بلکه میگیم فانکشن چیزی بر نمیگردونه اما خب اصولیش این هست که بگیم `()` برمیگردونه
+
+اگه تجربه‌ی برنامه‌نویسی داشته باشید میدونید که برای برگردوندن یک خروجی از یک فانکشن از کلمه‌کلیدی `return` استفاده میکنیم.
+
+پس چرا زمانی که `;` رو پاک میکنیم مقدار رو به عنوان خروجی برمیگردونه؟
+
+دلیلش این هست که در `Rust` برای برگردوندن مقدار از فانکشن دو روش وجود داره:
+
+- با استفاده از `return`
+
+- و روش خلاصه‌تر این هست که مقدار رو بدون `;` بزاریم، مثل همونکاری که اول کردیم (رایج‌تر هست)
+
+همچنین در روش استفاده از `return`، میتونیم `;return 8` رو بنویسیم، اما مرسوم‌تر هست که `;` رو پاک کنیم پس در نهایت بهتره از شیوه‌ی `return 8` استفاده کنیم.
+
 
 When you want to give variables to a function, put them inside the `()`. You have to give them a name and write the type.
 
