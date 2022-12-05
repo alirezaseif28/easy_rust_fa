@@ -720,8 +720,7 @@ fn number() -> i32 {
 
 همچنین در روش استفاده از `return`، میتونیم `;return 8` رو بنویسیم، اما مرسوم‌تر هست که `;` رو پاک کنیم پس در نهایت بهتره از شیوه‌ی `return 8` استفاده کنیم.
 
-
-When you want to give variables to a function, put them inside the `()`. You have to give them a name and write the type.
+وقتی میخوایم متغییری به فانکشنی بفرستیم باید درون قسمت `()` فانکشن اسم و نوع متغییر رو درخواستی رو مشخص کنیم.
 
 ```rust
 fn multiply(number_one: i32, number_two: i32) { // Two i32s will enter the function. We will call them number_one and number_two.
@@ -736,9 +735,7 @@ fn main() {
     multiply(some_number, some_other_number); // and put them in the function
 }
 ```
-
-We can also return an `i32`. Just take out the semicolon at the end:
-
+همچنین میتونیم خروجی هم داشته باشیم:
 ```rust
 fn multiply(number_one: i32, number_two: i32) -> i32 {
     let result = number_one * number_two;
