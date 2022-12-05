@@ -805,7 +805,9 @@ fn main() {
 
 Simple variables in Rust can be printed with `{}` inside `println!`. But some variables can't, and you need to **debug print**. Debug print is printing for the programmer, because it usually shows more information. Debug sometimes doesn't look pretty, because it has extra information to help you.
 
-How do you know if you need `{:?}` and not `{}`? The compiler will tell you. For example:
+متغییر های ساده در `Rust` میتونند با استفاده از `{}` پرینت بشند، اما بعضی متغییر ها  هم هستند که باید به اصطلاح **`Debug Print`** بشند. **`Debug Print`** یه جورایی پرینت برای برنامه‌نویس ها هست، اطلاعات بیشتری نشون میده و به همین دلیل شاید خیلی تر و تمیز به نظر نیاد.
+
+چطوری بفهمیم به `{:?}` نیاز داریم به جای `{}` ؟ خب کامپایلر بهت میگه ! برای مثال:
 
 ```rust
 fn main() {
@@ -814,7 +816,7 @@ fn main() {
 }
 ```
 
-When we run this, the compiler says:
+وقتی این کد رو اجرا میکنید، کامپایلر چنین چیزی میگه:
 
 ```text
 error[E0277]: `()` doesn't implement `std::fmt::Display`
@@ -829,11 +831,22 @@ error[E0277]: `()` doesn't implement `std::fmt::Display`
   = note: this error originates in a macro (in Nightly builds, run with -Z macro-backtrace for more info)
 ```
 
-This is a lot of information. But the important part is: `you may be able to use {:?} (or {:#?} for pretty-print) instead`. This means that you can try `{:?}`, and also `{:#?}` `{:#?}` is called "pretty printing". It is like `{:?}` but prints with different formatting over more lines.
+خب خیلی چیز گفت، اما بخش مهمش اونجاست که میگه `you may be able to use {:?} (or {:#?} for pretty-print) instead`.
 
-So Display means printing with `{}`, and Debug means printing with `{:?}`.
+خب این یعنی این که شما باید از `{:?}` یا `` یا `` استفاده کنید.
+
+خب `:#?` چی هست ؟
+
+این ها همون کار `{}` رو میکنند اما سعی میکنند کمی تر و تمیز‌تر به نظر بیان.
+
+خب پس وقتی داریم از `{}` برای پرینت استفاده میکنیم داریم `Display` میکنیم و وقتی از `{:?}` یا `{:#?}` استفاده میکنیم داریم `Debug` میکنیم.
+
+(البته منظورم `Display Printing` و `Debug Printing` هست)
+خب پس `Display`، یعنی استفاده از `{}` برای پرینت و `Debug` یعنی استفاده از `{:?}` یا `{:#?}` برای پرینت.
 
 One more thing: you can also use `print!` without `ln` if you don't want a new line.
+
+یک نکته‌ی دیگه: میتونیم از `print!` به جای `println!` استفاده کنیم اگه نمیخوام بعد از چاپ بره سر خط:
 
 ```rust
 fn main() {
@@ -842,7 +855,7 @@ fn main() {
 }
 ```
 
-This prints `This will not print a new line so this will be on the same line`.
+این رو پرینت میکنه: `This will not print a new line so this will be on the same line`.
 
 ### Smallest and largest numbers
 
