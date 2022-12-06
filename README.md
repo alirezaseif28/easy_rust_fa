@@ -1063,25 +1063,22 @@ fn main() {
 
 ## More about printing
 
-In Rust you can print things in almost any way you want. Here are some more things to know about printing.
+در `Rust` ما تقریبا میتونیم هر چیزی رو به هر روشی که میخوایم پرینت کنیم. در این بخش چیز های بیشتری در مورد پرینت کردن یاد میگیریم.
 
-Adding `\n` will make a new line, and `\t` will make a tab:
-
+اضافه کردن `\n`، یک خط جدید ایجاد میکنه و همچنین `\t` یک تب (`tab`) ایچاد میکنه:
 ```rust
 fn main() {
     // Note: this is print!, not println!
     print!("\t Start with a tab\nand move to a new line");
 }
 ```
-
-This prints:
-
+خروجیش:
 ```text
          Start with a tab
 and move to a new line
 ```
 
-Inside `""` you can write over many lines with no problem, but be careful with the spacing:
+داخل `""` میتونیم هر چند خط که میخوایم بنویسیم اما خب حواسمون باید به اسپیس ها هم باشه:
 
 ```rust
 fn main() {
@@ -1098,7 +1095,7 @@ and it will print just fine.");
 }
 ```
 
-This prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 Inside quotes
@@ -1110,7 +1107,7 @@ If you forget to write
     will be added when you print.
 ```
 
-If you want to print characters like `\n` (called "escape characters"), you can add an extra `\`:
+اگه میخواید `Escape Character` ها رو پرینت کنید، باید یه `\` اضافی هم بزارید که بفهمه میخواید خودش رو پرینت کنید و نمیخواید اون کاری که در حالت عادی انجام میده رو انجام بده:
 
 ```rust
 fn main() {
@@ -1118,13 +1115,13 @@ fn main() {
 }
 ```
 
-This prints:
+خروجی این هم همچین چیزی میشه:
 
 ```text
 Here are two escape characters: \n and \t
 ```
 
-Sometimes you have too many `"` and escape characters, and want Rust to ignore everything. To do this, you can add `r#` to the beginning and `#` to the end.
+گاهی اوقات، نیاز داریم تعداد زیادی `Escape Character` یا `"` رو پرینت کنیم، و نمیخوایم که مدام از `\` استفاده کنیم که کامپایلر بفهمه منظورمون فقط خود کاراکتر هست و نه کارکردش، برای این کار میتونیم از یک `r#` قبل از `String` و یک `#` بعد `String` بزاریم:
 
 ```rust
 fn main() {
@@ -1133,16 +1130,13 @@ fn main() {
 }
 ```
 
-This prints the same thing, but using `r#` makes it easier for humans to read.
-
+این دو خط کد یک چیز رو پرینت میکنن، اما روش دوم بهتره، چون کد راحت‌تر خونده میشه:
 ```text
 He said, "You can find the file at c:\files\my_documents\file.txt." Then I found the file.
 He said, "You can find the file at c:\files\my_documents\file.txt." Then I found the file.
 ```
 
-If you need to print with a `#` inside, then you can start with `r##` and end with `##`. And if you need more than one, you can add one more # on each side.
-
-Here are four examples:
+هر وقت هم که نیاز داشتیم که `#` رو پرینت کنیم، میتونیم `String` رو با `r##` شروع کنیم و با `##` تموم کنیم. البته اگه هم بیشتر از یکی نیاز داشتیم میتونیم هر چند تا که میخوام `#` به هر دو طرف اضافه کنیم، برای درک بهتر کدهای زیر رو ببینید:
 
 ```rust
 fn main() {
@@ -1157,7 +1151,7 @@ fn main() {
 }
 ```
 
-This will print:
+خروجیش:
 
 ```text
 'Ice to see you,' he said.
@@ -1166,7 +1160,7 @@ The hashtag #IceToSeeYou had become very popular.
 "You don't have to type ### to use a hashtag. You can just use #."
 ```
 
-`r#` has another use: with it you can use a keyword (words like `let`, `fn`, etc.) as a variable name.
+همچنین `r#` یه کاربرد دیگه هم داره، اون هم این هست که باهاش میتونیم از `کلمات‌کلیدی` به عنوان اسم متغییر استفاده کنیم، که در حالت عادی نمیتونیم:
 
 ```rust
 fn main() {
@@ -1174,11 +1168,7 @@ fn main() {
     let mut r#mut = 10; // This variable's name is mut
 }
 ```
-
-`r#` has this function because older versions of Rust had fewer keywords than Rust now. So with `r#` you can avoid mistakes with variable names that were not keywords before.
-
-Or maybe for some reason you *really* need a function to have a name like `return`. Then you can write this:
-
+البته در شاید شما **`واقعا`‍** لازم دارید از یک کلمه‌کلیدی به عنوان نام استفاده کنید، برای مثال **`باید`** اسم فانکشنی که میخوایید استفاده کنید، `return` باشه:
 ```rust
 fn r#return() -> u8 {
     println!("Here is your number.");
@@ -1190,23 +1180,21 @@ fn main() {
     println!("{}", my_number);
 }
 ```
-
-This prints:
-
+خروجیش:
 ```text
 Here is your number.
 8
 ```
+احتمالا هیچوقت به چنین قابلیتی نیاز پیدا نمیکنید، اما اگه در جایی واقعا لازم داشتید که از کلمات‌کلیدی به عنوان اسم استفاده کنید، یادتون باشه که میتونید از `r#` استفاده کنید.
 
-So you probably won't need it, but if you really need to use a keyword for a variable then you can use `r#`.
+اگه هر وقت لازم داشتید که مقدار بایت یک `&str` یا `char` رو پرینت کنید میتونید قیل از `String` یک `b` بزارید. این برای همه کاراکتر های `ASCII` کار میکنه.
 
-If you want to print the bytes of a `&str` or a `char`, you can just write `b` before the string. This works for all ASCII characters. These are all the ASCII characters:
-
+این ها همه کاراکتر های `ASCII` هستند:
 ```text
 ☺☻♥♦♣♠♫☼►◄↕‼¶§▬↨↑↓→∟↔▲▼123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~
 ```
 
-So when you print this:
+پس کد زیر:
 
 ```rust
 fn main() {
@@ -1214,15 +1202,15 @@ fn main() {
 }
 ```
 
-Here is the result:
+چنین خروجی‌ای میده:
 
 ```text
 [84, 104, 105, 115, 32, 119, 105, 108, 108, 32, 108, 111, 111, 107, 32, 108, 105, 107, 101, 32, 110, 117, 109, 98, 101, 114, 115]
 ```
 
-For a `char` this is called a *byte*, and for a `&str` it's called a *byte string*.
+البته برای یک `char` بهش میگن ***`byte`***، و برای `&str` بهش میگن ***`byte string`***.
 
-You can also put `b` and `r` together if you need to:
+همچنین میتونیم از `b` و `r` در کنار هم استفاده کنیم:
 
 ```rust
 fn main() {
@@ -1230,7 +1218,7 @@ fn main() {
 }
 ```
 
-That will print `[73, 32, 108, 105, 107, 101, 32, 116, 111, 32, 119, 114, 105, 116, 101, 32, 34, 35, 34, 46]`.
+همچین خروجی‌ای میده:  `[73, 32, 108, 105, 107, 101, 32, 116, 111, 32, 119, 114, 105, 116, 101, 32, 34, 35, 34, 46]`.
 
 There is also a Unicode escape that lets you print any Unicode character inside a string: `\u{}`. A hexadecimal number goes inside the `{}` to print it. Here is a short example of how to get the Unicode number, and how to print it again.
 
