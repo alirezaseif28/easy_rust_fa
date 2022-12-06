@@ -803,8 +803,6 @@ fn main() {
 
 ## نمایش و اشکال‌زدایی | Display and debug
 
-Simple variables in Rust can be printed with `{}` inside `println!`. But some variables can't, and you need to **debug print**. Debug print is printing for the programmer, because it usually shows more information. Debug sometimes doesn't look pretty, because it has extra information to help you.
-
 متغییر های ساده در `Rust` میتونند با استفاده از `{}` پرینت بشند، اما بعضی متغییر ها  هم هستند که باید به اصطلاح **`Debug Print`** بشند. **`Debug Print`** یه جورایی پرینت برای برنامه‌نویس ها هست، اطلاعات بیشتری نشون میده و به همین دلیل شاید خیلی تر و تمیز به نظر نیاد.
 
 چطوری بفهمیم به `{:?}` نیاز داریم به جای `{}` ؟ خب کامپایلر بهت میگه ! برای مثال:
@@ -843,8 +841,6 @@ error[E0277]: `()` doesn't implement `std::fmt::Display`
 
 (البته منظورم `Display Printing` و `Debug Printing` هست)
 خب پس `Display`، یعنی استفاده از `{}` برای پرینت و `Debug` یعنی استفاده از `{:?}` یا `{:#?}` برای پرینت.
-
-One more thing: you can also use `print!` without `ln` if you don't want a new line.
 
 یک نکته‌ی دیگه: میتونیم از `print!` به جای `println!` استفاده کنیم اگه نمیخوام بعد از چاپ بره سر خط:
 
