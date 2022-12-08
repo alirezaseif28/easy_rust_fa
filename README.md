@@ -1445,20 +1445,29 @@ fn main() {
 ```
 
 و حالا ما یک `String` میگیریم.
-## const and static
 
-**[See this chapter on YouTube](https://youtu.be/Ky3HqkWUcI0)**
+## ثابت‌ها و ایستا‌ها | consts and statics
 
-There are two other ways to declare values, not just with `let`. These are `const` and `static`. Also, Rust won't use type inference: you need to write the type for them. These are for values that don't change (`const` means constant). The difference is that:
+<div dir="rtl">
 
-- `const` is for values that don't change, the name is replaced with the value when it's used,
-- `static` is similar to `const`, but has a fixed memory location and can act as a global variable.
+دو روش دیگه برای ایچاد مقدار هم به جز استفاده از `let` داریم.
 
-So they are almost the same. Rust programmers almost always use `const`.
+اون دوتا `const` و `static` هستند، همچنین هنگام اینجاد متغییر با استفاده از این کلمه‌کلیدی‌‌ها `Rust` از استنتاج نوع استفاده نمیکنه، یعنی باید نوع رو مشخص کنیم.
 
-You write them with ALL CAPITAL LETTERS, and usually outside of `main` so that they can live for the whole program.
+این ها برای ایجاد مقدار هایی هستند که تغییر نمیکنند، تفاوتشون چیه؟
+- کلمه‌کلیدی `const` برای ایجاد مقدار هایی هست که تغییر نمیکنند
 
-Two examples are: `const NUMBER_OF_MONTHS: u32 = 12;` and `static SEASONS: [&str; 4] = ["Spring", "Summer", "Fall", "Winter"];`
+- کلمه‌کلیدی `static` هم شبیه به `const` هست، اما `static` ادرس حافظه‌اش تغییر نمیکنه، یعنی میتونیم ازش به عنوان متغییر جهانی (`Global Variable`) استفاده کنیم، البته مقدار `static` میتونه تغییر کنه
+
+پس تقریبا شبیه هم هستند. اما ما معمولا از `const` استفاده میکنیم. البته جا هایی هم هست که نیاز هست که از `static` استفاده کنیم.
+
+اسمی که برای مقادیری که با استفاده از کلمه‌کلیدی `const` یا `static` ساخته شدند، باید با حروف بزرگ باشد. همچنین معمولا بیرون از فانکشن `main` تعریف میشند که اینطوری میتونند در طول برنامه استفاده بشند.
+
+برای مثال اینطوری از این کلمه‌کلیدی ها استفاده کنید:
+- `const NUMBER_OF_MONTHS: u32 = 12;`
+- `static SEASONS: [&str; 4] = ["Spring", "Summer", "Fall", "Winter"];`
+
+</div>
 
 ## More on references
 
