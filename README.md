@@ -1220,7 +1220,7 @@ fn main() {
 
 همچین خروجی‌ای میده:  `[73, 32, 108, 105, 107, 101, 32, 116, 111, 32, 119, 114, 105, 116, 101, 32, 34, 35, 34, 46]`.
 
-There is also a Unicode escape that lets you print any Unicode character inside a string: `\u{}`. A hexadecimal number goes inside the `{}` to print it. Here is a short example of how to get the Unicode number, and how to print it again.
+همچنین میتونیم کاراکتر های `Unicode` رو با استفاده از کدشون پرینت کنیم. برای اینکار باید از فرمت `\u{}` استفاده کنیم. عدد هگزادسیمال کاراکتر هم داخل `{}` قرار میگیره:
 
 ```rust
 fn main() {
@@ -1233,9 +1233,9 @@ fn main() {
 }
 ```
 
-We know that `println!` can print with `{}` (for Display) and `{:?}` (for Debug), plus `{:#?}` for pretty printing. But there are many other ways to print.
+ما تا الان میدونیم که با استفاده از `{}` میتونیم متغییر هارو پرینت کنیم که بهش میگیم `Display Printing`، با `{:?}` هم میتونیم پرینت کنیم که بهش میگیم `Debug Printing` و همچنین با `{:#?}` هم میتونیم پرینت کنیم که بهش میگیم `Debug-Pretty Printing`. اما روش های دیگه‌ای هم برای پرینت کردن وجود داره.
 
-For example, if you have a reference, you can use `{:p}` to print the *pointer address*. Pointer address means the location in your computer's memory.
+برای مثال، با استفاده از `{:p}` میتونیم ‍`Pointer Address` رو پرینت کنیم. این یعنی میتونیم ادرس متغییر در حافظه(`RAM`) رو بدست بیاریم:
 
 ```rust
 fn main() {
@@ -1245,9 +1245,11 @@ fn main() {
 }
 ```
 
-This prints `0xe2bc0ffcfc` or some other address. It might be different every time, depending on where your computer stores it.
+الان چنین چیزی رو پرینت کرد: `0xe2bc0ffcfc`
 
-Or you can print binary, hexadecimal and octal:
+البته هر بار این ادرس متفاوت هست، حافظه ادرس های تصادفی داده ها رو ذخیره میکنه.‌ (`RAM` = `Random Access Memory`)
+
+همچنین میتونیم مقادیر رو به باینری، هگزادسیمال یا اکتال پرینت کنیم:
 
 ```rust
 fn main() {
@@ -1256,9 +1258,9 @@ fn main() {
 }
 ```
 
-This prints `Binary: 1000101011, hexadecimal: 22b, octal: 1053`.
+چنین چیزی پرینت میکنه: `Binary: 1000101011, hexadecimal: 22b, octal: 1053`.
 
-Or you can add numbers to change the order. The first variable will be in index 0, the next in index 1, and so on.
+همچنین میتونیم با استفاده از اعداد ترتیب متغییر هارو در فرمت مشخص کنیم:
 
 ```rust
 fn main() {
@@ -1269,10 +1271,7 @@ fn main() {
 }
 ```
 
-`father_name` is in position 0, `son_name` is in position 1, and `family_name` is in position 2. So it prints `This is Adrian Fahrenheit Țepeș, son of Vlad Țepeș`.
-
-Maybe you have a very complex string to print with too many variables inside the `{}` curly brackets. Or maybe you need to print a variable more than one time. Then it can help to add names to the `{}`:
-
+همچنین میتونیم از اسم برای مشخص کردن متغییر ها در فرمت استفاده کنیم:
 ```rust
 fn main() {
     println!(
@@ -1286,27 +1285,22 @@ but {city3} is not in {country}.",
 }
 ```
 
-That will print:
-
+چنین چیزی رو پرینت میکنه:
 ```text
 Seoul is in Korea and Busan is also in Korea,
 but Tokyo is not in Korea.
 ```
 
-Very complex printing is also possible in Rust if you want to use it. Here is how to do it:
+یک روش پرینت کارامدی و پیچیده‌ای هم وجود داره که چنین فرمتی داره: `{variable:padding alignment minimum.maximum}`
 
-{variable:padding alignment minimum.maximum}
+برای فهم این فرمت به نکات زیر توجه کنید:
+1) میخواید به متغییر اسم بدید؟ اسم رو اول بنویسید (بعدش اگه میخوایم کارای بیشتری انجام بدیم کاراکتر `:` رو میزاریم)
+2) ایا به `Padding Character` نیاز داریم؟ اون کاراکتر مدنظر رو میزاریم
+3) ایا نیاز به مشخص کردن جایگاه `Padding Character` داریم؟ علامتی که میخوایم رو میزاریم (`^` یعنی وسط، `<` یعنی به سمت سمت، `>` یعنی به سمت راست)
+4) ایا به حداقلی تعدادی از `Padding Character` نیاز داریم؟ تعداد رو به عدد مینویسیم
+5) به مشخص کردن حداکثر تعدادی از `Padding Character` نیاز داریم؟ اول یک `.` میزاریم و بعد تعداد رو به عدد مینویسیم
 
-To understand this, look at the
-
-1) Do you want a variable name? Write that first, like when we wrote {country} above.
-(Then add a `:` after it if you want to do more things)
-2) Do you want a padding character? For example, 55 with three "padding zeros" looks like 00055.
-3) What alignment (left / middle / right) for the padding?
-4) Do you want a minimum length? (just write a number)
-5) Do you want a maximum length? (write a number with a `.` in front)
-
-For example, if I want to write "a" with five ㅎ characters on the left and five ㅎ characters on the right:
+برای مثال،‌ اگه میخوایم کاراکتر `a` نوشته بشه با پنچ کاراکتر `ㅎ` قبل و بعدش باید چنین کدی بنویسیم:
 
 ```rust
 fn main() {
@@ -1315,15 +1309,15 @@ fn main() {
 }
 ```
 
-This prints `ㅎㅎㅎㅎㅎaㅎㅎㅎㅎㅎ`. Let's look at 1) to 5) for this to understand how the compiler reads it.
+چنین چیزی رو پرینت میکنه:  `ㅎㅎㅎㅎㅎaㅎㅎㅎㅎㅎ`.
 
-- Do you want a variable name? `{:ㅎ^11}` There is no variable name. There is nothing before `:`.
-- Do you want a padding character? `{:ㅎ^11}` Yes. ㅎ comes after the `:` and has a `^`. `<` means padding with the character on the left, `>` means on the right, and `^` means in the middle.
-- Do you want a minimum length? `{:ㅎ^11}` Yes: there is an 11 after.
-- Do you want a maximum length? `{:ㅎ^11}` No: there is no number with a `.` before.
+برای اینکه بفهمیم کامپایلر چظور باهاش رفتار میکنه بهتره به نکات زیر توجه کنیم:
+- به اسم نیاز داریم؟ `{:ㅎ^11}`: چیزی قبل از `:` وجود نداره پس خیر
+- به `Padding Character` نیاز داریم؟ `{:ㅎ^11}`: بله، چون کاراکتر `ㅎ` بعد از `:` مشخص شده و همچنین با استفاده از کاراکتر `^` جایگاهش وسظ انتخاب شده
+- به حداقل تعدادی از `Padding Character` نیاز داریم؟ `{:ㅎ^11}`: بله، عددی وجود داره که `11` هست
+- به حداکثر تعدادی از `Padding Character` نیاز داریم؟ `{:ㅎ^11}`: خیر چون عددی وجود نداره که قبلش کاراکتر `.` وجود داشته باشه
 
-Here is an example of many types of formatting.
-
+این مثالی از استفاده های این نوع پرینت کردن هست:
 ```rust
 fn main() {
     let title = "TODAY'S NEWS";
@@ -1336,8 +1330,7 @@ fn main() {
 }
 ```
 
-It prints:
-
+چنین چیزی رو پرینت میکنه:
 ```text
 ---------TODAY'S NEWS---------
 |                            |
