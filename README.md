@@ -1061,7 +1061,7 @@ fn main() {
 ```
 در کد بالا همه متغییر ها نوع متفاوتی از دیگری دارند، مثل اینکه "دوست یک دوست" با خود دوست فرق داره.
 
-## More about printing
+## باز هم پرینت کردن |‌ More about printing
 
 در `Rust` ما تقریبا میتونیم هر چیزی رو به هر روشی که میخوایم پرینت کنیم. در این بخش چیز های بیشتری در مورد پرینت کردن یاد میگیریم.
 
@@ -1337,9 +1337,7 @@ fn main() {
 SEOUL--------------------TOKYO
 ```
 
-## Strings
-
-**[See this chapter on YouTube](https://youtu.be/pSyaGzGg26o)**
+## رشته ها | Strings
 
 Rust has two main types of strings: `String` and `&str`. What is the difference?
 
