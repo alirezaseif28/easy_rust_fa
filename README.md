@@ -1469,11 +1469,11 @@ fn main() {
 
 </div>
 
-## More on references
+## باز هم `Reference` ها | More on references
 
-**[See this chapter on YouTube](https://youtu.be/R13sQ8SNoEQ)**
+مرجع (`Reference`) ها در `Rust` بسیار مهم هستند، `Rust` از `Reference` استفاده میکند که دسترسی امن به حافظه را ایجاد کند.
 
-References are very important in Rust. Rust uses references to make sure that all memory access is safe. We know that we use `&` to create a reference:
+ما میدونیم که `&` یک `Reference` میسازد:
 
 ```rust
 fn main() {
@@ -1485,11 +1485,11 @@ fn main() {
 }
 ```
 
-This prints `Austria`.
+چنین چیزی رو پرینت میکنه: `Austria`
 
-In the code, `country` is a `String`. We then created two references to `country`. They have the type `&String`, which you say is a "reference to a String". We could create three references or one hundred references to `country` and it would be no problem.
+در کد بالا `country` یک `String` است.ما بعدش دو `Reference` به ان ساختیم. اون ها نوع `&String` رو دارند، ما میتونیم `Reference` های بیشماری به `country` بسازیم.
 
-But this is a problem:
+اما این یک مشکل ایجاد میکنه:
 
 ```rust
 fn return_str() -> &str {
@@ -1502,11 +1502,9 @@ fn main() {
     let country = return_str();
 }
 ```
+فانکشن `return_str()` یک `String` میسازه و بعدش یک `Reference` به اون رو برمیگردونه، اما `String`‌ای که در `return_str()` درست میشه فقط در همونجا قابل دسترس هست و وقتی که فانکشن تموم بشه از بین میره و هر فضایی که این فانکشن گرفته بود برای استفاده های بعدی ازاد میشه. پس `country_ref` به یک چیزی اشاره میکنه که از بین رفته و وجود نداره و خب این چیز خوبی نیست. پس `Rust` باهوش ما این کد رو کامپایل نمیکنه.
 
-The function `return_str()` creates a String, then it creates a reference to the String. Then it tries to return the reference. But the String `country` only lives inside the function, and then it dies. Once a variable is gone, the computer will clean up the memory and use it for something else. So after the function is over, `country_ref` is referring to memory that is already gone, and that's not okay. Rust prevents us from making a mistake with memory here.
-
-This is the important part about the "owned" type that we talked about above. Because you own a `String`, you can pass it around. But a `&String` will die if its `String` dies, so you don't pass around "ownership" with it.
-
+باید به این نکته توجه کنید اگه یک نوعی که مالکیت داشته باشه از بین بره، تمام چیز هایی که بهش اشاره میکردند هم از بین میرند.
 ## Mutable references
 
 **[See this chapter on YouTube](https://youtu.be/G48z6Rv76vc)**
