@@ -1339,14 +1339,13 @@ SEOUL--------------------TOKYO
 
 ## رشته ها | Strings
 
-Rust has two main types of strings: `String` and `&str`. What is the difference?
+زبان `Rust` دو نوع اصلی `String` دارد: `String` و `&str`، خب فرقشون چیه؟
+- نوع `&str` نوع ساده‌ای هست، وقتی کد `;let s = "my string"` مینویسیم، یک `&str` درست میشه همچنین `&str` خیلی سربع هست
+- نوع `String` یکم پیچیده هست، یکم کند‌تر هست اما کارایی بیشتری داره،‌ `String` یک اشاره‌گر هست پس داده‌ای که بهش اشاره میکنه توی قسمت `Heap` حافظه هست
 
-- `&str` is a simple string. When you write `let my_variable = "Hello, world!"`, you create a `&str`. A `&str` is very fast.
-- `String` is a more complicated string. It is a bit slower, but it has more functions. A `String` is a pointer, with data on the heap.
+همچنین به این توجه کنید که `&str` یک `&` قبلش هست به این دلیل که برای استفاده از `str` نیاز به یک `Reference` داریم، این به دلیل است که `Stack` برای ذخیره سازی نیاز به سایز داده داره. همچنین باید این توجه کنید که برای استفاده از `str` به `&` نیاز داریم ، **پس ما مالکش نیستیم** ، اما برعکس ما مالک یک `String` هستیم. (بعدا در مورد مالکیت که مبحث مهمی در `Rust` هست صحبت میکنیم)
 
-Also note that `&str` has the `&` in front of it because you need a reference to use a `str`. That's because of the reason we saw above: the stack needs to know the size. So we give it a `&` that it knows the size of, and then it is happy. Also, because you use a `&` to interact with a `str`, you don't own it. But a `String` is an *owned* type. We will soon learn why that is important to know.
-
-Both `&str` and `String` are UTF-8. For example, you can write:
+هم `&str` و هم `String` از `UTF-8` پشتیبانی میکنند، برای مثال:
 
 ```rust
 fn main() {
@@ -1354,23 +1353,20 @@ fn main() {
     let other_name = String::from("Adrian Fahrenheit Țepeș"); // Ț and ș are no problem in UTF-8.
 }
 ```
+میتونید ببینید که در کد `String::from("Adrian Fahrenheit Țepeș")` یک `String` از `&str` ساخته شده، این دو نوع متفاوت هستند اما قابل تبدیل به یکدیگر هستند
 
-You can see in `String::from("Adrian Fahrenheit Țepeș")` that it is easy to make a `String` from a `&str`. The two types are very closely linked together, even though they are different.
-
-You can even write emojis, thanks to UTF-8.
-
+همچنین با تشکر از `UTF-8` میتونید ایموجی هم چاپ کنید:
 ```rust
 fn main() {
     let name = "😂";
     println!("My name is actually {}", name);
 }
 ```
+رو سیستم شما عبارت `My name is actually 😂` چاپ میشه اما امکان داره `Command Line` شما از `UTF-8` پشتیبانی نکنه و ایموجی پرینت نشه و خب این مشکل `Rust` نیست.
 
-On your computer that will print `My name is actually 😂` unless your command line can't print it. Then it will show `My name is actually �`. But Rust has no problem with emojis or any other Unicode.
+بیاید دوباره دلیل استفاده از `&` برای `str` رو مرور کنیم.
 
-Let's look at the reason for using a `&` for `str`s again to make sure we understand.
-
-- `str` is a dynamically sized type (dynamically sized = the size can be different). For example, the names "서태지" and "Adrian Fahrenheit Țepeș" are not the same size:
+- نوع `str` سایز پویا `Dynamic` هست،‌ یعنی سایزش میتونه متفاوت باشه، برای مثال سایز های `서태지` و `Adrian Fahrenheit Țepeș` متفاوت هست:
 
 ```rust
 fn main() {
@@ -1383,7 +1379,7 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 A String is always 24 bytes. It is Sized.
@@ -1393,14 +1389,15 @@ But a &str? It can be anything. '서태지' is 9 bytes. It is not Sized.
 And 'Adrian Fahrenheit Țepeș' is 25 bytes. It is not Sized.
 ```
 
-That is why we need a &, because `&` makes a pointer, and Rust knows the size of the pointer. So the pointer goes on the stack. If we wrote `str`, Rust wouldn't know what to do because it doesn't know the size.
+این دلیلی هست که باید از `&` استفاده کنیم، چون `&` یک اشاره گر میسازه و خب `Rust` سایز یک اشاره‌گر رو میدونه، پس اشاره‌گر میره توی `Stack`. اگه بنویسیم `str`، `Rust` نمیدونه که باید چیکار کنه چون سایز رو نمیدونه
 
-There are many ways to make a `String`. Here are some:
+چندین راه برای ساختن برای `String` وجود دارد:
 
-- `String::from("This is the string text");` This is a method for String that takes text and creates a String.
-- `"This is the string text".to_string()`. This is a method for &str that makes it a String.
-- The `format!` macro. This is like `println!` except it creates a String instead of printing. So you can do this:
+- `String::from("This is the string text");`: این یک روش برای ساخت `String` هست
+- `"This is the string text".to_string()`: در این روش یک `&str` به یک `String` تبدیل میشه
+- همچنین ماکروی `format!` یک `String` میسازه
 
+مثالی از استفاده از `format!`:
 ```rust
 fn main() {
     let my_name = "Billybrobby";
@@ -1414,9 +1411,12 @@ fn main() {
 }
 ```
 
-Now we have a String named *together*, but did not print it yet.
+حالا ما یک `String`ساختیم.
 
-One other way to make a String is called `.into()` but it is a bit different because `.into()` isn't just for making a `String`. Some types can easily convert to and from another type using `From` and `.into()`. And if you have `From`, then you also have `.into()`. `From` is clearer because you already know the types: you know that `String::from("Some str")` is a `String` from a `&str`. But with `.into()`, sometimes the compiler doesn't know:
+یک روش دیگه برای ساخت `String` استفاده از `.into()` هست، اما یکم متفاوت هست به این دلیل که `.into()` فقط برای ساختن `String` نیست. بعضی نوع ها با استفاده از `from` و`.into()`، میتونند به راحتی به نوع دیگه‌ای تبدیل بشند.
+
+استفاده از `from` رایج‌تر هست چون میدونیم که چه نوعی به چه نوعی تبدیل میشه، اما در هنگام استفاده از `.into()` بعضی وقت ها کامپایلر نمیدونه که باید به چه نوعی تبدیل کنه.
+برای مثال در کد `;String::from("Some str")`، میدونیم که یک `String` به یک `&str` تبدیل میشه اما برای مثال کد زیر رو در نظر بگیرید که کامپایلر نمیتونه نوع رو تشخیص بده:
 
 ```rust
 fn main() {
@@ -1424,7 +1424,9 @@ fn main() {
 }
 ```
 
-Rust doesn't know what type you want, because many types can be made from a `&str`. It says, "I can make a &str into a lot of things. Which one do you want?"
+در کد بالا کامپایلر نمیتونه بفهمه که به نوعی میخواید تبدیل کنید،‌‌ چون نوع `&str` میتونه به نوع های زیادی تبدیل بشه و ما مشخص نکردیم.
+
+در خطایی هم که میده میگه که `"من میتونیم "&str" رو به نوع های زیادی تبدیل کنم،‌ کدوم رو میخوای؟"` (`"I can make a &str into a lot of things. Which one do you want?"`)
 
 ```text
 error[E0282]: type annotations needed
@@ -1434,7 +1436,7 @@ error[E0282]: type annotations needed
   |         ^^^^^^^^^ consider giving `my_string` a type
 ```
 
-So you can do this:
+و خب ما میتونیم به اینگونه نوع درخواستی رو مطالبه کنیم:
 
 ```rust
 fn main() {
@@ -1442,8 +1444,7 @@ fn main() {
 }
 ```
 
-And now you get a String.
-
+و حالا ما یک `String` میگیریم.
 ## const and static
 
 **[See this chapter on YouTube](https://youtu.be/Ky3HqkWUcI0)**
