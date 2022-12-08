@@ -1505,11 +1505,10 @@ fn main() {
 فانکشن `return_str()` یک `String` میسازه و بعدش یک `Reference` به اون رو برمیگردونه، اما `String`‌ای که در `return_str()` درست میشه فقط در همونجا قابل دسترس هست و وقتی که فانکشن تموم بشه از بین میره و هر فضایی که این فانکشن گرفته بود برای استفاده های بعدی ازاد میشه. پس `country_ref` به یک چیزی اشاره میکنه که از بین رفته و وجود نداره و خب این چیز خوبی نیست. پس `Rust` باهوش ما این کد رو کامپایل نمیکنه.
 
 باید به این نکته توجه کنید اگه یک نوعی که مالکیت داشته باشه از بین بره، تمام چیز هایی که بهش اشاره میکردند هم از بین میرند.
-## Mutable references
 
-**[See this chapter on YouTube](https://youtu.be/G48z6Rv76vc)**
+## مرجع های تغییرپذیر | Mutable references
 
-If you want to use a reference to change data, you can use a mutable reference. For a mutable reference, you write `&mut` instead of `&`.
+اگه میخواید با استفاده از `Reference` مقدار رو تغییر بدید باید از `Mutable Reference` استفاده کنیم. برای استفاده از `Mutable Reference` باید از `&mut` به جای `&` استفاده کنیم.
 
 ```rust
 fn main() {
@@ -1517,10 +1516,11 @@ fn main() {
     let num_ref = &mut my_number;
 }
 ```
+خب نوع های این متغییر ها چی هستند؟ `my_number` یک `i32` هست و `num_ref` یک `mut i32&`. (میگیم که `num_ref` یک `Mutable Reference` به `my_number` است )
 
-So what are the two types? `my_number` is an `i32`, and `num_ref` is `&mut i32` (we say a "mutable reference to an `i32`").
+خب بیاید مقدار `my_number` رو با استفاده از `num_ref` با مقدار `10` جمع بزنیم. اما نمیتونیم بنویسیم `num_ref += 10`، به این دلیل که `num_ref` یک `i32` نیست، یک `&i32` هست.
 
-So let's use it to add 10 to my_number. But you can't write `num_ref += 10`, because `num_ref` is not the `i32` value, it is a `&i32`. The value is actually inside the `i32`. To reach the place where the value is, we use `*`. `*` means "I don't want the reference, I want the value behind the reference". In other words, one `*` is the opposite of `&`. Also, one `*` erases one `&`.
+برای اینکه به مقداری که `num_ref` بهش اشاره میکنه باید از کاراکتر `*` استفاده کنیم. کاراکتر `*` به این معنی هست که **من `Reference` رو نمیخوام و مقداری که داره بهش اشاره میکنه رو میخوام**. میتونیم اینطوری برداشت کنیم که `*` مخالف `&` هست.
 
 ```rust
 fn main() {
@@ -1535,37 +1535,37 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی پرینت میکنه:
 
 ```text
 18
 Second_number = triple_reference? true
 ```
+به استفاده از `&` میگن `Referencing`، اما به استفاده از `*` میگن `Derefrencing`.
 
-Because using `&` is called "referencing", using `*` is called "**de**referencing".
+زبان `Rust` از سه قانون برای استفاده از `Mutable/Immutable Reference` داره، اونها خیلی مهم هستند اما با اینجال به منطق جور در میاند:
 
-Rust has two rules for mutable and immutable references. They are very important, but also easy to remember because they make sense.
+- **قانون اول**: نمیتونیم همزمان هم `Mutable Reference` داشته باشیم و هم `Immutable Reference`
+- **قانون دوم**: اگه فقط `Immutable Reference` داریم، میتونیم هر چند تا که میخوایم داشته باشیم
+- **قانون سوم**: اگه حتی یک `Mutable Reference` داشته باشیم، دیگه نمیتونیم یکی دیگه هم داشته باشیم
 
-- **Rule 1**: If you have only immutable references, you can have as many as you want. 1 is fine, 3 is fine, 1000 is fine. No problem.
-- **Rule 2**: If you have a mutable reference, you can only have one. Also, you can't have an immutable reference **and** a mutable reference together.
+این قوانین به این دلیل وجود دارند که یک `Mutable Reference` میتونه داده رو تغییر بده. و خب اگه این قوانین وجود نداشتند میتونستیم به مشکل بر بخوریم، برای مثال فکر کنید که یک قسمت برنامه میخواد یک داده رو بخونه اما همزمان یک قسمت دیگه داره اون داده رو تغییر میده...
 
-This is because mutable references can change the data. You could get problems if you change the data when other references are reading it.
+یک روش خوب برای درک این قضیه فکر کردن به یک `Powerpoint Presentation` هست:
 
-A good way to understand is to think of a Powerpoint presentation.
+شرایط اول، **فقط یک `Mutable Reference`**:
 
-Situation one is about **only one mutable reference**.
+یک کارمند درحال نوشتن یک `Presentation` هست. اون میخواد که مدیرش کمکش کنه. کارمند اطلاعات `Login` رو به مدیر میده، الان مدیر یک `Mutable Reference` به `Presentation` داره. مدیر میتونه هر تغییری که میخواد رو روی `Presentation` انجام بده. در این شرایظ هیچ مشکلی وجود نداشت.
 
-Situation one: An employee is writing a Powerpoint presentation. He wants his manager to help him. The employee gives his login information to his manager, and asks him to help by making edits. Now the manager has a "mutable reference" to the employee's presentation. The manager can make any changes he wants, and give the computer back later. This is fine, because nobody else is looking at the presentation.
+شرایط دوم، **هر چندتا `Immutable Reference`**:
 
-Situation two is about **only immutable references**.
+کارمند `Presentation` رو با هر چند نفر که میخواد به اشتراک میزاره، همه اونها میتونند `Presentation` رو ببینند اما نمیتونند تغییرش بدند. در این شرایط هم مشکلی پیش نمیاد.
 
-Situation two: The employee is giving the presentation to 100 people. All 100 people can now see the employee's data. They all have an "immutable reference" to the employee's presentation. This is fine, because they can see it but nobody can change the data.
+شرایط سوم، **شرایط مشکل**:
 
-Situation three is **the problem situation**.
+کارمند اطلاعات `Login` رو به مدیرش میده. الان مدیرش یک `Mutable Reference` داره. بعد کارمند `Presentation` رو با هرچند نفر که میخواد به اشتراک میزاره، و خب الان اون هر چند نفر، نفری یک `Immutable Reference` دارند. و خب این مشکل داره، شاید مدیر وقتی `Login` کرده میخواد وسط ویرایش کردن یک ایمیل هم به مادرش بفرسته ! و خب همه‌ی اون هر چند نقر میتونند ایمیل رو هم ببینند، و **این چیزی نبود که انتظار داشتند**.
 
-Situation three: The Employee gives his manager his login information. His manager now has a "mutable reference". Then the employee went to give the presentation to 100 people, but the manager can still login. This is not fine, because the manager can log in and do anything. Maybe his manager will log into the computer and start typing an email to his mother! Now the 100 people have to watch the manager write an email to his mother instead of the presentation. That's not what they expected to see.
-
-Here is an example of a mutable borrow with an immutable borrow:
+این یک مثالی از داشتن `Mutable Reference` و `Immutable Reference` به طور همزمان هست:
 
 ```rust
 fn main() {
@@ -1577,8 +1577,9 @@ fn main() {
 }
 ```
 
-The compiler prints a helpful message to show us the problem.
+کامپایلر خطای پرینت میکنه که بسیار مفیده:
 
+نکته: به ساختن `Reference`، قرض گرفتن(`"Borrowing"`)هم میگن
 ```text
 error[E0502]: cannot borrow `number` as mutable because it is also borrowed as immutable
  --> src\main.rs:4:25
@@ -1592,7 +1593,7 @@ error[E0502]: cannot borrow `number` as mutable because it is also borrowed as i
   |                    ---------- immutable borrow later used here
 ```
 
-However, this code will work. Why?
+با این حال کد زیر کار میکند ! چرا ؟
 
 ```rust
 fn main() {
@@ -1603,10 +1604,9 @@ fn main() {
     println!("{}", number_ref); // print the immutable reference
 }
 ```
+این کد بدون مشکل `20` رو پرینت میکنه، به این دلیل کار میکنه که کامپایلر به اندازه‌ای باهوش هست که کد مارو متوجه بشه. کامپایلر میدونه که از `number_change` استفاده کردیم که `number` رو تغییر بدیم، اما بعدا ازش استفاده نکردیم، پس مشکلی وجود نداره. یه جورایی ما همزمان از `Mutable Reference` و `Immutable Reference` استفاده نکردیم.
 
-It prints `20` with no problem. It works because the compiler is smart enough to understand our code. It knows that we used `number_change` to change `number`, but didn't use it again. So here there is no problem. We are not using immutable and mutable references together.
-
-Earlier in Rust this kind of code actually generated an error, but the compiler is smarter now. It can understand not just what we type, but how we use everything.
+قبلا در `Rust` چنین کد هایی کامپایل نمیشدند و در هنگام کامپایل خطا میدادند، اما الان کامپایلر باهوش‌تر شده.
 
 ### Shadowing again
 
