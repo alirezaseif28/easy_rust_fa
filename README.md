@@ -1608,9 +1608,9 @@ fn main() {
 
 قبلا در `Rust` چنین کد هایی کامپایل نمیشدند و در هنگام کامپایل خطا میدادند، اما الان کامپایلر باهوش‌تر شده.
 
-### Shadowing again
+### دوباره سایه‌زدن | Shadowing again
 
-Remember when we said that shadowing doesn't **destroy** a value but **blocks** it? Now we can use references to see this.
+یادتون هست که گفتم، سایه‌زدن(`Shadowing`) متغییر رو از بین نمیبره؟ و بلکه مسدودش میکنه. خب بیاید با `Reference` ها هم این موضوع رو ببینیم:
 
 ```rust
 fn main() {
@@ -1621,7 +1621,26 @@ fn main() {
 }
 ```
 
-Does this print `Austria, 8` or `8, 8`? It prints `Austria, 8`. First we declare a `String` called `country`. Then we create a reference `country_ref` to this string. Then we shadow country with 8, which is an `i32`. But the first `country` was not destroyed, so `country_ref` still says "Austria", not "8". Here is the same code with some comments to show how it works:
+<div dir="rtl">
+
+خب کد بالا چی پرینت میکنه؟
+
+- `Austria, 8`
+- `8, 8`
+
+خروجی کد بالا میشه:
+- `Austria, 8`
+
+
+بزارید ببینیم ما چیکار کردیم؟
+
+اول یک متغییر `String` تغریف کردیم به نام `country`. بعدش یک `Reference` به `country` به نام `country_ref` درست کردیم. بعدش متغییر `country` رو با مقدار `8` سایه‌زدیم.
+
+خب پس هنوز متغییر `country` از بین نرفته، پس `country_ref` هنوز باید به مقدار `Austria` اشاره کنه و نه مقدار `8`.
+
+در زیر همون کد رو با کامنت میبینید و متوجه نحوه کار میشید:
+
+</div>
 
 ```rust
 fn main() {
