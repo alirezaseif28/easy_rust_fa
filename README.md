@@ -1651,13 +1651,17 @@ fn main() {
 }
 ```
 
-## Giving references to functions
+## دادن مرجع به تابع ها | Giving references to functions
 
-**See this chapter on YouTube: [immutable references](https://youtu.be/mKWXt9YTavc) and [mutable references](https://youtu.be/kJV1wIvAbyk)**
+<div dir="rtl">
 
-References are very useful for functions. The rule in Rust on values is: a value can only have one owner.
+در زبان `Rust`، `Reference` ها برای فانکشن ها کاربردی هستند.
 
-This code will not work:
+در زبان `Rust` یک قانون **مهم** برای مقدار ها وجود داره:
+- هر مقدار میتونه فقط یک مالک داشته باشه
+
+کد زیر کامپایل نمیشه:
+</div>
 
 ```rust
 fn print_country(country_name: String) {
@@ -1670,14 +1674,18 @@ fn main() {
     print_country(country); // ⚠️ That was fun, let's do it again!
 }
 ```
+<div dir="rtl">
 
-It does not work because `country` is destroyed. Here's how:
+به این دلیل کامپایل نمیشه که `country` نابود شده.
 
-- Step 1: We create the `String` called `country`. `country` is the owner.
-- Step 2: We give `country` to `print_country`. `print_country` doesn't have an `->`, so it doesn't return anything. After `print_country` finishes, our `String` is now dead.
-- Step 3: We try to give `country` to `print_country`, but we already did that. We don't have `country` to give anymore.
+ببینیم چی شده:
+- یک متغییر `String` به نام `country` درست کردیم. `country` مالکش هست
+- ما `country` رو به `print_country` دادیم. اگه یادتون باشه در هنگام به اتمام رسیدن یک فانکشن تمام فضایی که اشغال کرده بود هم ازاد میشه. ما `country` رو به `print_country` دادیم و اون در هنگام اتمام `print_country` نابود میشه. و خب البته `print_country` میتونست ورودیش رو به عنوان خروجیش بده بیرون، اما خب نداده
+- ما سعی کردیم که `country` که نابود شده رو به `print_country` بدیم، اما خب نابود شده
 
-We can make `print_country` give the `String` back, but it is a bit awkward.
+میتونیم کاری کنیم که `print_country` اون مقدار رو به عنوان خروجی بده و خب اینطوری کد کار میکنه، اما اینطوری کد یکم بیریخت میشه:
+
+</div>
 
 ```rust
 fn print_country(country_name: String) -> String {
@@ -1692,14 +1700,14 @@ fn main() {
 }
 ```
 
-Now it prints:
+الان چنین چیزی رو پرینت میکنه:
 
 ```text
 Austria
 Austria
 ```
 
-The much better way to fix this is by adding `&`.
+یک روش بهتر این هست که `Reference` متغییر `country` رو به فانکشن بدیم. میتونیم با اضافه کردن `&` این کار رو انجام بدیم.
 
 ```rust
 fn print_country(country_name: &String) {
@@ -1713,9 +1721,11 @@ fn main() {
 }
 ```
 
-Now `print_country()` is a function that takes a reference to a `String`: a `&String`. Also, we give it a reference to country by writing `&country`. This says "you can look at it, but I will keep it".
+حالا `()print_country` یک فانکشنی هست که یک `Reference` به `String` رو به عنوان ورودی میگیره. همچنین ما یک `Reference` به `country` رو بهش دادیم.
 
-Now let's do something similar with a mutable reference. Here is an example of a function that uses a mutable variable.
+این یعنی که فانکشن میتونه ازش استفاده کنه اما ما مالکش هستیم هنوز...
+
+حالا بیاید همینکار رو با استفاده از `Mutable Reference` انجام بدیم:
 
 ```rust
 fn add_hungary(country_name: &mut String) { // first we say that the function takes a mutable reference
@@ -1729,15 +1739,15 @@ fn main() {
 }
 ```
 
-This prints `Now it says: Austria-Hungary`.
+چنین خروجی‌ای میده: `Now it says: Austria-Hungary`.
 
-So to conclude:
+پس برای نتیجه‌گیری چنین چیزی میشه:
 
-- `fn function_name(variable: String)` takes a `String` and owns it. If it doesn't return anything, then the variable dies inside the function.
-- `fn function_name(variable: &String)` borrows a `String` and can look at it
-- `fn function_name(variable: &mut String)` borrows a `String` and can change it
+- `fn function_name(variable: String)`: یک `String` میگیره و مالکش میشه و اگه به عنوان خروجی برش نگردونه، اون ورودی نابود میشه
+- `fn function_name(variable: &String)`: یک `String` قرض میگیره، و میتونه به مقدارش دسترسی داشته باشه، اما مالکش نیست
+- `fn function_name(variable: &mut String)`: یک `String` قرض میگیره، و میتونه به مقدارش دسترسی داشته باشه همچنین میتونه مقدارش رو تغییر بده، اما مالکش نیست
 
-Here is an example that looks like a mutable reference, but it is different.
+کد زیر شبیه به استفاده از `Mutable Reference` هست،‌ اما نیست و متقاوت هست:
 
 ```rust
 fn main() {
@@ -1750,10 +1760,13 @@ fn adds_hungary(mut country: String) { // Here's how: adds_hungary takes the Str
     println!("{}", country);
 }
 ```
+کد کامپایل میشه، اما چطور ممکنه؟
 
-How is this possible? It is because `mut country` is not a reference: `adds_hungary` owns `country` now. (Remember, it takes `String` and not `&String`). The moment you call `adds_hungary`, it becomes the full owner. `country` has nothing to do with `String::from("Austria")` anymore. So `adds_hungary` can take `country` as mutable, and it is perfectly safe to do so.
+به این دلیل هست که `mut country` یک `Reference` نیست. در این حالت `adds_hungary` مالک `country` میشه. (یک `String` میگیره و نه `&String`)
 
-Remember our employee Powerpoint and manager situation above? In this situation it is like the employee just giving his whole computer to the manager. The employee won't ever touch it again, so the manager can do anything he wants to it.
+وقتی که `adds_hungary` رو صدا میزنید، اون مالک میشه. و خب میتونه اون رو به یک متغییر تغییرپذیر تغییر بده. و مشکلی هم ایجاد نمیشه.
+
+مثال `Powerpoint Presentation` رو یادتون هست؟ در این شرایط میتونیم بگیم که کارمند کل کامپیوتر رو به مدیرش میده و کارمند دیگه به کامپیوتر دسترسی نداره پس مدیر هم میتونه هر کاری که میخواد با کامپیوتر و `Presentation` بکنه.
 
 ## Copy types
 
