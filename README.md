@@ -1899,22 +1899,18 @@ fn main() {
 
 به جای `50` تا کپی گرفتن اینبار اصلا کپی نگرفتیم که خب یعنی حافظه‌ی کمتری مصرف کردیم.
 
-### Variables without values
+### متغییر های بدون مقدار |‌ Variables without values
 
-A variable without a value is called an "uninitialized" variable. Uninitialized means "hasn't started yet". They are simple: just write `let` and the variable name:
+یک متغییر بدون مقدار را `Uninitialized` میگیم. خیلی ساده هستند، فقط باید `let` و اسم متغییر رو بنویسیم:
 
 ```rust
 fn main() {
     let my_variable; // ⚠️
 }
 ```
+اما `Rust` این رو کامپایل نمیکنه. یعنی اگه حتی یک چیزی که مقدار بهش داده نشده باشه، وچود داشته باشه، کد رو کامپایل نمیکنه.
 
-But you can't use it yet, and Rust won't compile if anything is uninitialized.
-
-But sometimes they can be useful. A good example is when:
-
-- You have a code block and the value for your variable is inside it, and
-- The variable needs to live outside of the code block.
+اما بعضی وقت ها کاربردی هستند:
 
 ```rust
 fn loop_then_return(mut counter: i32) -> i32 {
@@ -1944,12 +1940,10 @@ fn main() {
     println!("{}", my_number);
 }
 ```
+کد بالا `100` رو پرینت میکنه.
+میتونید ببینید که `my_number` در فانکشن `()main` ایچاد شده، پس تا انتهای اون در دسترس هست. اما مقدارش درون حلقه‌ی `loop` مشخص میشه. با این حال
 
-This prints `100`.
-
-You can see that `my_number` was declared in the `main()` function, so it lives until the end. But it gets its value from inside a loop. However, that value lives as long as `my_number`, because `my_number` has the value. And if you wrote `let my_number = loop_then_return(number)` inside the block, it would just die right away.
-
-It helps to imagine if you simplify the code. `loop_then_return(number)` gives the result 100, so let's delete it and write `100` instead. Also, now we don't need `number` so we will delete it too. Now it looks like this:
+برای اینکه کد ساده‌تر بشه بهتره تصور کنیم که `(number)loop_then_return` همیشه خروچی `100` رو برمیگردونه، پس حذفش میکنیم و `100` رو بجاش مینویسیم. همچنین به متغییر `number` هم احتیاج نداریم پس حذفش میکنیم. الان کد چنین چیزی هست:
 
 ```rust
 fn main() {
@@ -1962,9 +1956,7 @@ fn main() {
 }
 ```
 
-So it's almost like saying `let my_number = { 100 };`.
-
-Also note that `my_number` is not `mut`. It didn't get a value until it got 100, so it never changed its value. In the end, the real code for `my_number` is just `let my_number = 100;`.
+همچنین به این نکته توجه کنید که `my_number`، یک `Mutable` نیست. اون اولین مقداری که گرفته `100` هست و هیچ وقت هم تغییر نکرده پس نیازی هم نیست که `mut` رو داشته باشه. در نهایت کدی که کامپایلر تولید میکنه چنین چیزی وجود داره:`;let my_number = 100`.
 
 ## Collection types
 
