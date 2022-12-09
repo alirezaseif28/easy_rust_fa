@@ -1768,21 +1768,31 @@ fn adds_hungary(mut country: String) { // Here's how: adds_hungary takes the Str
 
 مثال `Powerpoint Presentation` رو یادتون هست؟ در این شرایط میتونیم بگیم که کارمند کل کامپیوتر رو به مدیرش میده و کارمند دیگه به کامپیوتر دسترسی نداره پس مدیر هم میتونه هر کاری که میخواد با کامپیوتر و `Presentation` بکنه.
 
-## Copy types
+## نوع های کپی |‌ Copy types
 
-Some types in Rust are very simple. They are called **copy types**. These simple types are all on the stack, and the compiler knows their size. That means that they are very easy to copy, so the compiler always copies when you send it to a function. It always copies because they are so small and easy that there is no reason not to copy. So you don't need to worry about ownership for these types.
+<div dir="rtl">
 
-These simple types include: integers, floats, booleans (`true` and `false`), and `char`.
+بعضی نوع ها در `Rust` خیلی ساده هستند. بهشون میگیم **نوع ها کپی**. این نوع های ساده توی `Stack` ذخیره میشند، و خب کامپایلر سایزشون رو میدونه. این به معنی این هست که خیلی راحت میتونیم کپی‌شون کنیم، پس کامپایلر همیشه برای فرستادنشون به یک فانکشن اون ها رو کپی میکنه. همیشه کپی میکنه به این دلیل معمولا خیلی کوچیک هستند و دلیلی نداره که اونهارو کپی نکنه. پس نیازی نیست که به مالکیتشون فکر کنیم.
 
-How do you know if a type **implements** copy? (implements = can use) You can check the documentation. For example, here is the documentation for char:
+این نوع ها ساده این ها هستند: `Integers`, `Floats`, `Booleans` (`true` و `false`), و `char`.
+
+
+خب چطور بفهمیم که یک تایپ کپی میشه یا که خیر؟
+
+میتونیم مستندات اون رو بخونیم. برای مثال مستند نوع `char` در لینک زیر هست:
 
 [https://doc.rust-lang.org/std/primitive.char.html](https://doc.rust-lang.org/std/primitive.char.html)
 
-On the left you can see **Trait Implementations**. You can see for example **Copy**, **Debug**, and **Display**. So you know that a `char`:
 
-- is copied when you send it to a function (**Copy**)
-- can use `{}` to print (**Display**)
-- can use `{:?}` to print (**Debug**)
+در سمت چپ لینک بالا میتونید قسمت `Trait Implementations` رو ببینید. شما میتونید **Copy**، **Debug** و **Display** رو ببینید، پس میفهمید که:
+
+- وقتی به فانکشنی فرستاده میشه کپی میشه. (**`Copy`**)
+
+-میشه از `{}` برای پرینت کردنش استفاده کرد. (**`Display`**)
+
+-میشه از `{:?}` برای پرینت کردنش استفاده کرد. (**`Debug`**)
+
+</div>
 
 ```rust
 fn prints_number(number: i32) { // There is no -> so it's not returning anything
@@ -1798,14 +1808,13 @@ fn main() {
                               // No problem, because my_number is copy type!
 }
 ```
-
-But if you look at the documentation for String, it is not copy type.
+اما اگه به مستندات نوع `String` نگاه کنید، میبینید که یک `Copy type` نیست.
 
 [https://doc.rust-lang.org/std/string/struct.String.html](https://doc.rust-lang.org/std/string/struct.String.html)
 
-On the left in **Trait Implementations** you can look in alphabetical order. A, B, C... there is no **Copy** in C. But there is **Clone**. **Clone** is similar to **Copy**, but usually needs more memory. Also, you have to call it with `.clone()` - it won't clone just by itself.
+در سمت چپ لینک بالا میتونید قسمت `Trait Implementations` رو ببینید. شما میتونید چیز های زیادی رو ببینید اما `Copy` رو نمیبینید اما به جاش `Clone`. `Clone` شبیه به `Copy` هست اما به حافظه‌ی بیشتری نیاز داره، همچنین نیاز دارید وقتی لازم دارید ازش استفاده کنید مستقیم از `.clone()` استفاده کنید. (خودش همینطوری کلون نمیشه)
 
-In this example, `prints_country()` prints the country name, a `String`. We want to print it two times, but we can't:
+در کد زیر، `()prints_country` یک `String` رو پرینت میکنه، ما میخوایم دوبار پرینتش کنیم اما نمیتونیم (دلیلش مالکیت هست)
 
 ```rust
 fn prints_country(country_name: String) {
@@ -1819,7 +1828,7 @@ fn main() {
 }
 ```
 
-But now we understand the message.
+اما الان میتونیم خطای زیر رو بفهمیم:
 
 ```text
 error[E0382]: use of moved value: `country`
@@ -1832,8 +1841,7 @@ error[E0382]: use of moved value: `country`
 4 |     prints_country(country);
   |                    ^^^^^^^ value used here after move
 ```
-
-The important part is `which does not implement the Copy trait`. But in the documentation we saw that String implements the `Clone` trait. So we can add `.clone()` to our code. This creates a clone, and we send the clone to the function. Now `country` is still alive, so we can use it.
+قسمت مهمش بخش `which does not implement the Copy trait` هست. اما در مستنداتش فهمیدیم که `Clone` رو پیاده‌سازی کرده، یعنی ازش پشتیبانی میکنه. پس میتونیم `.clone()` رو به کدمون اضافه کنیم. این یک دیگه از مقداری که وجود داره میسازه و به فانکشن میده. الان `country` هم در دسترس هست و نابود نشده. پس میتونیم ازش استفاده کنیم.
 
 ```rust
 fn prints_country(country_name: String) {
@@ -1846,8 +1854,9 @@ fn main() {
     prints_country(country);
 }
 ```
+البته، اگه `String` سایز زیادی داشته باشه، `.clone()` مقدار حافظه‌ی بسیار زیادی مصرف میکنه. یک `String` برای مثال میتونه کل کتاب رو به عنوان مقدار در خودش داشته باشه، و در این شرایط هر وقتی که از `.clone()` استفاده کنیم، کل کتاب رو کپی میکنه. پس در این شرایط استفاده از `Reference` بهینه‌تر هست.
 
-Of course, if the `String` is very large, `.clone()` can use a lot of memory. One `String` can be a whole book in length, and every time we call `.clone()` it will copy the book. So using `&` for a reference is faster, if you can. For example, this code pushes a `&str` onto a `String` and then makes a clone every time it gets used in a function:
+برای مثال کد زیر، چندین بار یک `&str` به یک `String` اضافه میکنه و یک کلون هم ازش میگیره میده به یک فانکشن:
 
 ```rust
 fn get_length(input: String) { // Takes ownership of a String
@@ -1863,7 +1872,7 @@ fn main() {
 }
 ```
 
-It prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 It's 5 words long.
@@ -1872,7 +1881,7 @@ It's 10 words long.
 It's 250 words long.
 ```
 
-That's 50 clones. Here it is using a reference instead, which is better:
+اما خب `50` تا کلون گرفت ازش، این یعنی `50` بار مقدار رو کپی کرده. اما اینبار از `Reference` استفاده میکنیم، که بهتره:
 
 ```rust
 fn get_length(input: &String) {
@@ -1888,7 +1897,7 @@ fn main() {
 }
 ```
 
-Instead of 50 clones, it's zero.
+به جای `50` تا کپی گرفتن اینبار اصلا کپی نگرفتیم که خب یعنی حافظه‌ی کمتری مصرف کردیم.
 
 ### Variables without values
 
