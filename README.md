@@ -2061,14 +2061,14 @@ fn main() {
 
 اما خب میتونیم کاری کنیم که اخرین `index`ای که مشخص میکنیم هم جزو بازه باشه، چطوری؟ با استفاده از `..=`. پس اگه میخوایم بازه ای داشته باشیم از اولین عنصر تا سومین عنصر، میتونیم از `[0..=2]` استفاده کنیم.
 
-## Vectors
+## بردارها | Vectors
 
-**[See this chapter on YouTube](https://youtu.be/Eh-DsRnDKmw)**
+همونطوری که `&str` و `String` داریم. ما `Array` و `Vector` هم داریم. `Array` ها سریع هستند اما کاربرد کمتری دارند، و `Vector` ها کند‌تر هستند و کاربرد بیشتری دارند.
 
-In the same way that we have `&str` and `String`, we have arrays and vectors. Arrays are faster with less functionality, and vectors are slower with more functionality. (Of course, Rust is always very fast so vectors are not slow, just slow*er* than arrays.) The type is written `Vec`, and you can also just call it a "vec".
+البته در `Rust` همه چی خیلی سریع هست پس `Vector` ها کند نیستند، اما از `Array` ها کند‌تر هستند. نوع `Vector` ها `Vec` هست، ما هم برای اینکه وقتمون گرفته نشه بهشون `vec` میگیم :
+)
 
-There are two main ways to declare a vector. One is like with `String` using `new`:
-
+دو روش برای تعریف `vec` ها وجود داره، یکیش استفاده از `new` هست:
 ```rust
 fn main() {
     let name1 = String::from("Windy");
@@ -2082,13 +2082,15 @@ fn main() {
     my_vec.push(name2);
 }
 ```
+<div dir="rtl">
 
-You can see that a `Vec` always has something else inside it, and that's what the `<>` (angle brackets) are for. A `Vec<String>` is a vector with one or more `String`s. You can also have more types inside. For example:
+ما همیشه باید نوعی که `Vec` درون خودش نگه میداره رو مشخص کنیم،‌ البته اگه مقداری به `Vec` اضافه کنیم، کامپایلر باهوش `Rust` متوجه نوع میشه. اما میتونیم از `<>` برای مشخص کردن اون نوع استفاده کنیم، برای مثال:
+- کد `Vec<(i32, i32)>` یک `Vec` ایجاد میکنه که هر ایتمش یک `Tuple` از `(i32, i32)` نگهداری میکنه
+- کد `Vec<Vec<String>>` یک `Vec` ایجاد میکنه که هر ایتمش یک `Vec` که `String` در خودش جای میده رو نگهداری میکنه
 
-- `Vec<(i32, i32)>` this is a `Vec` where each item is a tuple: `(i32, i32)`.
-- `Vec<Vec<String>>` this is a `Vec` that has `Vec`s of `Strings`. Say for example you wanted to save your favourite book as a `Vec<String>`. Then you do it again with another book, and get another `Vec<String>`. To hold both books, you would put them into another `Vec` and that would be a `Vec<Vec<String>>`.
+همچنین میتونیم نوع یک متغییر رو مشخص کنیم که `Rust` مجبور نباشه از مقداری که ما به `.push()` میدیم نوع رو انتخاب کنه:
 
-Instead of using `.push()` to make Rust decide the type, you can just declare the type.
+</div>
 
 ```rust
 fn main() {
@@ -2097,9 +2099,10 @@ fn main() {
 }
 ```
 
-You can see that items in vectors must have the same type.
+همونطور که متوجه شدید، ایتم های داخل یک `Vec` باید همه از یک نوع باشند.
 
-Another easy way to create a vector is with the `vec!` macro. It looks like an array declaration, but has `vec!` in front of it.
+
+یک دیگه از روش های ایجاد یک `Vec` استفاده از ماکروی `vec!` است. شبیه به ایجاد یک `Array` هست، البته یک `vec!` اولش داره:
 
 ```rust
 fn main() {
@@ -2107,9 +2110,10 @@ fn main() {
 }
 ```
 
-The type is `Vec<i32>`. You call it a "Vec of i32s". And a `Vec<String>` is a "Vec of strings". And a `Vec<Vec<String>>` is a "Vec of a vec of strings".
+نوع متغییر `my_vec` یک `Vec<i32>` هست.
 
-You can slice a vector too, just like in an array.
+
+همچنین میتونیم از قابلیت `Slicing` در `Vec` ها هم استفاده کنیم:
 
 ```rust
 fn main() {
@@ -2127,9 +2131,15 @@ everything: {:?}", three_to_five, start_at_two, end_at_five, everything);
 }
 ```
 
-Because a vec is slower than an array, we can use some methods to make it faster. A vec has a **capacity**, which means the space given to the vector. When you push a new item on the vector, it gets closer and closer to the capacity. Then if you go past the capacity, it will make its capacity double and copy the items into the new space. This is called reallocation. We'll use a method called `.capacity()` to look at the capacity of a vector as we add items to it.
+بخاطر اینکه یک `Vec` کند‌تر از `Array` هست، ما میتونیم یکسری روش هایی رو بکار بگیریم که بهینه‌تر از `Vec` بتونیم استفاده کنیم.
 
-For example:
+نوع `Vec` چیزی به نام ظرفیت(`Capacity`) داره، و اون به معنای این هست که `Vec` چه تعداد ایتمی رو میتونه در خودش نگه داره. برای مثال فکر کنید که `Capacity` یک `Vec` مقدار `2` هست،‌ خب در این حالت ما میتونیم به راحتی `2` ایتم درش اضافه کنیم، البته بعدش هم میتونیم اضافه کنیم اما `Vec` برای نگهداری تعداد بیشتری از ایتم ها نیاز داره که فضای بیشتری رو از حافظه اشغال کنه و همه ایتم هارو کپی کنه در فضای جدیدی که گرفته شده و `Capacity` **دو برابر**، `Capacity` قبلی هست. خب اینکار هزینه بر هست.
+
+به این کار میگن `Reallocation`.
+
+ما میتونیم از `.capacity()` برای گرفتن `Capacity` یک `Vec` استفاده کنیم.
+
+برای مثال به کد زیر توجه کنید:
 
 ```rust
 fn main() {
@@ -2146,7 +2156,7 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی پرینت میکنه:
 
 ```text
 0
@@ -2154,8 +2164,11 @@ This prints:
 4
 8
 ```
+پس این `Vec` دو بار فضای جدید، که هربار **دوبرابر** مقدار قبلی هست رو اشغال کرده و هر ایتمی که درونش داشته رو در فضای جدید کپی کرده.
 
-So this vector has two reallocations: 0 to 4, and 4 to 8. We can make it faster:
+پس این `Vec` دو بار `Reallocation` انچام داده: `0` به `4` و `4` به `8`.
+
+ما میتونیم با استفاده از `.with_capacity()` هنگام ساخت یک `Vec` مقدار `Capacity` رو هم بدیم که خب اگه درست `Capacity` بدیم میتونیم از `Vec` بهینه‌تر استفاده کنیم:
 
 ```rust
 fn main() {
@@ -2171,10 +2184,9 @@ fn main() {
     println!("{}", num_vec.capacity()); // Still 8
 }
 ```
+خب `Vec`ای که در کد با وجود داره اصلا `Reallocation` انجام نداده که خب بهتر هست. پس اگه میدونیم که قراره چند ایتم در یک `Vec` قرار بدیم بهتر هست که با استفاده از `.with_capacity()` مقدار `Capacity` اون `Vec` رو مشخص کنیم. که اینطوری برنامه سریع‌تر میشه.
 
-This vector has 0 reallocations, which is better. So if you think you know how many elements you need, you can use `Vec::with_capacity()` to make it faster.
-
-You remember that you can use `.into()` to make a `&str` into a `String`. You can also use it to make an array into a `Vec`. You have to tell `.into()` that you want a `Vec`, but you don't have to choose the type of `Vec`. If you don't want to choose, you can write `Vec<_>`.
+یادتون هست که ما با استفاده از `.into()` یک `&str` رو به `String` تبدیل کردیم؟ خب میتونیم با استفاده ازش یک `Array` رو به `Vec` هم تبدیل کنیم. البته باید نوع `Vec` رو هم مشخص کنیم. همچنین با استفاده از `Vec<_>` میتونیم به کامپایلر بگیم که خودت نوع `Vec` رو انتخاب کن.
 
 ```rust
 fn main() {
