@@ -2196,23 +2196,20 @@ fn main() {
 }
 ```
 
-## Tuples
+## تاپل‌ها | Tuples
 
-**[See this chapter on YouTube](https://youtu.be/U67Diy6SlTg)**
-
-Tuples in Rust use `()`. We have seen many empty tuples already, because *nothing* in a function actually means an empty tuple:
+با استفاده از `()` میتونیم در `Rust`، `Tuple` درست کنیم. ما خیلی `Tuple` خالی دیدم تا حالا به این دلیل که **هیچی** یعنی یک `Tuple` خالی:
 
 ```text
 fn do_something() {}
 ```
 
-is actually short for:
+کد بالا در واقعیت میانبری برای کد زیر هست:
 
 ```text
 fn do_something() -> () {}
 ```
-
-That function gets nothing (an empty tuple), and returns nothing (an empty tuple). So we have been using tuples a lot already. When you don't return anything in a function, you actually return an empty tuple.
+فانکشن بالا هیچی نمیگیره و هیچی هم بر نمیگردونه، یعنی یک `()` میگیره و یک `()` برمیگردونه. پس همینطوریش هم خیلی از `Tuple` ها استفاده کردیم.
 
 ```rust
 fn just_prints() {
@@ -2222,7 +2219,11 @@ fn just_prints() {
 fn main() {}
 ```
 
-But tuples can hold many things, and can hold different types too. Items inside a tuple are also indexed with numbers 0, 1, 2, and so on. But to access them, you use a `.` instead of a `[]`. Let's put a whole bunch of types into a single tuple.
+نوع `Tuple` میتونه چیز های زیادی نگه داره و حتی میتونه چیز هایی با نوع های مختلف رو هم نگه داره. ایتم های درون `Tuple` به این ترتیب قابل دسترسی هستند: 0, 1, 2 و همینطوری تا اخرین ایتم...
+
+برای دسترسی بهشون به جای `[]` از `.` استفاده میکنیم.
+
+بزارید یک `Tuple` با نوع های مختلف درست کنیم و نحوه‌ی  کار با `Tuple` ها رو ببینیم:
 
 ```rust
 fn main() {
@@ -2244,7 +2245,7 @@ Sixth item: {:?}",
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Inside the tuple is: First item: "Here is a name"
@@ -2255,17 +2256,17 @@ Fifth item: [8, 9, 10]
 Sixth item: 7.7
 ```
 
-That tuple is of type `(&str, i32, Vec<char>, char, [i32; 3], f64)`.
+نوع `Tuple` بالا از درونش نوع های `(&str, i32, Vec<char>, char, [i32; 3], f64)` وچود دارند.
 
-You can use a tuple to create multiple variables. Take a look at this code:
+
+میتونیم از `Tuple` ها برای ایچاد چندین متغییر استفاده کنیم،‌به کد زیر یه نگاهی بندازید:
 
 ```rust
 fn main() {
     let str_vec = vec!["one", "two", "three"];
 }
 ```
-
-`str_vec` has three items in it. What if we want to pull them out? That's where we can use a tuple.
+متغییر `str_vec` سه ایتم درونش داره. چطوری باید استخراجشون کنیم؟ میتونیم از `Tuple` ها استفاده کنیم:
 
 ```rust
 fn main() {
@@ -2276,9 +2277,9 @@ fn main() {
 }
 ```
 
-That prints `"two"`, which is what `b` is. This is called *destructuring*. That is because first the variables are inside a structure, but then we made `a`, `b`, and `c` that are not inside a structure.
+کد با خروجی `"two"` رو میده، که چیزی هست که `b` هست. به این میگن `Destructuring`. این به این خاصر هست که متغییر اولی یک ساختار(`Structure`) هست، اما بعدش ما `a`، `b` و `c` رو درست کردیم که داخل یک ساختار نیستند.
 
-If you need to destructure but don't want all the variables, you can use `_`.
+اگه میخوایم `Destructure` کنیم اما به همه‌ی مقدار ها احتیاجی نداریم میتونیم از `_` استفاده کنیم.
 
 ```rust
 fn main() {
@@ -2287,10 +2288,9 @@ fn main() {
     let (_, _, variable) = (str_vec[0], str_vec[1], str_vec[2]);
 }
 ```
+الان فقط `variable` رو داریم و با بقیه کاری نداشتیم.
 
-Now it only creates a variable called `variable` but doesn't make a variable for the others.
-
-There are many more collection types, and many more ways to use arrays, vecs, and tuples. We will learn more about them too, but first we will learn control flow.
+همچنین نوع های مجموعه‌ای زیادی وجود دارند، و روش های زیادی برای استفاده از `Array` ها، `Vec` ها و `Tuple` ها وجود داره که بعدا در موردشون یاد میگیریم. اما حالا بیاید `Control Flow` رو یاد بگیریم.
 
 ## Control flow
 
