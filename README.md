@@ -1960,18 +1960,23 @@ fn main() {
 
 ## Collection types
 
-Rust has a lot of types for making a collection. Collections are for when you need more than one value in one spot. For example, you could have information on all the cities in your country inside one variable. We will start with arrays, which are fastest but also have the least functionality. They are kind of like `&str` in that way.
+زبان `Rust` نوع های زیادی برای ساخت مجموعه دارد. مجموعه های برای زمان هایی هستند که نیاز دارید چندین داده را در یک متغییر ذخیره کنیم. برای مثال، میتونیم نام تمام شهر های یک کشور رو داخل یک متغییر داشته باشیم. ما با ارایه ها شروع میکنیم، که سریع‌ترین هستند اما کاربرد کمی دارند، از این لحاظ شبیه به `&str` هستند.
 
 ### Arrays
 
-An array is data inside square brackets: `[]`. Arrays:
+<div dir="rtl">
 
-- must not change their size,
-- must only contain the same type.
+مشخصات ارایه ها:
 
-They are very fast, however.
+- سایزشون نمیتونه بعد از تعریف تغییر کنه
+- همه‌ی اعضا باید از یک نوع باشند
 
-The type of an array is: `[type; number]`. For example, the type of `["One", "Two"]` is `[&str; 2]`. This means that even these two arrays have different types:
+اما خب خیلی سریع هستند.
+
+نوع یک ارایه چنین فرمتی هست: `[type; size]`
+
+برای مثال دو متغییر زیر نوع های متفاوتی دارند:
+</div>
 
 ```rust
 fn main() {
@@ -1979,9 +1984,10 @@ fn main() {
     let array2 = ["One", "Two", "Five"]; // But this one is type [&str; 3]. Different type!
 }
 ```
+نوع `array1`: `[&str; 2]` هست.
+نوع `array2`: `[&str; 3]` هست.
 
-Here is a good tip: to know the type of a variable, you can "ask" the compiler by giving it bad instructions. For example:
-
+یک ترفند جالب برای فهمیدن نوع یک ارایه از طریق کامپایلر وجود داره، و اون هم استفاده از متود هایی هست که وجود ندارند:
 ```rust
 fn main() {
     let seasons = ["Spring", "Summer", "Autumn", "Winter"];
@@ -1990,8 +1996,7 @@ fn main() {
     seasons2.thd(); // ⚠️ as well
 }
 ```
-
-The compiler says, "What? There's no `.ddd()` method for seasons and no `.thd()` method for seasons 2 either!!" as you can see:
+کامپایلر میگه که ‌"چی میگی؟ متود `.ddd()` برای `seasons` وجود نداره و `.thd()` هم برای `seasons2` وجود نداره":
 
 ```text
 error[E0599]: no method named `ddd` found for array `[&str; 4]` in the current scope
@@ -2007,10 +2012,9 @@ error[E0599]: no method named `thd` found for array `[&str; 5]` in the current s
   |              ^^^ method not found in `[&str; 5]`
 ```
 
-So it tells you `` method not found in `[&str; 4]` ``, which is the type.
+خب کامپایلر میگه که ``method not found in `[&str; 4]` ``، که خب نوع ارایه رو هم داده !
 
-If you want an array with all the same value, you can declare it like this:
-
+اگه بخوایم ارایه‌ای بسازیم که همه‌ی عناصرش یک مقدار داشته باشند، از فرمتی مثل فرمت زیر استفاده میکنیم:
 ```rust
 fn main() {
     let my_array = ["a"; 10];
@@ -2018,11 +2022,11 @@ fn main() {
 }
 ```
 
-This prints `["a", "a", "a", "a", "a", "a", "a", "a", "a", "a"]`.
+چنین چیزی پرینت میکنه: `["a", "a", "a", "a", "a", "a", "a", "a", "a", "a"]`.
 
-This method is used a lot to create buffers. For example, `let mut buffer = [0; 640]` creates an array of 640 zeroes. Then we can change zero to other numbers in order to add data.
+این روش به طور مداوم برای ایچاد بافر استفاده میشه، برای مثال: `;let mut buffer = [0; 640]`. که یک ارایه با `640` عنصری که مقدارشون `0` هست میسازه.
 
-You can index (get) entries in an array with []. The first entry is [0], the second is [1], and so on.
+با استفاده از `[]` میتونیم عنصر هارو بدست بیاریم. شماره‌ی اولین عنصر `[0]` هست و دومین عنصر هم `[1]` هست و همینطوری تا اخر...
 
 ```rust
 fn main() {
@@ -2031,9 +2035,9 @@ fn main() {
 }
 ```
 
-You can get a slice (a piece) of an array. First you need a &, because the compiler doesn't know the size. Then you can use `..` to show the range.
+همچنین ما میتونیم یک `slice` (یه تیکه) از یک ارایه بدست بیاریم. اول از همه به `&` نیاز داریم چون کامپایلر سایز رو نمیدونه بعد میتونیم از `..` برای مشخص کردن بازه تیکه‌ای که میخوایم رو مشخص کنیم.
 
-For example, let's use this array: `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`.
+برای مثال:
 
 ```rust
 fn main() {
@@ -2048,14 +2052,14 @@ fn main() {
 }
 ```
 
-Remember that:
+یادمون باشه که:
 
-- Index numbers start at 0 (not 1)
-- Index ranges are **exclusive** (they do not include the last number)
+- شماره های عنصر ها از `0` شروع میشند و نه `1`
+- بازه‌ای که انتخاب میکنیم، **تا** اخرین `index`ای که مشخص میکنیم هست، یعنی خود اون رو شامل نمیشه.
 
-So `[0..2]` means the first index and the second index (0 and 1). Or you can call it the "zeroth and first" index. It doesn't have the third item, which is index 2.
+پس بازه‌ی `[0..2]` میشه اولین عنصر و دومین عنصر (0 و ‍‍1).
 
-You can also have an **inclusive** range, which means it includes the last number too. To do this, add `=` to write `..=` instead of `..`. So instead of `[0..2]` you can write `[0..=2]` if you want the first, second, and third item.
+اما خب میتونیم کاری کنیم که اخرین `index`ای که مشخص میکنیم هم جزو بازه باشه، چطوری؟ با استفاده از `..=`. پس اگه میخوایم بازه ای داشته باشیم از اولین عنصر تا سومین عنصر، میتونیم از `[0..=2]` استفاده کنیم.
 
 ## Vectors
 
