@@ -2292,11 +2292,11 @@ fn main() {
 
 همچنین نوع های مجموعه‌ای زیادی وجود دارند، و روش های زیادی برای استفاده از `Array` ها، `Vec` ها و `Tuple` ها وجود داره که بعدا در موردشون یاد میگیریم. اما حالا بیاید `Control Flow` رو یاد بگیریم.
 
-## Control flow
+## کنترل جریان | Control flow
 
-**See this chapter on YouTube: [Part 1](https://youtu.be/UAymDOpv_us) and [Part 2](https://youtu.be/eqysTfiiQZs)**
+کنترل جریان یعنی اینکه برنامه در شرایط متفاوت چه کاری باید انجام بده.
 
-Control flow means telling your code what to do in different situations. The simplest control flow is `if`.
+اولین کنترل کننده `if` هست:
 
 ```rust
 fn main() {
@@ -2306,10 +2306,9 @@ fn main() {
     }
 }
 ```
+همچنین به این نکته توجه کنید که `==` برای مقایسه هست و `=` برای دادن مقدار و به این هم دقت کنید که در `Rust` به پرانتز در `if` نیازی نداریم.
 
-Also note that you use `==` and not `=`. `==` is to compare, `=` is to *assign* (to give a value). Also note that we wrote `if my_number == 7` and not `if (my_number == 7)`. You don't need brackets with `if` in Rust.
-
-`else if` and `else` give you more control:
+و همچنین `else` و `else if` هم وجود دارند که کنترل بیشتری رو هم میدند:
 
 ```rust
 fn main() {
@@ -2324,9 +2323,9 @@ fn main() {
 }
 ```
 
-This prints `It's a different number` because it's not equal to 7 or 6.
+خروجی بالا: `It's a different number` است به این دلیل که مقدار برابر `7` یا `6` نیست.
 
-You can add more conditions with `&&` (and) and `||` (or).
+همچنین میتونیم شرط های بیشتری با استفاده از `&&` و `||` ایجاد کنیم:
 
 ```rust
 fn main() {
@@ -2341,9 +2340,11 @@ fn main() {
 }
 ```
 
-This prints `It's a positive odd number` because when you divide it by 2 you have a remainder of 1, and it's greater than 0.
+خروجی کد بالا: `It's a positive odd number`است، به این دلیل که وقتی `my_number` رو بر `2` تقسیم میکنیم، باقیمانده‌ی اون `1` میشه، و همچین `1` بزرگتر از `0` هست.
 
-You can see that too much `if`, `else`, and `else if` can be difficult to read. In this case you can use `match` instead, which looks much cleaner. But you must match for every possible result. For example, this will not work:
+میتونیم ببینیم که `if`، `else` و `else if` زیاد، خوندن کد رو سخت میکنه. خب ما میتونیم از `match` به جای اونها استفاده کنیم که به خوانایی کد کمک میکنه.
+
+اما هر وقت که از `match` استفاده میکنیم باید تمام حالات ممکن رو در نظر بگیریم و براشون کد بنویسیم، برای مثال کد زیر کار نمیکنه:
 
 ```rust
 fn main() {
@@ -2357,7 +2358,7 @@ fn main() {
 }
 ```
 
-The compiler says:
+خطای کامپایلر:
 
 ```text
 error[E0004]: non-exhaustive patterns: `3u8..=std::u8::MAX` not covered
@@ -2367,7 +2368,9 @@ error[E0004]: non-exhaustive patterns: `3u8..=std::u8::MAX` not covered
   |           ^^^^^^^^^ pattern `3u8..=std::u8::MAX` not covered
 ```
 
-This means "you told me about 0 to 2, but `u8`s can go up to 255. What about 3? What about 4? What about 5?" And so on. So you can add `_` which means "anything else".
+این به این معنی هست که "تو شرایطی که مقدار `0`، `1` و `2` باشه رو کنترل کردی اما اگه چیزی غیر از این بود چیکار کنم؟ نوع `u8` میتونه `255` حالت مختلف داشته باشه و تو فقط چندتا ازشون رو گفتی، بقیه چی؟".
+
+خب برای حل این مشکل میتونیم از `_` استفاده کنیم، که به "هر چیز دیگه که بود" هست:
 
 ```rust
 fn main() {
@@ -2381,16 +2384,17 @@ fn main() {
 }
 ```
 
-That prints `It's some other number`.
+خروجیش میشه: `It's some other number`.
 
-Remember this for match:
+در هنگام استفاده از `match` به این نکات توجه کنید:
 
-- You write `match` and then make a `{}` code block.
-- Write the *pattern* on the left and use a `=>` fat arrow to say what to do when it matches.
-- Each line is called an "arm".
-- Put a comma between the arms (not a semicolon).
+- شرایط مختلف `match` رو داخل `{}` باید بنویسیم
+- وقتی یک **الگو** مینویسیم، بعدش از `=>` استفاده میکنیم که بگیم اگه مقدار با این **الگو** `match` بود چیکار کنه
+- هر شرایطی که در `match` کنترل میکنیم، بهش میگیم یک **بازو**(`Arm`). برای مثال در کد بالا هر خط داخل `match` یک `Arm` هست
+- بین `Arm` ها `,` میزاریم و نه `;`
 
-You can declare a value with a match:
+
+همچنین میتونیم با استفاده از `match` یک مقدار تغریف کنیم:
 
 ```rust
 fn main() {
@@ -2402,10 +2406,11 @@ fn main() {
     };
 }
 ```
+مقدار متغییر `second_number` میشه `10`.
 
-`second_number` will be 10. Do you see the semicolon at the end? That is because, after the match is over, we actually told the compiler this: `let second_number = 10;`
+همونطور که متوجه شدید بعد `match` یک `;` هست. این به دلیل این هست که ما با استفاده از `match` یک مقدار یک متغییر رو تغریف کردیم پس کد ما در نهایت میشه ‌`;let second_number = 10`.
 
-You can match on more complicated things too. You use a tuple to do it.
+میتونیم به عنوان ورودی به `Rust` یک `Tuple` هم بدیم:
 
 ```rust
 fn main() {
@@ -2421,9 +2426,9 @@ fn main() {
 }
 ```
 
-This prints `It's dark but not bad` because it matches "cloudy" and "warm" for `sky` and `temperature`.
+خروجیش میشه: `It's dark but not bad`، به این دلیل که مقدار `sky`، `cloudy` هست و مقدار `temperature`، `warm` هست.
 
-You can even put `if` inside of `match`. This is called a "match guard":
+همچنین میتونیم از `if` داخل `match` استفاده کنیم. به این کار میگن `Match guard`:
 
 ```rust
 fn main() {
@@ -2438,9 +2443,9 @@ fn main() {
 }
 ```
 
-This will print `Married? true. Number of children: 5.`
+خروجیش میشه: `Married? true. Number of children: 5.`
 
-You can use _ as many times as you want in a match. In this match on colours, we have three but only check one at a time.
+میتونیم هر چند‌تا که میخوایم از `_` در داخل یک `match` استفاده کنیم:
 
 ```rust
 fn match_colours(rbg: (i32, i32, i32)) {
@@ -2464,7 +2469,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش میشه:
 
 ```text
 Not much blue
@@ -2472,11 +2477,11 @@ Each colour has at least 10
 Not much green
 ```
 
-This also shows how `match` statements work, because in the first example it only printed `Not much blue`. But `first` also has not much green. A `match` statement always stops when it finds a match, and doesn't check the rest. This is a good example of code that compiles well but is not the code you want.
+خب همونطور که متوجه شدیم، `match` اولین الگویی که با مقدار ها هماهنگ باشه رو اجرا میکنه و با باقی شرایط دیگه کاری نداره. این یکی از جاهایی هست که کد کامپایل میشه اما میتونه نتیجه‌ی دلخواه مارو نده.
 
-You can make a really big `match` statement to fix it, but it is probably better to use a `for` loop. We will talk about loops soon.
+برای حل این مشکل میتونیم یک `match` بزرگ بنویسیم، اما بهتر هست که از حلقه‌ی `for` استفاده کنیم. (بعدا در مورد حلقه‌ ها صحبت میکنیم)
 
-A match has to return the same type. So you can't do this:
+دستور `match` اگه خروجی‌ای داره باید همه‌ی خروجی هاش از یک نوع باشند، پس کد زیر کامپایل نمیشه:
 
 ```rust
 fn main() {
@@ -2488,7 +2493,7 @@ fn main() {
 }
 ```
 
-The compiler tells you that:
+چیزی که کامپایلر میگه:
 
 ```text
 error[E0308]: `match` arms have incompatible types
@@ -2504,15 +2509,14 @@ error[E0308]: `match` arms have incompatible types
    | |_____- `match` arms have incompatible types
 ```
 
-This will also not work, for the same reason:
-
+این کد هم به همون دلیل کامپایل نمیشه:
 ```rust
 fn main() {
     let some_variable = if my_number == 10 { 8 } else { "something else "}; // ⚠️
 }
 ```
 
-But this works, because it's not a `match` so you have a different `let` statement each time:
+اما این کار میکنه، به این دلیل که `match` نیست و در هر شرایطی هم یک متغییر جدید ایجاد میکنه:
 
 ```rust
 fn main() {
@@ -2525,8 +2529,7 @@ fn main() {
     }
 }
 ```
-
-You can also use `@` to give a name to the value of a `match` expression, and then you can use it. In this example we match an `i32` input in a function. If it's 4 or 13 we want to use that number in a `println!` statement. Otherwise, we don't need to use it.
+همجنین میتونیم از `@` برای دادن اسم به مقدار داخل عبارت `match` استفاده کنیم.
 
 ```rust
 fn match_number(input: i32) {
@@ -2544,7 +2547,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش میشه:
 
 ```text
 Looks like a normal number
