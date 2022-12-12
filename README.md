@@ -2689,18 +2689,16 @@ fn main() {
 }
 ```
 
-## Enums
+## اینام ها | Enums
 
-**See this chapter on YouTube: [Part 1](https://youtu.be/SRnqNTJUgjs), [Part 2](https://youtu.be/F_EcbWM63lk), [Part 3](https://youtu.be/2uh64U9JesA) and [Part 4](https://youtu.be/LOHVUYTc5Us)**
+کلمه‌ی `enum` کوتاه شده‌ی کلمه‌ی `Enumeration` هست. این ها خیلی شبیه به `Struct` ها هستند،‌ اما تفاوتی هم دارند که این ها هستند:
+- زمانی از `Struct` ها استفاده میکنیم که نیاز داریم یک مقدار **و** یک مقدار دیگه رو در یک نوع ذخیره کنیم
+- زمانی از `Enum` استفاده میکنیم که نیاز داریم یک مقدار **یا** یک مقدار دیگه رو در یک نوع ذخیره کنیم
 
-An `enum` is short for enumerations. They look very similar to a struct, but are different. Here is the difference:
 
-- Use a `struct` when you want one thing **AND** another thing.
-- Use an `enum` when you want one thing **OR** another thing.
+پس `Struct` ها برای استفاده از **چندین چیز** کنار یکدیگر هستند. اما `Enum` ها برای استفاده از **چندین انتخاب** کنار یکدیگر هستند.
 
-So structs are for **many things** together, while enums are for **many choices** together.
-
-To declare an enum, write `enum` and use a code block with the options, separated by commas. Just like a `struct`, the last part can have a comma or not. We will create an enum called `ThingsInTheSky`:
+برای ایجاد یک `Enum` از کلمه‌کلیدی `enum` استفاده میکنیم وبعدش اسم رو میدیم و بعدش هم `{}` میزاریم و انتخاب هارو درونش تعریف میکنیم. همچنین مثل `Struct` ها از `,` برای جداسازی انتخاب ها استفاده میکنیم. در کد زیر یک `Enum` با نام `ThingsInTheSky` ایجاد میکنیم:
 
 ```rust
 enum ThingsInTheSky {
@@ -2710,8 +2708,7 @@ enum ThingsInTheSky {
 
 fn main() {}
 ```
-
-This is an enum because you can either see the sun, **or** the stars: you have to choose one. These are called **variants**.
+استفاده از `Enum` منطقی هست دیگه، چون تو اسمون یا `خورشید` هست و یا `ستاره ها` هستند. و ما باید یکی رو انتخاب کنیم.
 
 ```rust
 // create the enum with two choices
@@ -2743,10 +2740,9 @@ fn main() {
 }
 ```
 
-This prints `I can see the sun!`.
+چنین چیزی پرینت میکنه: `I can see the sun!`.
 
-You can add data to an enum too.
-
+همچین هم انتخاب در `Enum` میتونه مقداری رو هم در خودش ذخیره کنه:
 ```rust
 enum ThingsInTheSky {
     Sun(String), // Now each variant has a string
@@ -2774,9 +2770,9 @@ fn main() {
 }
 ```
 
-This prints the same thing: `I can see the sun!`
+این هم همون خروچی `I can see the sun!` رو میده.
 
-You can also "import" an enum so you don't have to type so much. Here's an example where we have to type `Mood::` every time we match on our mood:
+همچین میتونیم انتخاب هایی که یک `Enum` به ما میده رو هم به اصطلاح `Import` کنیم. باری مثال در کد زیر ما هر باز لازم داریم که برای اشاره به یک انتخاب `Modd::` رو بنویسیم:
 
 ```rust
 enum Mood {
@@ -2803,8 +2799,15 @@ fn main() {
 }
 ```
 
-It prints `Out of 1 to 10, my happiness is 7`. Let's import so we can type less. To import everything, write `*`. Note: it's the same key as `*` for dereferencing but is completely different.
+خروجیش چنین چیزی میشه: `Out of 1 to 10, my happiness is 7`
 
+اما میتونیم انتخاب های `Enum` رو `Import` کنیم که این باعث میشه کد کمتری بنویسیم.
+
+برای `Import` کردن انتخاب هایی که `Mood` به ما میده میتونیم از `;use Mood::*` استفاده کنیم.
+
+این `*` که اینجا استفاده کردیم کاملا با `*` که در `Derefrencing` استفاده میکنیم فرق داره.
+
+بزارید در کد ببینیم:
 ```rust
 enum Mood {
     Happy,
@@ -2830,8 +2833,9 @@ fn main() {
     println!("Out of 1 to 10, my happiness is {}", happiness_level);
 }
 ```
+همچنین اگه ما تغیین نکنیم که انتخاب های یک `Enum` چه مقداری میتونند ذخیره کنند، `Rust` به طور پیشفرض یک عدد رو به هر انتخاب با ترتیبی که هستند میده.
 
-Parts of an `enum` can also be turned into an integer. That's because Rust gives each arm of an `enum` a number that starts with 0 for its own use. You can do things with it if your enum doesn't have any other data in it.
+عددی که هر انتخاب نگه میداره به ترتیب از `0` شروع میشه. یعنی در کد زیر `Spring` مقدار `0` رو میگیره، `Summer` مقدار `1` رو میگیره و خودت برو تا تهش...
 
 ```rust
 enum Season {
@@ -2850,7 +2854,7 @@ fn main() {
 }
 ```
 
-This prints:
+کد بالا چنین چیزی رو پرینت میکنه:
 
 ```text
 0
@@ -2858,8 +2862,8 @@ This prints:
 2
 3
 ```
-
-Though you can give it a different number, if you want - Rust doesn't care and can use it in the same way. Just add an `=` and your number to the variant that you want to have a number. You don't have to give all of them a number. But if you don't, Rust will just add 1 from the arm before to give it a number.
+البته اگه میخوایم میتونیم مقدار دیگه رو هم بهشون بدیم.
+لازم نیست به همشون مقدار بدیم همیشه مقدار انتخاب بعدی یکی بیشتر از مقدار انتخاب قبلی میشه.
 
 ```rust
 enum Star {
@@ -2884,7 +2888,7 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 Not the biggest star.
@@ -2894,7 +2898,7 @@ This is a good-sized star.
 What about DeadStar? It's the number 1001.
 ```
 
-`DeadStar` would have been number 4, but now it's 1001.
+اگه به هیچ کدوم مقدار نمیدادیم، مقدار `DeadStar` میشد `4`،‌ اما الان مقدارش شده `1001`.
 
 ### Enums to use multiple types
 
