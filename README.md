@@ -2555,20 +2555,18 @@ Looks like a normal number
 4 is an unlucky number in China (sounds close to 死)!
 ```
 
-## Structs
+## ساختار ها | Structs
 
-**See this chapter on YouTube: [Part 1](https://youtu.be/W23uQghBOFk) and [Part 2](https://youtu.be/GSVhrjLCuNA)**
+با استفاده از `Struct` ها میتونیم نوع خومون رو بسازیم. در `Rust`، خیلی از `Struct` ها استفاده میکنیم به این دلیل که ساختشون اسون هست و بسیار کاربردی هستند. `Struct` ها با کلمه‌کلیدی `struct` ایجاد میشند. اسم های باید فرمت `UpperCamelCase` باشند، یعنی فاصله‌ای بین کلمات نباید باشه و هر کلمه با حرف بزرگ شروع بشه. اگه اسم یک `Struct` با حروف کوچیک باشه کامپایلر اخطار میده.
 
-With structs, you can create your own type. You will use structs all the time in Rust because they are so convenient. Structs are created with the keyword `struct`. The name of a struct should be in UpperCamelCase (capital letter for each word, no spaces). If you write a struct in all lowercase, the compiler will tell you.
-
-There are three types of structs. One is a "unit struct". Unit means "doesn't have anything". For a unit struct, you just write the name and a semicolon.
+سه نوع `Struct` وجود داره. به یکیشون میگیم `Unit Struct`. این نوع چیز خاصی رو در خودش نگه نمیداره:
 
 ```rust
 struct FileDirectory;
 fn main() {}
 ```
 
-The next is a tuple struct, or an unnamed struct. It is "unnamed" because you only need to write the types, not the field names. Tuple structs are good when you need a simple struct and don't need to remember names.
+نوع بعدی `Tuple Struct` ها هستند. در نوع `Struct` ها اسمی برای هر مقدار نمینویسیم. `Tuple Struct` ها زمانی کاربردی هستند که فقط میخوایم یه مقداری رو در یک `Struct` ذخیره کنیم و نیازی نداریم که به هر مقداری که ذخیره میشه اسم بدیم:
 
 ```rust
 struct Colour(u8, u8, u8);
@@ -2579,10 +2577,15 @@ fn main() {
 }
 ```
 
-This prints `The second part of the colour is: 0`.
+کد بالا چنین چیزی پرینت میکنه: `The second part of the colour is: 0`
 
-The third type is the named struct. This is probably the most common struct. In this struct you declare field names and types inside a `{}` code block. Note that you don't write a semicolon after a named struct, because there is a whole code block after it.
+نوع بعدی `Named Struct` ها هستند. این نوع `Struct` ها رایج‌ترین نوع هستند. در این نوع `Struct` ها ما برای هم مقداری که در `Struct` ذخیره میشه اسم میدیم.
 
+به مقداری که با اسم در یک `Struct` ذخیره میشه، `Field` میگیم. `Field` ها درون `{}` تعریف میشند. نحوه‌ی ایجاد هر `Field` هم اینطوری هست که اسم رو میدیم و نوع مقداری که میتونه درش ذخیره بشه رو هم میگیم.
+
+به این نکته توجه کنید که بعد از تعریف هر `Field` از `;` استفاده نمیکنیم و از `,` استفاده میکنیم.
+
+کد زیر رو ببینید همه چی رو متوجه میشید:
 ```rust
 struct Colour(u8, u8, u8); // Declare the same Colour tuple struct
 
@@ -2600,8 +2603,9 @@ fn main() {
     };
 }
 ```
+با استفاده از `,`، `Field` ها رو از هم جدا میکنیم. برای اخرین `Field` هم میتونیم `,` بزاریم و هم میتونیم نزاریم. این به عهده‌ی ما است که با کدوم حال کنیم :)
 
-You separate fields by commas in a named struct too. For the last field you can add a comma or not - it's up to you. `SizeAndColour` had a comma after `colour`:
+برای مثال در کد زیر اخرین `Field`، `SiezeAndColour` یک `,` داره:
 
 ```rust
 struct Colour(u8, u8, u8); // Declare the same Colour tuple struct
@@ -2614,7 +2618,7 @@ struct SizeAndColour {
 fn main() {}
 ```
 
-but you don't need it. But it can be a good idea to always put a comma, because sometimes you will change the order of the fields:
+اما خب بهش احتیاچی نداریم، اما ایده‌ی خوبی هست که همیشه یک `,` بزاریم، به این دلیل که شاید گاهی بخوایم ترتیب `Field` ها رو عوض کنیم:
 
 ```rust
 struct Colour(u8, u8, u8); // Declare the same Colour tuple struct
@@ -2627,8 +2631,7 @@ struct SizeAndColour {
 fn main() {}
 ```
 
-Then we decide to change the order...
-
+اما اگه بخوایم ترتیب رو عوض کنیم کد کامپایل نمیشه، چون اگه `Field` اخری نیست حتما باید `,` داشته باشه:
 ```rust
 struct SizeAndColour {
     colour: Colour // ⚠️ Whoops! Now this doesn't have a comma.
@@ -2638,9 +2641,10 @@ struct SizeAndColour {
 fn main() {}
 ```
 
-But it is not very important either way so you can choose whether to use a comma or not.
+اما خب این مسئله زیاد مهم نیست، و ما میتونیم تصمیم بگیریم که چیکار کنیم.
 
-Let's create a `Country` struct to give an example. The `Country` struct has the fields `population`, `capital`, and `leader_name`.
+
+خب بیاید یک ساختار به اسم `Country` بسازیم. ساختار `Country` فیلد های `population`، `capital` و `leader_name` رو داره:
 
 ```rust
 struct Country {
@@ -2662,8 +2666,9 @@ fn main() {
 }
 ```
 
-Did you notice that we wrote the same thing twice? We wrote `population: population`, `capital: capital`, and `leader_name: leader_name`. Actually, you don't need to do that. If the field name and variable name are the same, you don't have to write it twice.
+متوجه شدید که اسم فیلد هارو رو بار نوشتیم؟ نوشتیم: `population: population`, `capital: capital`, `leader_name: leader_name`.
 
+خب این اضافه کاری هست و بهش نیازی نداریم اگه اسم متغییر هایی که داریم میدیم با اسم `Field` یکی باشه:
 ```rust
 struct Country {
     population: u32,
