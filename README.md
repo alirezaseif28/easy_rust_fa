@@ -2900,9 +2900,13 @@ What about DeadStar? It's the number 1001.
 
 اگه به هیچ کدوم مقدار نمیدادیم، مقدار `DeadStar` میشد `4`،‌ اما الان مقدارش شده `1001`.
 
-### Enums to use multiple types
+### اینام برای استفاده از چندین نوعEnums to use multiple types
 
-You know that items in a `Vec`, array, etc. all need the same type (only tuples are different). But you can actually use an enum to put different types in. Imagine we want to have a `Vec` with `u32`s or `i32`s. Of course, you can make a `Vec<(u32, i32)>` (a vec with `(u32, i32)` tuples) but we only want one each time. So here you can use an enum. Here is a simple example:
+میدونیم که در ایتم هایی که میتونیم در `Vec`، `Array` و ... ذخیره کنیم باید از یک نوع باشند(فقط `Tuple` ها از چندین نوع پشتیبانی میکنند). اما میتونیم از `Enum` استفاده کنیم که نوع های متفاوت رو درون این نوع ها قرار بدیم.
+
+تصور کنید که میخوایم که `Vec` داشته باشیم که بتونه از نوع `u32` یا `i32` درون خودش جای بده. البته که میتونیم از `Vec<(u32, i32)>` استفاده کنیم اما ما میخوایم که یک نوعی داشته باشیم که بتونه `u32` یا `i32` رو درون خودش جای بده.
+
+برای حل این مشکل میتونیم از `Enum` استفاده کنیم:
 
 ```rust
 enum Number {
@@ -2912,12 +2916,19 @@ enum Number {
 
 fn main() {}
 ```
+<div dir="rtl">
 
-So there are two variants: the `U32` variant with a `u32` inside, and the `I32` variant with `i32` inside. `U32` and `I32` are just names we made. They could have been `UThirtyTwo` or `IThirtyTwo` or anything else.
+خب دو انتخاب داریم:
+- `U32` که میتونه یک مقدار از نوع `u32` در خودش جای بده
+- `I32` که میتونه یک مقدار از نوع `i32` در خودش جای بده
 
-Now, if we put them into a `Vec` we just have a `Vec<Number>`, and the compiler is happy because it's all the same type. The compiler doesn't care that we have either `u32` or `i32` because they are all inside a single type called `Number`. And because it's an enum, you have to pick one, which is what we want. We will use the `.is_positive()` method to pick. If it's `true` then we will choose `U32`, and if it's `false` then we will choose `I32`.
+`U32` و `I32` فقط اسم هستند و میتونستند هرچیزی باشند، برای مثال میتونیم اسمشون رو بزاریم `UThirtyTwo` و `IThirtyTwo` یا هر چیز دیگه ای...
 
-Now the code looks like this:
+خب الان میتونیم `Number` رو در یک `Vec` قرار بدیم و اون `Vec` میتونه هم `i32` و هم `u32` رو در هر ایتمش نگهداری کنه. کامپایلر هم ناراضی نمیشه چون نوعی ساختیم که میتونه اینکارو انجام بده. برای کامپایلر مهم نیست که چه مقداری رو درون `Vec` قرار میدیم تا زمانی که اون چیزی که قرار میدیم یک **انتخاب** از `Number` باشه.
+
+بخاطر اینکه `Number` یک `Enum` هست باید یکی از انتخاب های موجود رو انتخاب کنیم. پس در هنگام مقداردهی از `()is_positive` استفاده میکنیم و مقدار ورودی رو به شکل یک انتخاب از `Number` به عنوان خروجی میدیم بیرون. اینکار رو درون فانکشن `get_number` انجام دادیم:
+
+</div>
 
 ```rust
 enum Number {
@@ -2946,7 +2957,7 @@ fn main() {
 }
 ```
 
-This prints what we wanted to see:
+خروجی برنامه بالا چنین چیزی میشه:
 
 ```text
 It's an i32 with the value -800
