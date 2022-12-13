@@ -2964,9 +2964,9 @@ It's an i32 with the value -800
 It's a u32 with the value 8
 ```
 
-## Loops
+## حلقه ها | Loops
 
-With loops you can tell Rust to continue something until you want it to stop. You use `loop` to start a loop that does not stop, unless you tell it when to `break`.
+با استفاده از حلقه ها میتونیم به `Rust` بگیم یک کار رو تا زمانی انجام بده که ما میخوایم. کلمه‌کلیدی `loop` یک حلقه ایجاد میکنه که تا زمانی که به کلمه‌کلیدی `break` برخوره متوقف نمیشه:
 
 ```rust
 fn main() { // This program will never stop
@@ -2976,8 +2976,7 @@ fn main() { // This program will never stop
 }
 ```
 
-So let's tell the compiler when it can break.
-
+بیاد به کامپایلر بگیم که در شرایط خاصی باید انجام اون کار رو متوقف کنه و حلقه رو `break` کنه:
 ```rust
 fn main() {
     let mut counter = 0; // set a counter to 0
@@ -2991,7 +2990,7 @@ fn main() {
 }
 ```
 
-This will print:
+خروجیش میشه:
 
 ```text
 The counter is now: 1
@@ -3000,8 +2999,7 @@ The counter is now: 3
 The counter is now: 4
 The counter is now: 5
 ```
-
-If you have a loop inside of a loop, you can give them names. With names, you can tell Rust which loop to `break` out of. Use `'` (called a "tick") and a `:` to give it a name:
+اگه یک حلقه درون یک حلقه‌ی دیگه داشته باشیم، میتونیم بهشون اسم بدیم اینطوری میتونیم بگیم که کدوم حلقه باید `break` بشه. با استفاده از رو کاراکتر `'` و `:` میتونیم به یک حلقه اسم بدیم:
 
 ```rust
 fn main() {
@@ -3030,7 +3028,7 @@ fn main() {
 }
 ```
 
-This will print:
+خروجیش:
 
 ```text
 Now entering the first loop.
@@ -3050,7 +3048,7 @@ The second counter is now: 1
 The second counter is now: 2
 ```
 
-A `while` loop is a loop that continues while something is still `true`. Each loop, Rust will check if it is still `true`. If it becomes `false`, Rust will stop the loop.
+حلقه‌ی بعدی `while` هست که تا زمانی که شرطی که درش تعریف کردیم، پایدار باشه، ادامه پیدا میکنه:
 
 ```rust
 fn main() {
@@ -3063,10 +3061,10 @@ fn main() {
 }
 ```
 
-A `for` loop lets you tell Rust what to do each time. But in a `for` loop, the loop stops after a certain number of times. `for` loops use **ranges** very often. You use `..` and `..=` to create a range.
+حلقه‌ی بعدی `for` هست که بعد از تعداد معینی بار اجرا شدن متوقف میشه. حلقه‌ی `for` اغلب از `Range` استفاده میکنه. برای ایجاد یک `Range` از `..` یا `..=` استفاده میکنیم.
 
-- `..` creates an **exclusive** range: `0..3` creates `0, 1, 2`.
-- `..=` creates an **inclusive** range: `0..=3` = `0, 1, 2, 3`.
+- `..` یک بازه‌ی عددی بین `0` **تا** `n` ایجاد میکنه(`n` شامل بازه نمیشه): `0..3` چنین بازه‌ای میسازه: `0, 1, 2`.
+- `..=` یک بازه‌ی عددی بین `0` و `n` ایجاد میکنه(`n` شامل بازه میشه): `0..=3` چنین بازه‌ای میسازه: `0, 1, 2, 3`.
 
 ```rust
 fn main() {
@@ -3080,7 +3078,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 The number is: 0
@@ -3092,10 +3090,9 @@ The next number is: 2
 The next number is: 3
 ```
 
-Also notice that `number` becomes the variable name for 0..3. We could have called it `n`, or `ntod_het___hno_f`, or anything. We can then use that name in `println!`.
+همچنین در هر دور حلقه، مقداری از بازه که الان روش هستیم رو در متغییری که قبل از `in` تعریف شده بهمون میده. میتونیم اسم اون رو هرچیزی بزاریم. و به این نکته توجه داشته باشید که به اون متغییر فقط در درون حلقه دسترسی داریم.
 
-If you don't need a variable name, use `_`.
-
+اگه نیازی به مقداری که الان روش هستیم نداریم میتونیم از `_` استفاده کنیم:
 ```rust
 fn main() {
     for _ in 0..3 {
@@ -3104,7 +3101,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Printing the same thing three times
@@ -3112,9 +3109,7 @@ Printing the same thing three times
 Printing the same thing three times
 ```
 
-because we didn't give it any number to print each time.
-
-And actually, if you give a variable name and don't use it, Rust will tell you:
+اگه به اون متغییر خاص درون حلقه اسم بدیم و ازش استفاده نکنیم، کامپایلر بهمون اخطار میده:
 
 ```rust
 fn main() {
@@ -3124,8 +3119,7 @@ fn main() {
 }
 ```
 
-This prints the same thing as above. The program compiles fine, but Rust will remind you that you didn't use `number`:
-
+این هم خروجی کد بالا رو میده، اما در هنگام کامپایل اخطاری نمایش داده میشه که اسم متغییر رو دادیم و از `_` استفاده نکردیم و این به معنای این هست که میخوایم ازش استفاده کنیم، اما ازش استفاده نکردیم:
 ```text
 warning: unused variable: `number`
  --> src\main.rs:2:9
@@ -3134,9 +3128,9 @@ warning: unused variable: `number`
   |         ^^^^^^ help: if this is intentional, prefix it with an underscore: `_number`
 ```
 
-Rust suggests writing `_number` instead of `_`. Putting `_` in front of a variable name means "maybe I will use it later". But using just `_` means "I don't care about this variable at all". So you can put `_` in front of variable names if you will use them later and don't want the compiler to tell you about them.
+کامپایلر پیشنهاد میکنه که برای اینکه این اخطار رو نگیریم باید قبل از اسم اون متغییر از `_` استفاده کنیم. این برای `Rust` به این معنی هست که حالا شاید ازش استفاده کردم، شایدم نکردیم تو در این مورد گیر نده. اما استفاده از `_` خالی، به این معنا هست که اصلا اهمیتی درباره این متغییر نمیدم.
 
-You can also use `break` to return a value. You write the value right after `break` and use a `;`. Here is an example with a `loop` and a break that gives `my_number` its value.
+همچنین میتونیم از `break` برای برگردوندن یک مقدار استفاده کنیم. برای اینکار میتونیم اسم متغییر رو بعد از `break` بنویسیم و بعد از `;` استفاده کنیم، برای مثال:
 
 ```rust
 fn main() {
@@ -3150,10 +3144,14 @@ fn main() {
     println!("{}", my_number);
 }
 ```
+خروجیش میشه : `56`
 
-This prints `56`. `break counter;` means "break and return the value of counter". And because the whole block starts with `let`, `my_number` gets the value.
+کد `;break counter` به این معنا هست که حلقه رو تموم کن و همچنین مقدار متغییر `counter` رو هم برگردون.
 
-Now that we know how to use loops, here is a better solution to our `match` problem with colours from before. It is a better solution because we want to compare everything, and a `for` loop looks at every item.
+
+خب حالا میدونیم که چطوری از حلقه ها استفاده کنیم. کد زیر یک راه‌حل خوب هست برای مشکلی که در بخش ها قبل با `match` داشتیم.
+
+بهتر هست به این دلیل که ما میخوام همه‌ی ایتم هارو با چیزی مقایسه کنیم و `for` این قابلیت رو به ما میده:
 
 ```rust
 fn match_colours(rbg: (i32, i32, i32)) {
@@ -3183,7 +3181,7 @@ fn main() {
 }
 ```
 
-This prints:
+چنین خروجی رو میده:
 
 ```text
 Comparing a colour with 200 red, 0 blue, and 0 green:
