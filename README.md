@@ -3486,10 +3486,11 @@ fn main() {
 ```
 پس یادمون باشه، وقتی از `.` استفاده میکنیم نیازی به `*` نداریم.
 
-## Generics
+## عمومی ها | Generics
 
-In functions, you write what type to take as input:
+(اره واقعا ترجمه‌ی درستی نکردم)
 
+در فانکشن ها ما باید نوع متغییر های ورودی رو بنویسیم:
 ```rust
 fn return_number(number: i32) -> i32 {
     println!("Here is your number.");
@@ -3501,11 +3502,15 @@ fn main() {
 }
 ```
 
-But what if you want to take more than just `i32`? You can use generics for this. Generics means "maybe one type, maybe another type".
+اما اگه بخوایم بتونیم نوع های دیگه‌ای رو هم بگیریم باید چیکار کنیم؟ خب باید از `Generic` استفاده کنیم. وقتی از `Generic` ها استفاده میکنیم لازم نیست نوع رو به طور مشخص تعریف کنیم و همچنین اون قسمتی از برنامه که درش از `Generic` ها استفاده کردیم میتونه با نوع ها متفاوتی هم کار کنه.
 
-For generics, you use angle brackets with the type inside, like this: `<T>` This means "any type you put into the function". Usually, generics uses types with one capital letter (T, U, V, etc.), though you don't have to just use one letter.
+برای استفاده از `Generic` ها، باید از کاراکتر `<>` استفاده کنیم و یک اسمی هم به نوع بدیم برای مثال `T` پس میشه: `<T>`.
 
-This is how you change the function to make it generic:
+این به معنای این هست که هر نوعی رو میپذیره.
+
+معمولا اسم `Generic` ها رو با یک حروف بزرگ مشخص میکنیم اما مجبور به این کار نیستیم.
+
+اینطوری میتونیم فانکشنی که قبلا نوشته بودیم رو `Generic` کنیم، یعنی میتونه هر نوعی رو به عنوان ورودی دریافت کنیم:
 
 ```rust
 fn return_number<T>(number: T) -> T {
@@ -3517,10 +3522,9 @@ fn main() {
     let number = return_number(5);
 }
 ```
+بخش مهم `<T>` که بعدش از اسم فانکشن نوشتیم هست. بدون `<T>`، `Rust` فکر میکنه که `T` یک `Concrete` هست(`Concrete،` `Generic` نیست). `Concrete` چیزی هست مثل `String` یا `i8`.
 
-The important part is the `<T>` after the function name. Without this, Rust will think that T is a concrete (concrete = not generic) type, like `String` or `i8`.
-
-This is easier to understand if we write out a type name. See what happens when we change `T` to `MyType`:
+برای فهم بهتر بیاید `<T>` رو حذف کنیم ببینیم چی میشه، همچنین `T` رو به `MyType` تغییر میدیم:
 
 ```rust
 fn return_number(number: MyType) -> MyType { // ⚠️
@@ -3528,8 +3532,9 @@ fn return_number(number: MyType) -> MyType { // ⚠️
     number
 }
 ```
+همونطور که گفتم الان `Rust` فکر میکنه که `MyType` یک `Concrete` هست، پس باید یک نوعی به نام `MyType` بسازیم که کد کار کنه وگرنه اصلا `MyType` وجود نداره.
 
-As you can see, `MyType` is concrete, not generic. So we need to write this and so now it works:
+اما ما میخوایم هر نوعی بگیریم و از `Generic` ها استفاده کنیم، پس نوع `MyType` رو نمینویسیم و میایم میگیم که فانکشن `return_number` یک `Generic` میگیره به نام `MyType` و نوع متغییر ورودی رو هم میگیم که `MyType` هست. دقت کنید که `MyType` میتونه هر چیزی باشه:
 
 ```rust
 fn return_number<MyType>(number: MyType) -> MyType {
@@ -3542,12 +3547,13 @@ fn main() {
 }
 ```
 
-So the single letter `T` is for human eyes, but the part after the function name is for the compiler's "eyes". Without it, it's not generic.
+خب مسخره بازی رو کنار میزاریم و از همون اسم `T` استفاده میکنیم چون تنبلیم...
 
-Now we will go back to type `T`, because Rust code usually uses `T`.
+یادتون هست که در `Rust` بعضی نوع ها **`Copy`** رو پیاده‌سازی کرده بودند و بعضی هم **`Clone`** رو پیاده‌سازی کرده بودند.
 
-You will remember that some types in Rust are **Copy**, some are **Clone**, some are **Display**, some are **Debug**, and so on. With **Debug**, we can print with `{:?}`. So now you can see that we have a problem if we want to print `T`:
+خب یادتونم هست که برای اینکه بتونیم یک نوع رو با استفاده از `{:?}` پرینت کنیم، اون نوع باید رو **`Debug`** پیاده‌سازی میکرد.
 
+در هنگام استفاده از `Generic` ها به مشکل بر میخوریم چون نمیدونیم که ایا نوعی که به عنوان ورودی میاد فلان چیز پیاده‌سازی کرده یا که نه:
 ```rust
 fn print_number<T>(number: T) {
     println!("Here is your number: {:?}", number); // ⚠️
@@ -3557,9 +3563,9 @@ fn main() {
     print_number(5);
 }
 ```
+`print_number` میخواد `number` رو پرینت کنه اما نمیدونیم که ایا نوع `number`، **`Debug`** رو پیاده‌سازی کرده یا نه.
 
-`print_number` needs **Debug** to print `number`, but is `T` a type with `Debug`? Maybe not. Maybe it doesn't have `#[derive(Debug)]`, who knows. The compiler doesn't know either, so it gives an error:
-
+در خطایی که کامپایلر هم میده، میتونیم ببینیم که میگه `T`، `Debug` رو پشتیبانی نکرده:
 ```text
 error[E0277]: `T` doesn't implement `std::fmt::Debug`
   --> src\main.rs:29:43
@@ -3567,8 +3573,11 @@ error[E0277]: `T` doesn't implement `std::fmt::Debug`
 29 |     println!("Here is your number: {:?}", number);
    |                                           ^^^^^^ `T` cannot be formatted using `{:?}` because it doesn't implement `std::fmt::Debug`
 ```
+در پیام خطا اومده که `T`، `Debug` رو پیاده‌سازی نکرده. خب ما چیکار کنیم؟ `Debug` رو برای `T` پیاده‌سازی کنیم؟ خب ما که نوعش رو نمیدونیم!
 
-T doesn't implement **Debug**. So do we implement Debug for T? No, because we don't know what T is. But we can tell the function: "Don't worry, because any type T for this function will have Debug".
+خب در اینجا میتونیم به فانکشن این اطمینان رو بدیم که نوعی که به عنوان ورودی بهت فرستاده میشه، **`Debug`** رو پیاده‌سازی کرده:
+
+اینطوری میتونیم اینکار رو انجام بدیم:
 
 ```rust
 use std::fmt::Debug; // Debug is located at std::fmt::Debug. So now we can just write 'Debug'.
@@ -3582,9 +3591,9 @@ fn main() {
 }
 ```
 
-So now the compiler knows: "Okay, this type T is going to have Debug". Now the code works, because `i32` has Debug. Now we can give it many types: `String`, `&str`, and so on, because they all have Debug.
+الان کامپایلر میدونه که نوع `T`، **`Debug`** رو پیاده‌سازی کرده. پس کد کار میکنه، چرا ؟ به این دلیل که `i32`، **`Debug`** رو پیاده‌سازی کرده.
 
-Now we can create a struct and give it Debug with #[derive(Debug)], so now we can print it too. Our function can take `i32`, the struct Animal, and more:
+الان میتونیم یک `Struct` درست کنیم که **`Debug`** رو پیاده‌سازی کرده و بدیم به `print_item` که پرینتش کنه:
 
 ```rust
 use std::fmt::Debug;
@@ -3612,16 +3621,18 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 Here is your item: Animal { name: "Charlie", age: 1 }
 Here is your item: 55
 ```
 
-Sometimes we need more than one type in a generic function. We have to write out each type name, and think about how we want to use it. In this example, we want two types. First we want to print a statement for type T. Printing with `{}` is nicer, so we will require `Display` for `T`.
+گاهی هم نیاز داریم که نوع های بیشتری در یک فانکشن `Generic` بگیریم.
 
-Next is type U, and the two variables `num_1` and `num_2` have type U (U is some sort of number). We want to compare them, so we need `PartialOrd`. That trait lets us use things like `<`, `>`, `==`, and so on. We want to print them too, so we require `Display` for `U` as well.
+در این مثال ما دو `Generic` رو میگیریم، اول `T` که میخوایم با `{}` پرینتش کنیم، پس باید **`Display`** رو پیاده‌سازی کرده باشه.
+
+همچنین یک نوع دیگه به اسم `U` که هم میخوایم با `{}` پرینتش کنیم و هم میخوایم که قابل مقایسه کردن باشه، پس باید `Display` و `PartialOrd` رو پیاده‌سازی کرده باشه.
 
 ```rust
 use std::fmt::Display;
@@ -3636,17 +3647,15 @@ fn main() {
 }
 ```
 
-This prints `Listen up!! Is 9 greater than 8? true`.
+خروجیش: `Listen up!! Is 9 greater than 8? true`.
 
-So `fn compare_and_display<T: Display, U: Display + PartialOrd>(statement: T, num_1: U, num_2: U)` says:
+پس `fn compare_and_display<T: Display, U: Display + PartialOrd>(statement: T, num_1: U, num_2: U)` میگه که:
 
-- The function name is `compare_and_display`,
-- The first type is T, and it is generic. It must be a type that can print with {}.
-- The next type is U, and it is generic. It must be a type that can print with {}. Also, it must be a type that can compare (use `>`, `<`, and `==`).
+- اسم فانکشن `compare_and_display` هست
+- نوع `Generic` اولی که میگیره اسمش `T` هست و باید قابل پرینت با `{}` باشه
+- نوع `Generic` دومی که میگیره، اسمش `U` هست و باید قابل پرینت با `{}` باشه و همچنین باید قابل مقایسه باشه
 
-Now we can give `compare_and_display` different types. `statement` can be a `String`, a `&str`, anything with Display.
-
-To make generic functions easier to read, we can also write it like this with `where` right before the code block:
+همچین برای اینکه `Generic` ها راحت قابل خوندن باشن میتونیم قبل از شروع بلوک کد فانکشن از `where` استفاده کنیم:
 
 ```rust
 use std::cmp::PartialOrd;
@@ -3665,14 +3674,14 @@ fn main() {
 }
 ```
 
-Using `where` is a good idea when you have many generic types.
+استفاده از `where` ایده‌ی خوبی هست وقتی با چندین نوع `Generic` سروکار داریم.
 
-Also note:
+همچین به نکات توجه کنید:
 
-- If you have one type T and another type T, they must be the same.
-- If you have one type T and another type U, they can be different. But they can also be the same.
+- اگه یک نوع `Generic` دارید به نام `T` و یک نوع دیگه هم با نم `T` دارید، اونها باید یکی باشند
+- اگه یک نوع `Generic` به نام `T` دارید و یک نوع دیگه با نام `U`، اونها هم میتونند یکی باشند و هم متفاوت از هم، که خب منطقی هست
 
-For example:
+برای مثال:
 
 ```rust
 use std::fmt::Display;
@@ -3688,7 +3697,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 I have two things to say: Hello there! and I hate sand.
