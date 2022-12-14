@@ -3312,10 +3312,11 @@ fn main() {
 
 خروجی کد بالا میشه: `Need sleep NOW`
 
-## Destructuring
+## تخریب کردن |‌ Destructuring
 
-Let's look at some more destructuring. You can get the values from a struct or enum by using `let` backwards. We learned that this is  `destructuring`, because you get variables that are not part of a structure. Now you have the values separately. First a simple example:
+بیاید یکم بیشتر در مورد `Destructuring` بدونیم.
 
+در کد زیر یک روش از `Destructuring` رو میبینیم،‌ در حقیقت متغییر `papa_doc` رو در یک `Struct`، `Destructure` کردیم:
 ```rust
 struct Person { // make a simple struct for a person
     name: String,
@@ -3343,13 +3344,14 @@ fn main() {
 }
 ```
 
-This prints: `They call him Papa Doc but his real name is Clarence. He is 170 cm tall and is he happy? false`
+چنین چیزی رو پرینت میکنه: `They call him Papa Doc but his real name is Clarence. He is 170 cm tall and is he happy? false`
 
-You can see that it's backwards. First we say `let papa_doc = Person { fields }` to create the struct. Then we say `let Person { fields } = papa_doc` to destructure it.
+اول از همه ما با `; let papa_doc = Person { fields }` یک متغییر از نوع `Person` ایجاد کردیم. بعد با استفاده از `let Person { fields } = papa_doc` اون رو `Destructure` کردیم.
 
-You don't have to write `name: a` - you can just write `name`. But here we write `name: a` because we want to use a variable with the name `a`.
+ما مجبور نیستیم که `name: a` رو بنویسیم،‌ میتونیم فقط `name` بنویسیم. اما اونطوری نوشتیم چون میخواستیم اسم اون متغییر `a` باشه.
 
-Now a bigger example. In this example we have a `City` struct. We give it a `new` function to make it. Then we have a `process_city_values` function to do things with the values. In the function we just create a `Vec`, but you can imagine that we can do much more after we destructure it.
+
+خب حالا یک مثال بزرگتر میزنیم. در این مثال ما یک `Struct` به نام `City` داریم. ما `Method`،‌ `new` رو براش تغریف کردیم. بعد فانکشن `process_city_values` رو داریم که یکسری کار با مقدار های `City`‌ای که بهش میدیم انجام میده. در این فانشکن متغییر ورودی رو `Destructure` کردیم:
 
 ```rust
 struct City {
@@ -3388,7 +3390,7 @@ fn main() {
 }
 ```
 
-This prints `The city's two names are ["Tallinn", "Reval"]`.
+چنین چیزی پرینت میکنه: `The city's two names are ["Tallinn", "Reval"]`.
 
 ## References and the dot operator
 
