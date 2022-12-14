@@ -3394,7 +3394,9 @@ fn main() {
 
 ## References and the dot operator
 
-We learned that when you have a reference, you need to use `*` to get to the value. A reference is a different type, so this won't work:
+تا اینجا فهمیدیم که ما `Reference` ها رو داریم و برای اینکه مقدار یک `Reference` رو بگیریم باید از `*` استفاده کنیم.
+
+میدونیم که `Reference` یک نوع متفاوت از نوع اصلی هست،‌ در حقیفت یک `Reference` از نوع اصلی هست. پس کد زیر کار نمیکنه:
 
 ```rust
 fn main() {
@@ -3405,7 +3407,7 @@ fn main() {
 }
 ```
 
-The compiler prints:
+خطایی که کامپایلر میده:
 
 ```text
 error[E0277]: can't compare `{integer}` with `&{integer}`
@@ -3415,11 +3417,11 @@ error[E0277]: can't compare `{integer}` with `&{integer}`
   |                              ^^ no implementation for `{integer} == &{integer}`
 ```
 
-So we change line 5 to `println!("{}", my_number == *reference);` and now it prints `true` because it's now `i32` == `i32`, not `i32` == `&i32`. This is called dereferencing.
+پس باید بجاش بنویسیم `println!("{}", my_number == *reference);`، اگه اینکار رو کنیم `true` رو پرینت میکنه،‌ دلیلش این هست که الان یک نوع `i32` رو با `i32` مقایسه میکنه و نه یک نوع `i32` رو با `&i32`. به این کار میگن `Derefrencing`.
 
-But when you use a method, Rust will dereference for you. The `.` in a method is called the dot operator, and it does dereferencing for free.
+اما وقتی از `Method` ها استفاده میکنیم `Rust` خودش عملیات `Dereferencing` رو انجام میده. کاراکتر `.` در استفاده از `Method` ها خودش عملیات `Dereferencing` رو انجام میده. بهش میگیم `dot operator`.
 
-First, let's make a struct with one `u8` field. Then we will make a reference to it and try to compare. It will not work:
+بزارید یک `Struct` با یک فیلد `u8` تعریف کنیم. بعدش یک `Reference` ازش میسازیم و سعی میکنیم با مقداری مقایسش کنیم. اما کد زیر کار نمیکنه:
 
 ```rust
 struct Item {
@@ -3436,11 +3438,9 @@ fn main() {
     println!("{}", reference_number == 8); // ⚠️ &u8 and u8 cannot be compared
 }
 ```
+برای اینکه کار کنه باید متغییر `reference_number` رو `Dereference` کنیم. چطوری؟ اینطوری: `println!("{}", *reference_number == 8);`
 
-To make it work, we need to dereference: `println!("{}", *reference_number == 8);`.
-
-But with the dot operator, we don't need `*`. For example:
-
+اما اگه طوری کد رو بنویسیم که از `dot operator` استفاده کنیم دیگه خودمون لازم نیست `Derefrencing` رو انجام بدیم:
 ```rust
 struct Item {
     number: u8,
@@ -3456,8 +3456,7 @@ fn main() {
     println!("{}", reference_item.number == 8); // we don't need to write *reference_item.number
 }
 ```
-
-Now let's create a method for `Item` that compares `number` to another number. We don't need to use `*` anywhere:
+حالا بزارید یک `Method` برای `Item` درست کنیم که مقدار درون `Item` رو با یک مقدار دیگه مقایسه کنه. اینجا هم نیازی به `*` نداریم:
 
 ```rust
 struct Item {
@@ -3485,8 +3484,7 @@ fn main() {
 
 }
 ```
-
-So just remember: when you use the `.` operator, you don't need to worry about `*`.
+پس یادمون باشه، وقتی از `.` استفاده میکنیم نیازی به `*` نداریم.
 
 ## Generics
 
