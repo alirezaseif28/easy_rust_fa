@@ -3195,16 +3195,24 @@ Comparing a colour with 200 red, 50 blue, and 0 green:
 Not much green.
 ```
 
-## Implementing structs and enums
+## پیاده سازی ساختار ها و اینام ها | ‌Implementing structs and enums
 
-This is where you can start to give your structs and enums some real power. To call functions on a `struct` or an `enum`, use an `impl` block. These functions are called **methods**. There are two kinds of methods in an `impl` block.
+<div dir="rtl">
 
-- Methods: these take **self** (or **&self** or **&mut self**). Regular methods use a `.` (a period). `.clone()` is an example of a regular method.
-- Associated functions (known as "static" methods in some languages): these do not take self. Associated means "related to". They are written differently, using `::`. `String::from()` is an associated function, and so is `Vec::new()`. You see associated functions most often used to create new variables.
+اینجا اون جایی هست که میتونیم `Struct` ها و `Enum` ها رو کاربردی کنیم. با استفاده از کلمه‌کلیدی `impl` میتونیم برای `Struct` ها و `Enum` ها فانکشن تعریف کینم. به فانکشن هایی که برای `Struct` ها یا `Enum` ها هستند متود(`Method`) میگیم.
 
-In our example we are going to create animals and print them.
+دو نوع `Method` وجود دارند:
 
-For a new `struct` or `enum`, you need to give it **Debug** if you want to use `{:?}` to print, so we will do that. If you write `#[derive(Debug)]` above the struct or enum then you can print it with `{:?}`. These messages with `#[]` are called **attributes**. You can sometimes use them to tell the compiler to give your struct an ability like `Debug`. There are many attributes and we will learn about them later. But `derive` is probably the most common and you see it a lot above structs and enums.
+- `Regular Method`: اینها همیشه به عنوان ورودی `self` یا `&self` یا `&mut self` رو میگیرند. برای استفاده از اینها باید از `.` استفاده کنیم. برای مثال `().clone` یک `Regular Method` هست
+
+- `Associated/Static Method`:اینها `self` نمیگیرند. معمولا هم برای ایجاد یک `Struct` یا `Enum` جدید بکار میرند. برای استفاده از این ها باید از `::` استفاده کنیم.
+
+</div>
+
+
+برای پرینت کردن یک `Struct` یا `Enum` با استفاده از `{:?}` جدید باید `Debug` رو پیاده‌سازی کرده باشه. ما میتونیم به کامپایلر بگیم که اینکار رو انجام بده. برای این کار از `#[derive(Debug)]` استفاده میکنیم. به چیز هایی که با `#[]` شروع میشند میگن `Attribute`. بعدا در مورد `Attribute` ها یاد میگیریم اما `derive` رایج ترین چیزی هست که استفاده میکنیم.
+
+در مثال پایین ما یک `Animal` میسازیم و بعد اون رو پرینت میکنیم:
 
 ```rust
 #[derive(Debug)]
@@ -3267,7 +3275,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 The animal is a cat
@@ -3276,13 +3284,9 @@ The animal is a dog
 Changing animal to cat!
 The animal is a cat
 ```
+به این نکته توجه کنید که `Self` و `self` فقط یک اختصار هستند برای اشاره به نوع فعلی، برای مثال در کد بالا همه‌ی `Self` و `self` ها به نوع `Animal` اشاره میکنند.
 
-Remember that Self (the type Self) and self (the variable self) are abbreviations. (abbreviation = short way to write)
-
-So in our code, Self = Animal. Also, `fn change_to_dog(&mut self)` means `fn change_to_dog(&mut Animal)`.
-
-Here is one more small example. This time we will use `impl` on an `enum`:
-
+در زیر یک ما یک `Method` برای یک `Enum` پیاده‌سازی کردیم:
 ```rust
 enum Mood {
     Good,
@@ -3306,7 +3310,7 @@ fn main() {
 }
 ```
 
-This prints `Need sleep NOW`.
+خروجی کد بالا میشه: `Need sleep NOW`
 
 ## Destructuring
 
