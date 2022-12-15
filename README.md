@@ -3879,17 +3879,17 @@ We got nothing.
 We got: 5
 ```
 
-### Result
+### نتیجه | Result
 
-Result is similar to Option, but here is the difference:
+راستش `Result` هم شبیه به `Option` هست اما تفاوت هایی داره:
 
-- Option is about `Some` or `None` (value or no value),
-- Result is about `Ok` or `Err` (okay result, or error result).
+- `Option` میگه که مقداری هست یا نیست
+- `Reuslt` میگه که خطایی وجود داره یا مشکلی وچود نداره
 
-So `Option` is if you are thinking: "Maybe there will be something, and maybe there won't." But `Result` is if you are thinking: "Maybe it will fail."
+پس وقتی که فکر میکنیم "که شاید مقداری وجود داشته باشه شاید هم نه" باید از `Option` استفاده کنیم و وقتی که فکر میکنیم که "شاید خطایی رخ بده" باید از `Result` استفاده کنیم.
 
-To compare, here are the signatures for Option and Result.
 
+کدشون رو میتونیم اینجا ببینیم:
 ```rust
 enum Option<T> {
     None,
@@ -3903,10 +3903,11 @@ enum Result<T, E> {
 
 fn main() {}
 ```
+پس `Result` رو حالت داره، `Ok` و `Err` که هر دوشون مقداری رو در خودشون میتونند نگه دارند، `Ok` مقدار `T` که هر چیزی میتونه باشه رو در خودش نگه میداره و `Err` مقدار `E` که هرچیزی میتونه باشه رو در خودش نگه میداره. ما اینطوری ازش استفاده میکنیم که `T` رو برابر با مقداری که اگه خطایی رخ نده باید بگیریم قرار میدیم و `E` رو برابر با نوع خطایی که امکان داره رخ بده قرار میدیم.
 
-So Result has a value inside of `Ok`, and a value inside of `Err`. That is because errors usually contain information that describes the error.
+حالت `Err` به این دلیل مقداری رو در خودش ذخیره میکنه که ما به عنوان یک برنامه‌نویس باید خطایی که رخ داده رو شرح بدیم که امکان رفعش وجود داشته باشه.
 
-`Result<T, E>` means you need to think of what you want to return for `Ok`, and what you want to return for `Err`. Actually, you can decide anything. Even this is okay:
+مقدار `Ok` و `Err` هر چیزی میتونه باشه یعنی کد زیر هم حتی مشکلی نداره:
 
 ```rust
 fn check_error() -> Result<(), ()> {
@@ -3918,9 +3919,7 @@ fn main() {
 }
 ```
 
-`check_error` says "return `()` if we get `Ok`, and return `()` if we get `Err`". Then we return `Ok` with a `()`.
-
-The compiler gives us an interesting warning:
+ما در `check_error` فقط حالت `Ok` رو برگردوندیم، به همین دلیل کامپایلر یه اخطاری بهمون میده:
 
 ```text
 warning: unused `std::result::Result` that must be used
@@ -3932,8 +3931,7 @@ warning: unused `std::result::Result` that must be used
   = note: `#[warn(unused_must_use)]` on by default
   = note: this `Result` may be an `Err` variant, which should be handled
 ```
-
-This is true: we only returned the `Result` but it could have been an `Err`. So let's handle the error a bit, even though we're still not really doing anything.
+خب اخطارش درسته، طبق هیچ شرایطی امکان نداره که `check_error` حالت `Err` رو برگردونه. پس بیاید یک شرایطی رو پیشبینی کنیم که برای مثال با توجه به ورودی امکان خطا وجود داشته باشه (همچنان کار معنی داری داریم انجام نمیدیم و فقط یک مثال هست):
 
 ```rust
 fn give_result(input: i32) -> Result<(), ()> {
@@ -3953,11 +3951,15 @@ fn main() {
 }
 ```
 
-This prints `It's an error, guys`. So we just handled our first error.
+خروجیش میشه: `It's an error, guys`
 
-Remember, the four methods to easily check are `.is_some()`, `is_none()`, `is_ok()`, and `is_err()`.
+پس ما تونستیم یک `Err` رو کنترل کنیم.
 
-Sometimes a function with Result will use a `String` for the `Err` value. This is not the best method to use, but it is a little better than what we've done so far.
+یادمون باشه که چهار `Method` برای چک کردن مقدار `Option` و `Result` اینا هستند: `is_some()`, `is_none()`, `is_ok()` و `is_err`.
+
+دوتای اولی برای `Option` هستند و دوتای دومی برای `Result` استفاده میشند.
+
+گاهی فانکشن ها یک `String` رو به عنوان نوع خطا(`Err`) انتخاب میکنند. این بهترین روش نیست اما باز هم از اینکه مقدار `Err` هیچی نباشه بهتره:
 
 ```rust
 fn check_if_five(number: i32) -> Result<i32, String> {
@@ -3978,14 +3980,14 @@ fn main() {
 }
 ```
 
-Our vec prints:
+خروجی:
 
 ```text
 [Err("Sorry, the number wasn\'t five."), Err("Sorry, the number wasn\'t five."), Err("Sorry, the number wasn\'t five."), Ok(5),
 Err("Sorry, the number wasn\'t five.")]
 ```
 
-Just like Option, `.unwrap()` on `Err` will panic.
+دقیقا مثل `Option`، `.unwrap()` در `Result` هم اگه مقدار `Err` باشه، `Panic` میکنه:
 
 ```rust
     // ⚠️
@@ -3995,24 +3997,22 @@ fn main() {
 }
 ```
 
-The program panics, and prints:
-
+برنامه `Panic` میکنه و چنین چیزی رو چاپ میکنه:
 ```text
 thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: "There was an error"', src\main.rs:30:20
 ```
 
-This information helps you fix your code. `src\main.rs:30:20` means "inside main.rs in directory src, on line 30 and column 20". So you can go there to look at your code and fix the problem.
+اطلاعات این پیام کمک میکنه که کد رو درست بنویسیم. `src\main.rs:30:20` یعنی در دایکتوری `src` و در فایل `main.rs` و در خط `30` و حتی در ستون `20`. پس میتونیم دقیقا بریم بالا سر چیزی که باعث `Panic` شده و اون رو درست کنیم.
 
-You can also create your own error types. Result functions in the standard library and other people's code usually do this. For example, this function from the standard library:
+ما همچنین میتونیم نوع خطای خودمون رو هم درست کنیم. معمولا هم برای `Err` ما نوع های خودمون رو میسازیم، برای مثال در زیر یک کد از `Standard Library` رو میبینیم:
 
 ```rust
 // 🚧
 pub fn from_utf8(vec: Vec<u8>) -> Result<String, FromUtf8Error>
 ```
+این فانکشن یک `Vec<u8>` میگیره و سعی میکنه که اون رو تبدیل به `String` کنه. در صورت موفقیت یک `String` و در صورت خطا یک `FromUtf8Error` درون `Result` برمیگردونه. ما میتونیم هر اسمی به نوع خطامون بدیم.
 
-This function takes a vector of bytes (`u8`) and tries to make a `String`. So the success case for the Result is a `String` and the error case is `FromUtf8Error`. You can give your error type any name you want.
-
-Using a `match` with `Option` and `Result` sometimes requires a lot of code. For example, the `.get()` method returns an `Option` on a `Vec`.
+استفاده از `match` روی `Option` و `Result` گاهی اوقات نیازمند کد زیادی هست. برای مثال کد زیر از `Method`، `.get()` که برای `Vec` هست رو استفاده کرده. این `Method` یک `Option` برمیگردونه:
 
 ```rust
 fn main() {
@@ -4030,8 +4030,7 @@ This prints
 Some(2)
 None
 ```
-
-So now we can match to get the values. Let's use a range from 0 to 10 to see if it matches the numbers in `my_vec`.
+خب ما میتونیم با استفاده از `match` شرایط مختلف رو کنترل کنیم:
 
 ```rust
 fn main() {
@@ -4045,9 +4044,11 @@ fn main() {
     }
 }
 ```
+این خوبه اما ما هیچکاری برای شرایطی که مقدار `None` باشه، نکردیم، به این دلیل که اگه مقدار `None` باشه اصلا ما اهمیتی بهش نمیدیم.
 
-This is good, but we don't do anything for `None` because we don't care. Here we can make the code smaller by using `if let`. `if let` means "do something if it matches, and don't do anything if it doesn't". `if let` is when you don't care about matching for everything.
+اینجا ما میتونیم از یک کد کوتاه از `match` هم استفاده کنیم، اون هم `if let` هست. `if let` به این معنا هست که: "فلان کار رو انجام بده اگه شرط برقرار بود، اگه نه هیچکاری نکن"
 
+وقتی که لازم نداریم که همه‌ی شرایط رو کنترل کنیم میتونیم از `if let` استفاده کنیم:
 ```rust
 fn main() {
     let my_vec = vec![2, 3, 4];
@@ -4060,20 +4061,18 @@ fn main() {
 }
 ```
 
-**Important to remember**: `if let Some(number) = my_vec.get(index)` means "if you get `Some(number)` from `my_vec.get(index)`".
+**نکته‌ی مهم**: `if let Some(number) = my_vec.get(index)` به این معنی هست که "اگه `Some(number)` رو از `my_vec.get(index)` گرفتی".
 
-Also note: it uses one `=`. It is not a boolean.
+همچنین توجه کنید که: از یک `=` استفاده کردیم
 
-`while let` is like a while loop for `if let`. Imagine that we have weather station data like this:
+عبارت `while let` هم یک حلقه ایجاد میکنه که شبیه به `if let` هست. فکر کنید که داده‌ای شبیه به این داریم:
 
 ```text
 ["Berlin", "cloudy", "5", "-7", "78"]
 ["Athens", "sunny", "not humid", "20", "10", "50"]
 ```
 
-We want to get the numbers, but not the words. For the numbers, we can use a method called `parse::<i32>()`. `parse()` is the method, and `::<i32>` is the type. It will try to turn the `&str` into an `i32`, and give it to us if it can. It returns a `Result`, because it might not work (like if you wanted it to parse "Billybrobby" - that's not a number).
-
-We will also use `.pop()`. This takes the last item off of the vector.
+ما میخوایم عدد هارو ازش بگیریم، اما کلمه ها رو نمیخوایم. ما میتونیم از `.parse::<i32>` برای تبدیل یک `&str` به `i32` استفاده کنیم. این `Method` یک `Result` به عنوان خروجی برمیگردونه، چون امکان داره ورودی یک عدد نباشه. همچنین از `.pop()` برای گرفتن اخرین ایتم یک `Vec` استفاده میکنیم.
 
 ```rust
 fn main() {
@@ -4097,7 +4096,7 @@ fn main() {
 }
 ```
 
-This will print:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 For the city of Berlin:
@@ -4110,11 +4109,13 @@ The number is: 10
 The number is: 20
 ```
 
-## Other collections
+## مجموعه های دیگه |‌ Other collections
 
-Rust has many more types of collections. You can see them at <https://doc.rust-lang.org/beta/std/collections/> in the standard library. That page has good explanations for why to use one type, so go there if you don't know what type you want. These collections are all inside `std::collections` in the standard library. The best way to use them is with a `use` statement, like we did with our `enums`. We will start with `HashMap`, which is very common.
+زبان `Rust` مجموعه های دیگه‌ای هم داره، میتونیم در [https://doc.rust-lang.org/beta/std/collections/](https://doc.rust-lang.org/beta/std/collections/) ببینیمشون. این ها در `Standard Library` هستند. این صفحه توضیحات خوبی داره که در چه زمانی و برای چی از یک نوع میتونیم استفاده کنیم. این مجموعه ها همه در `std::collections` وجود دارند. برای استفاده ازشون باید از `use` استفاده کنیم.
 
-### HashMap (and BTreeMap)
+با مجموعه‌‌ی `HashMap` شروع میکنیم.
+
+### هش‌مپ و بی‌تری‌مپ | HashMap and BTreeMap
 
 A HashMap is a collection made out of *keys* and *values*. You use the key to look up the value that matches the key. You can create a new `HashMap` with just `HashMap::new()` and use `.insert(key, value)` to insert items.
 
