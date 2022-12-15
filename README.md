@@ -3704,15 +3704,17 @@ I have two things to say: Hello there! and I hate sand.
 I have two things to say: Where is Padme? and Is she all right?
 ```
 
-## Option and Result
+## گزینه و نتیجه | Option and Result
 
-We understand enums and generics now, so we can understand `Option` and `Result`. Rust uses these two enums to make code safer.
+ما مفهوم `Enum` ها و `Generic` ها رو فهمیدیم، پس الان میتونیم به راحتی `Option` و `Result` رو هم بفهمیم.
 
-We will start with `Option`.
+با `Option` شروع میکنیم.
 
-### Option
+### گزینه | Option
 
-You use `Option` when you have a value that might exist, or might not exist. When a value exists it is `Some(value)` and when it doesn't it's just `None`, Here is an example of bad code that can be improved with `Option`.
+وقتی از `Option` استفاده میکنیم که شاید مقداری وچود داشته باشه، و شاید هم نداشته باشه.
+
+وقتی مقداری وجود داشته باشه این `Enum` مقدارش میشه، `Some(value)` و وقتی مقداری نداشته باشه میشه `None`. در زیر یکسری کد نامناسب میبینیم که میتونم با استفاده از `Option` بهتر بنویسیمش:
 
 ```rust
     // ⚠️
@@ -3726,15 +3728,16 @@ fn main() {
 }
 ```
 
-When we run the code, it panics. Here is the message:
-
+وقتی این کد رو اجرا کنیم، `Panic` اتفاق میوفته و متوقف میشه و چنین پیامی میده:
 ```text
 thread 'main' panicked at 'index out of bounds: the len is 2 but the index is 4', src\main.rs:34:5
 ```
 
-Panic means that the program stops before the problem happens. Rust sees that the function wants something impossible, and stops. It "unwinds the stack" (takes the values off the stack) and tells you "sorry, I can't do that".
+اصطلاح `Panic` به این معنی هست که برنامه متوقف میشه درست قبل از زمانی که مشکل اتفاق بیوفته. در کد بالا `Rust` میبینه که فانکشن چیزی رو میخواد که غیرممکن هست و خب برنامه رو متوقف میکنه.
 
-So now we will change the return type from `i32` to `Option<i32>`. This means "give me a `Some(i32)` if it's there, and give me `None` if it's not". We say that the `i32` is "wrapped" in an `Option`, which means that it's inside an `Option`. You have to do something to get the value out.
+خب بیاید نوع بازگشتی فانکشن رو از `i32` به `Option<i32>` تغییر بدیم. این به معنای این هست که مقدار بازگشتی یا `Some(i32)` هست و یا `None` هست.
+
+همچنین به این توجه کنید نوع بازگشتی یک `Enum`ای به نام `Option` هست که یک `Generic` هم هست. و طرز کارش اینطوری هست که دو حالت داره یا هیچ چیزی درش نگه نمیداره و مقدارش `None` هست و یا یک مقدار از نوعی که بهش معرفی شده رو درون `Some` در خودش نگه میداره.
 
 ```rust
 fn take_fifth(value: Vec<i32>) -> Option<i32> {
@@ -3753,10 +3756,9 @@ fn main() {
 }
 ```
 
-This prints `None, Some(5)`. This is good, because now we don't panic anymore. But how do we get the value 5?
+خروجی کد بالا `None, Some(5)` هست، الان خوب شد، چون دیگه `Panic` نمیکنه، اما چطوری مقدار `5` رو بگیریم؟
 
-We can get the value inside an option with `.unwrap()`, but be careful with `.unwrap()`. It's just like unwrapping a present: maybe there's something good inside, or maybe there's an angry snake inside. You only want to `.unwrap()` if you are sure. If you unwrap a value that is `None`, the program will panic.
-
+ما میتونیم با استفاده از `.unwrap()` مقدار داخل یک `Option` رو اگه هست بگیریم،‌ اگه مقداری درش نباشه، یا بهتر بگم مقدارش `None` باشه، `Panic` میکنه:
 ```rust
 // ⚠️
 fn take_fifth(value: Vec<i32>) -> Option<i32> {
@@ -3777,14 +3779,11 @@ fn main() {
 }
 ```
 
-The message is:
-
+پیامی که میده:
 ```text
 thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', src\main.rs:14:9
 ```
-
-But we don't have to use `.unwrap()`. We can use a `match`. Then we can print the value we have `Some`, and not touch it if we have `None`. For example:
-
+اما مجبور نیستیم از `.unwrap()` استفاده کنیم که امکان `Panic` وجود داشته باشه. میتونیم و بهتره که از `match` استفاده کنیم:
 ```rust
 fn take_fifth(value: Vec<i32>) -> Option<i32> {
     if value.len() < 5 {
@@ -3817,14 +3816,12 @@ fn main() {
 }
 ```
 
-This prints:
-
+خروجیش:
 ```text
 Found a None!
 Found a 5!
 ```
-
-Because we know generics, we are able to read the code for `Option`. It looks like this:
+بخاطر اینکه ما فهمیدیم که `Generic` ها چی هستند، میتونیم کدی که برای `Option` نوشته شده رو بخونیم. چیزی شبیه به این هست:
 
 ```rust
 enum Option<T> {
@@ -3835,9 +3832,9 @@ enum Option<T> {
 fn main() {}
 ```
 
-The important point to remember: with `Some`, you have a value of type `T` (any type). Also note that the angle brackets after the `enum` name around `T` is what tells the compiler that it's generic. It has no trait like `Display` or anything to limit it, so it can be anything. But with `None`, you don't have anything.
+نکته مهمی برای یاداوری: `Option` یک `Generic` هست و طبق تعریفی که شده هر نوعی رو میپذیره. و دو حالت داره، `None` که عملا هیچی نیست، و `Some` که یک مقدار از نوع `T` که میتونه هر چیزی باشه رو در خودش ذخیره میکنه.
 
-So in a `match` statement for Option you can't say:
+پس نمیتونیم درون `match` چنین چیزی بنویسیم:
 
 ```rust
 // 🚧
@@ -3845,9 +3842,10 @@ Some(value) => println!("The value is {}", value),
 None(value) => println!("The value is {}", value),
 ```
 
-because `None` is just `None`.
+به این دلیل که `None` هیچی رو در خودش ذخیره نمیکنه. و "هیچ" هست.
 
-Of course, there are easier ways to use Option. In this code, we will use a method called `.is_some()` to tell us if it is `Some`. (Yes, there is also a method called `.is_none()`.) In this easier way, we don't need `handle_option()` anymore. We also don't need a vec for the Options.
+البته راه های راحت‌تری هم وجود دارند، در کد زیر ما از `.is_some()` استفاده میکنیم. (و بله، `.is_none()` هم وچود داره)
+
 
 ```rust
 fn take_fifth(value: Vec<i32>) -> Option<i32> {
@@ -3874,7 +3872,7 @@ fn main() {
 }
 ```
 
-This prints:
+چیزی که پرینت میکنه:
 
 ```text
 We got nothing.
