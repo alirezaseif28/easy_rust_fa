@@ -4531,12 +4531,11 @@ fn main() {
 
 حالا خروجی کد بالا این میشه: `0 3 5 8 10 11 13 14 15 16 17 18 19 20 22 24 25 26 28 29 32 33 34 35 36 37 38 41 42 43 44 46 49 51 54 55 56 57 58 59 60 61 63 64 66 67 68 71 73 74 76 79 80 81 82 84 86 87 89 90 91 92 93 94 95 96`.
 
-### BinaryHeap
+### هیپ‌باینری | BinaryHeap
 
-A `BinaryHeap` is an interesting collection type, because it is mostly unordered but has a bit of order. It keeps the largest item in the front, but the other items are in any order.
+نوع مجموعه‌ای `BinaryHeap` نوع جالبی هست، به این دلیل که تقریبا مقادیر رو بدون ترتیب نگهداری میکنه، اما خب به نوعی ترتیب هم داره. خب این یعنی چی؟
 
-We will use another list of items for an example, but this time smaller.
-
+در ساده‌ترین شیوه‌ی توضیح میشه گفت که همیشه بزرگترین ایتم رو در عنصر `0` نگهداری میکنه. اما باقی ایتم ها بدون ترتیب نگهداری میشند:
 ```rust
 use std::collections::BinaryHeap;
 
@@ -4564,7 +4563,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Popped off 30. Remaining numbers are: [25, 15, 20, 0, 10, 5]
@@ -4576,9 +4575,13 @@ Popped off 5. Remaining numbers are: [0]
 Popped off 0. Remaining numbers are: []
 ```
 
-You can see that the number in the 0 index is always largest: 25, 20, 15, 10, 5, then 0. But the other ones are all different.
+میتونید این رو چندین بار اچرا کنید، همیشه بزرگ‌ترین ایتم در عنصر اول قرار میگیره و باقی ایتم‌ها ترتیب خاصی ندارند.
 
-A good way to use a `BinaryHeap` is for a collection of things to do. Here we create a `BinaryHeap<(u8, &str)>` where the `u8` is a number for the importance of the task. The `&str` is a description of what to do.
+خب شاید بپرسید چه زمانی از `BinaryHeap` استفاده کنیم؟
+
+برای مثال میتونیم زمانی که نیاز داریم کارهایی رو با اولویت خاصی انجام بدیم، از `BinaryHeap` استفاده کنیم.
+
+در کد زیر ما یک `BinaryHeap<(u8, &str)>` درست میکنیم که `u8` اولویت رو نشون میده و `&str` کاری که باید انجام بشه رو نشون میده:
 
 ```rust
 use std::collections::BinaryHeap;
@@ -4599,8 +4602,7 @@ fn main() {
 }
 ```
 
-This will always print:
-
+خروجیش میشه:
 ```text
 You need to: Write back to email from the CEO
 You need to: Finish the report today
