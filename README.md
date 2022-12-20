@@ -4435,15 +4435,21 @@ fn main() {
 
 اگه هم کلید وجود داشته باشه دیگه یک `Vec` جدید نمیسازه و فقط داده رو اضافه میکنه.
 
-### HashSet and BTreeSet
+### هش‌ست و ب‌تری‌ست | HashSet and BTreeSet
 
-A `HashSet` is actually a `HashMap` that only has keys. On [the page for HashSet](https://doc.rust-lang.org/std/collections/struct.HashSet.html) it explains this on the top:
+نوع `HashSet` مثل `HashMap` هست که فقط کلید داره و مقداری رو نگهداری نمیکنه. [صفحه‌ی مستندات `HashSet`](https://doc.rust-lang.org/std/collections/struct.HashSet.html)
 
-`A hash set implemented as a HashMap where the value is ().` So it's a `HashMap` with keys, no values.
+در بالای صفحه‌ی مستند `HashSet` توضیح زیر رو نوشته:
+`A hash set implemented as a HashMap where the value is ().`
 
-You often use a `HashSet` if you just want to know if a key exists, or doesn't exist.
+پس نوع `HashSet` یک `HashMap`‌ای هست که مقدار نداره و فقط کلید داره.
 
-Imagine that you have 100 random numbers, and each number between 1 and 100. If you do this, some numbers will appear more than once, while some won't appear at all. If you put them into a `HashSet` then you will have a list of all the numbers that appeared.
+معمولا زمانی از `HashSet` استفاده میکنیم که فقط میخوایم بدونیم که یک کلید وجود داره یا نه.
+
+بیاید فکر کنیم که ما صدتا عدد تصادفی داریم که هر عدد بین `1` تا `100` هست. اگه اینکار رو انجام بدیم، امکان داره که بعضی اعداد چندین بار وجود داشته باشند و بعضی اعداد وجود نداشته باشند.
+در ضمن `HashSet` مقادیر تکراری رو حدف میکنه.
+
+خب بزارید یکم کد ببینیم:
 
 ```rust
 use std::collections::HashSet;
@@ -4480,25 +4486,27 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش میشه:
 
 ```text
 There are 66 unique numbers, so we are missing 34.
 It does not contain: 1 2 4 6 7 9 12 21 23 27 30 31 39 40 45 47 48 50 52 53 62 65 69 70 72 75 77 78 83 85 88 97 98 99
 ```
+فرق نوع `HashSet` و `BTreeSet` این هست که، نوع `BTreeSet` مقادیر رو با ترتیب نگهداری میکنه ولی `HashMap` ترتیبی رو برای نگهداری مقادیر در نظر نمیگیره.
 
-A `BTreeSet` is similar to a `HashSet` in the same way that a `BTreeMap` is similar to a `HashMap`. If we print each item in the `HashSet`, we don't know what the order will be:
-
+پس اگه مقادیر رو در `HashSet` نگهداری کنیم، ترتیبشون رو نمیدونیم و هر بار در یک ترتیبی ظاهر میشند:
 ```rust
 for entry in number_hashset { // 🚧
     print!("{} ", entry);
 }
 ```
 
-Maybe it will print this: `67 28 42 25 95 59 87 11 5 81 64 34 8 15 13 86 10 89 63 93 49 41 46 57 60 29 17 22 74 43 32 38 36 76 71 18 14 84 61 16 35 90 56 54 91 19 94 44 3 0 68 80 51 92 24 20 82 26 58 33 55 96 37 66 79 73`. But it will almost never print it in the same way again.
+شاید خروجی کد بالا این باشه: `67 28 42 25 95 59 87 11 5 81 64 34 8 15 13 86 10 89 63 93 49 41 46 57 60 29 17 22 74 43 32 38 36 76 71 18 14 84 61 16 35 90 56 54 91 19 94 44 3 0 68 80 51 92 24 20 82 26 58 33 55 96 37 66 79 73`. 
 
-Here as well, it is easy to change your `HashSet` to a `BTreeSet` if you decide you need ordering. In our code, we only need to make two changes to switch from a `HashSet` to a `BTreeSet`.
+اما خب اطمینانی وجود نداره که دفعه‌ی بعد هم همین ترتیب رو داشته باشه.
 
+
+اما اگه از `BTreeSet` استفاده کنیم، این مشکل رو نداریم و مقادیر با ترتیب نگهداری میشند:
 ```rust
 use std::collections::BTreeSet; // Change HashSet to BTreeSet
 
@@ -4521,7 +4529,7 @@ fn main() {
 }
 ```
 
-Now it will print in order: `0 3 5 8 10 11 13 14 15 16 17 18 19 20 22 24 25 26 28 29 32 33 34 35 36 37 38 41 42 43 44 46 49 51 54 55 56 57 58 59 60 61 63 64 66 67 68 71 73 74 76 79 80 81 82 84 86 87 89 90 91 92 93 94 95 96`.
+حالا خروجی کد بالا این میشه: `0 3 5 8 10 11 13 14 15 16 17 18 19 20 22 24 25 26 28 29 32 33 34 35 36 37 38 41 42 43 44 46 49 51 54 55 56 57 58 59 60 61 63 64 66 67 68 71 73 74 76 79 80 81 82 84 86 87 89 90 91 92 93 94 95 96`.
 
 ### BinaryHeap
 
