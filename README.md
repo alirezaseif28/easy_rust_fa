@@ -4117,9 +4117,15 @@ The number is: 20
 
 ### هش‌مپ و بی‌تری‌مپ | HashMap and BTreeMap
 
-A HashMap is a collection made out of *keys* and *values*. You use the key to look up the value that matches the key. You can create a new `HashMap` with just `HashMap::new()` and use `.insert(key, value)` to insert items.
+یک `HashMap` یک مجموعه از **کلید** و **مقدار** هست.
 
-A `HashMap` is not in order, so if you print every key in a `HashMap` together it will probably print differently. We can see this in an example:
+ما میتونیم با استفاده از `HashMap::new()` یک `HashMap` ایجاد کنیم.
+
+با استفاده از `.insert(key,value)` میتونیم یک کلید و مقدار به `HashMap` اضافه کنیم.
+
+یک `HashMap` بر اساس ترتیب داده ها رو ذخیره نمیکنه، و یک مقدار فقط با کلیدی که براش تعریف شده قابل دسترسی هست.
+
+کد طریقه‌ی استفاده از `HashMap` هست:
 
 ```rust
 use std::collections::HashMap; // This is so we can just write HashMap instead of std::collections::HashMap every time
@@ -4147,7 +4153,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 In the year 1372 the city of Tallinn had a population of 3250.
@@ -4155,7 +4161,7 @@ In the year 2020 the city of Tallinn had a population of 437619.
 In the year 1851 the city of Tallinn had a population of 24000.
 ```
 
-or it might print:
+یا برای دفعه‌ی دوم این بود:
 
 ```text
 In the year 1851 the city of Tallinn had a population of 24000.
@@ -4163,9 +4169,9 @@ In the year 2020 the city of Tallinn had a population of 437619.
 In the year 1372 the city of Tallinn had a population of 3250.
 ```
 
-You can see that it's not in order.
+دیدید، ترتیبی رو رعایت نمیکنه.
 
-If you want a `HashMap` that you can sort, you can use a `BTreeMap`. Actually they are very similar to each other, so we can quickly change our `HashMap` to a `BTreeMap` to see. You can see that it is almost the same code.
+اگه میخواید از چیزی مثل `HashMap` که ترتیب رو هم رعایت کنه استفاده کنید، چیزی به  اسم `BTreeMap` وجود داره. اینها خیلی شبیه به هم هستند. خب بیاید کد رو تغییر بدیم که از `HashMap` استفاده کنه(کار زیادی نداریم):
 
 ```rust
 use std::collections::BTreeMap; // Just change HashMap to BTreeMap
@@ -4192,19 +4198,19 @@ fn main() {
 }
 ```
 
-Now it will always print:
-
+الان همیشه چنین خروجی میده، چون ترتیب مهم هست:
 ```text
 In the year 1372 the city of Tallinn had a population of 3250.
 In the year 1851 the city of Tallinn had a population of 24000.
 In the year 2020 the city of Tallinn had a population of 437619.
 ```
 
-Now we will go back to `HashMap`.
+خب برگردیم به `HashMap`.
 
-You can get a value in a `HashMap` by just putting the key in `[]` square brackets. In this next example we will bring up the value for the key `Bielefeld`, which is `Germany`. But be careful, because the program will crash if there is no key. If you write `println!("{:?}", city_hashmap["Bielefeldd"]);` for example then it will crash, because `Bielefeldd` doesn't exist.
+برای گرفتن یک مقدار از `HashMap` باید **کلید** رو درون `[]` قرار بدیم.
+برای مثال در کد زیر ما با استفاده از **کلید**، `Bielefeld`، مقدار `Germany` رو گرفتیم. اما باید مراقب بود، اگه کلیدی بدیم که وجود نداشته باشه، برنامه `Crash` میکنه.
 
-If you are not sure that there will be a key, you can use `.get()` which returns an `Option`. If it exists it will be `Some(value)`, and if not you will get `None` instead of crashing the program. That's why `.get()` is the safer way to get a value from a `HashMap`.
+اگه هر وقت اطمینان نداشتیم که یک **کلید** وجود خواهد داشت یا نه، میتونیم از `.get()` استفاده کنیم که یک `Option` برمیگردونه. اگه وجود داشته باشه یک `Some(value)` برمیگردونه و اگه وجود نداشته باشه یک `None` برمیگردونه. و خب برنامه دیگه `Crash` نمیکنه. به همین دلیل `.get()` امن تر از گرفتن مقدار به طور مستفیم از `HashMap` هست.
 
 ```rust
 use std::collections::HashMap;
@@ -4228,17 +4234,16 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 "Germany"
 Some("Germany")
 None
 ```
+چنین خروجی‌ای میده به این دلیل که کلید `Bielefeld` وجود داره،‌ اما `Bielefeldd` وجود نداره.
 
-This is because *Bielefeld* exists, but *Bielefeldd* does not exist.
-
-If a `HashMap` already has a key when you try to put it in, it will overwrite its value:
+اگه یک کلید و مقدار جدید وارد کنیم که کلیدش تکراری باشه، مقدار جدید جای مقدار قدیم رو میگیره:
 
 ```rust
 use std::collections::HashMap;
@@ -4255,9 +4260,9 @@ fn main() {
 }
 ```
 
-This prints `Some("Eye of the World")`, because it was the last one you used `.insert()` for.
+خروجیش میشه: `Some("Eye of the World")`
 
-It is easy to check if an entry exists, because you can check with `.get()` which gives an `Option`:
+برای چک کردن وجود داشتن یک کلید هم میتونید از `.get()` استفاده کنیم:
 
 ```rust
 use std::collections::HashMap;
@@ -4275,11 +4280,20 @@ fn main() {
 }
 ```
 
-This prints `Some("L\'Allemagne Moderne")` because there was already a key for `1`, so we didn't insert `Le Petit Prince`.
+خروجیش میشه: `Some("L\'Allemagne Moderne")`
 
-`HashMap` has a very interesting method called `.entry()` that you definitely want to try out. With it you can try to make an entry and use another method like `.or_insert()` to insert the value if there is no key. The interesting part is that it also gives a mutable reference so you can change it if you want. First is an example where we just insert `true` every time we insert a book title into the `HashMap`.
+به این دلیل که چون کلید `1` وجود داشت ما مقدار `Le Petit Prince` رو در جای مقدار کلید `1` ننوشتیم.
 
-Let's pretend that we have a library and want to keep track of our books.
+نوع `HashMap` یک `Method` جالب به نام `().entry` داره که حتما باید دربارش صحبت کرد.
+
+نوع `HashMap` یک `Method` جالب داره به نام `().entry`. ما میتونیم یک کلید بهش بدیم، و این `Method` در خروجی میگه که ایا این کلید در `HashMap` وجود داره یا خیر.
+خود این `Method`، عمل خاصی انجام نمیده اما میتونیم روی این `Method` از `Method` های دیگه‌ای استفاده کنیم.
+
+برای مثال میتونیم از `()or_insert.` استفاده کنیم که اگه کلید وجود نداشت مقداری رو که ما بهش میدیم رو وارد کنه. نکته‌ی جالبش اینجاست که این `Method` در خروجی یک `Mutable Reference` هم میده که میتونیم با استفاده از اون مقدار کلید رو تغییر بدیم.
+
+
+در کد زیر ما در هنگام اضافه کردن یک کلید، مقدار `true` رو هم بهش اضافه میکنیم.
+کد زیر به این دلیل ایتم هارو اضافه میکنه که اون کلید در `HashMap` وجود نداره:
 
 ```rust
 use std::collections::HashMap;
@@ -4298,7 +4312,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Do we have Eye of the World? true
@@ -4306,13 +4320,17 @@ Do we have Le Petit Prince? true
 Do we have L'Allemagne Moderne? true
 ```
 
-But that's not exactly what we want. Maybe it would be better to count the number of books so that we know that there are two copies of *Eye of the World*. First let's look at what `.entry()` does, and what `.or_insert()` does. `.entry()` actually returns an `enum` called `Entry`:
+اما خب این چیزی نیست که ما میخوایم، بهتره که به عنوان مقدار، تعداد هر کتاب رو  داشته باشیم، اینطوری میتونیم بدونیم که چه کتاب های تکراریی وجود دارند.
+
+اول بزارید ببینیم که `().entry` و `().or_insert` چیکار میکنند.
+
+خب `().entry` یک `Enum` به نام `Entry` برمیگردونه:
 
 ```rust
 pub fn entry(&mut self, key: K) -> Entry<K, V> // 🚧
 ```
 
-[Here is the page for Entry](https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html). Here is a simple version of its code. `K` means key and `V` means value.
+[این صفحه‌ی `Entry` هست](https://doc.rust-lang.org/std/collections/hash_map/enum.Entry.html). در کد زیر `K` به معنای کلید هست و `V` به معنای مقدار هست:
 
 ```rust
 // 🚧
@@ -4324,7 +4342,7 @@ enum Entry<K, V> {
 }
 ```
 
-Then when we call `.or_insert()`, it looks at the enum and decides what to do.
+وقتی که `()or_insert.` رو صدا میزنیم، براساس `Entry` تصمیم میگیره که چه کاری باید انجام بده:
 
 ```rust
 fn or_insert(self, default: V) -> &mut V { // 🚧
@@ -4334,9 +4352,11 @@ fn or_insert(self, default: V) -> &mut V { // 🚧
     }
 }
 ```
+همونطور که گفتم نکته‌ی جالبش اینجاست که یک `Mutable Reference` از مقدار رو برمیگردونه. این یعنی اینکه میتونیم مقداری که درون `HashMap` هست رو تغییر بدیم.
 
-The interesting part is that it returns a `mut` reference: `&mut V`. That means you can use `let` to attach it to a variable, and change the variable to change the value in the `HashMap`. So for every book we will insert a 0 if there is no entry. And if there is one, we will use `+= 1` on the reference to increase the number. Now it looks like this:
+پس هروقت که کلید وجود نداشت مقدار `0` رو وارد میکنیم و بعد با استفاده از `Mutable Reference`‌ای که میده، ما اون مقدار رو به علاوه‌ی یک میکنیم.
 
+خب پس کد میشه:
 ```rust
 use std::collections::HashMap;
 
@@ -4355,8 +4375,16 @@ fn main() {
     }
 }
 ```
+بخش مهم کد `;let return_value = book_hashmap.entry(book).or_insert(0)` هست.
 
-The important part is `let return_value = book_hashmap.entry(book).or_insert(0);`. If you take out the `let`, you get `book_hashmap.entry(book).or_insert(0)`. Without `let` it does nothing: it inserts 0, and nobody takes the mutable reference to 0. So we bind it to `return_value` so we can keep the 0. Then we increase the value by 1, which gives at least 1 for every book in the `HashMap`. Then when `.entry()` looks at *Eye of the World* again it doesn't insert anything, but it gives us a mutable 1. Then we increase it to 2, and that's why it prints this:
+اگه خروجی `()or_insert.` رو نمیگرفتیم عملا اون چیزی میخواستیم اجرا نمیشد.
+
+اما الان چه چیزی رخ میده؟
+
+خب اگه کلید وجود نداشته باشه ما اول اون رو اضافه میکنیم و بعد هم `0` رو به عنوان مقدار بهش میدیم.
+بعد با استفاده از `Mutable Reference`‌ای که به ما میده ما مقدار رو به علاوه‌ی یک میکنیم.
+
+و در نهاست هم وقتی به اخرین کلید که `Eye of the World` هست میرسیم، `()entry.` میبینه که این کلید وجود داره پس چیزی رو به عنوان مقدار بهش نمیده اما یک `Mutable Reference` به مقدارش بهمون میده و ما هم اون رو به علاوه‌ی یک میکنیم. به این دلیل هست که خروجی کد بالا این میشه:
 
 ```text
 L'Allemagne Moderne, 1
@@ -4364,7 +4392,9 @@ Le Petit Prince, 1
 Eye of the World, 2
 ```
 
-You can also do things with `.or_insert()` like insert a vec and then push into the vec. Let's pretend that we asked men and women on the street what they think of a politician. They give a rating from 0 to 10. Then we want to put the numbers together to see if the politician is more popular with men or women. It can look like this:
+دیگه فهمیدیم که چه کارهایی میتونیم با استفاده از `()or_insert.` بکنیم.اما بزارید یک مثال دیگه هم بزنیم.
+
+فکر کنید که ما یک نظرسنجی از زنان و مردان در مورد سیاستمدار ها کردیم، و میخوایم که ببینیم کدوم سیاستمدار بین زنان و مردان محبوب‌تر هست، کدش یه چیزی شبیه این میشه:
 
 ```rust
 use std::collections::HashMap;
@@ -4391,14 +4421,19 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 "female", [5, 6, 5]
 "male", [9, 0, 10]
 ```
+بخش مهم کد بالا `;survey_hash.entry(item.0).or_insert(Vec::new()).push(item.1)` هست.
 
-The important line is: `survey_hash.entry(item.0).or_insert(Vec::new()).push(item.1);` So if it sees "female" it will check to see if there is "female" already in the `HashMap`. If not, it will insert a `Vec::new()`, then push the number in. If it sees "female" already in the `HashMap`, it will not insert a new Vec, and will just push the number into it.
+در کد بالا اگه ببینه که برای مثال کلید `female` وجود نداره، یک `Vec` خالی به عنوان مقدار به کلید میده.
+
+و اگه کلید وجود داشته باشه یا نداشته باشه، در هر صورت مقدار داده‌ای که داریم رو به اون `Vec` اضافه میکنه.
+
+اگه هم کلید وجود داشته باشه دیگه یک `Vec` جدید نمیسازه و فقط داده رو اضافه میکنه.
 
 ### HashSet and BTreeSet
 
