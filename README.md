@@ -4710,16 +4710,17 @@ You must: phone Loki back
 ("add new product to list", true) ("send email to customer", true) ("phone Loki back", false)
 ```
 
-## The ? operator
+## اپراتور ؟ | The ? operator
 
-There is an even shorter way to deal with `Result` (and `Option`), shorter than `match` and even shorter than `if let`. It is called the "question mark operator", and is just `?`. After a function that returns a result, you can add `?`. This will:
+یک روش کوتاه‌تر برای کار با `Result` و `Option` هم وجود داره، کوتاه‌تر از `match` و حتی کوتاه‌تر از `if let`. بهش میگیم `"Question Mark Operator"`، و کاراکترش `"?"` هست. میتونیم بعد از فانکشنی که `Result` برمیگردونه استفاده کنیم. خب حالا این اپراتور جیکار میکنه؟
 
-- return what is inside the `Result` if it is `Ok`
-- pass the error back if it is `Err`
+- اگه مقدار درون `Result`، `Ok` باشه، اون مقدار رو برمیگردونه
 
-In other words, it does almost everything for you.
+- اگه مقدار درون `Result`، `Err` باشه، اون `Error` رو از فانکشن `return` میکنه
 
-We can try this with `.parse()` again. We will write a function called `parse_str` that tries to turn a `&str` into a `i32`. It looks like this:
+پس تقریبا همه کار برای ما میکنه.
+
+بیاید با `()parse.` امتحانش کنیم. یک فانکشن مینویسیم که تلاش میکنه یک `&str` رو تبدیل به یک `i32` کنه:
 
 ```rust
 use std::num::ParseIntError;
@@ -4732,9 +4733,9 @@ fn parse_str(input: &str) -> Result<i32, ParseIntError> {
 fn main() {}
 ```
 
-This function takes a `&str`. If it is `Ok`, it gives an `i32` wrapped in `Ok`. If it is an `Err`, it returns a `ParseIntError`. Then we try to parse the number, and add `?`. That means "check if it is an error, and give what is inside the Result if it is okay". If it is not okay, it will return the error and end. But if it is okay, it will go to the next line. On the next line is the number inside of `Ok()`. We need to wrap it in `Ok` because the return is `Result<i32, ParseIntError>`, not `i32`.
+این فانکشن یک `&str` به عنوان ورودی میگیره. بعد سعی میکنه که اون رو تبدیل به `i32` کنه، نتیجه‌ی این کار یک `Result` هست، ما هم از `?` استفاده کردیم، پس اگه نتیجه‌ی عملیات `Err` باشه، همون لحظه اون `Err` به عنوان خروجی فانکشن در نظر گرفته میشه و فانکشن تموم میشه. اگه هم که تبدیل به درستی انجام بشه، ما نتیجه رو در یک `Ok` به عنوان خروجی فانکشن به بیرون مبفرستیم.
 
-Now, we can try out our function. Let's see what it does with a vec of `&str`s.
+حالا فانکشن رو تست میکنیم:
 
 ```rust
 fn parse_str(input: &str) -> Result<i32, std::num::ParseIntError> {
@@ -4751,7 +4752,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Err(ParseIntError { kind: InvalidDigit })
@@ -4761,6 +4762,7 @@ Err(ParseIntError { kind: InvalidDigit })
 Ok(6060)
 ```
 
+حالا چطوری فهمیدیم که باید از نوع `ParseIntError` به عنوان نوع `Err` استفاده کنیم؟ خب ما از کامپایلر میتونیم بپرسیم:
 How did we find `std::num::ParseIntError`? One easy way is to "ask" the compiler again.
 
 ```rust
@@ -4770,7 +4772,7 @@ fn main() {
 }
 ```
 
-The compiler doesn't understand, and says:
+کامپایلر این کد رو نمیفهمه و میگه که:
 
 ```text
 error[E0599]: no method named `rbrbrb` found for enum `std::result::Result<i32, std::num::ParseIntError>` in the current scope
@@ -4780,12 +4782,15 @@ error[E0599]: no method named `rbrbrb` found for enum `std::result::Result<i32, 
   |             ^^^^^^ method not found in `std::result::Result<i32, std::num::ParseIntError>`
 ```
 
-So `std::result::Result<i32, std::num::ParseIntError>` is the signature we need.
+پس `std::result::Result<i32, std::num::ParseIntError>` چیزی هست که ما ازش فهمیدیم از جه نوع خطایی باید استفاده کنیم.
 
-We don't need to write `std::result::Result` because `Result` is always "in scope" (in scope = ready to use). Rust does this for all the types we use a lot so we don't have to write `std::result::Result`, `std::collections::Vec`, etc.
+ما نیاز نداریم `std::result::Result` رو بنویسیم، به این دلیل که `Result` همیشه در کد قابل دسترس هست(در `Scope` هست). `Rust` این کار رو برای نوع هایی که همیشه استفاده میکنیم، انجام میدیم.
 
-We aren't working with things like files yet, so the ? operator doesn't look too useful yet. But here is a useless but quick example that shows how you can use it on a single line. Instead of making an `i32` with `.parse()`, we'll do a lot more. We'll make an `u16`, then turn it to a `String`, then a `u32`, then to a `String` again, and finally to a `i32`.
+نوع هایی مثل: `std::result::Result`, `std::collections::Vec`
 
+ما هنوز با فایل ها کار نکردیم، پس `?` همچین کاربردی بنظر نمیرسه. اما یک مثال میزنم که بفهمیم چقدر میتونه کاربردی باشه.
+
+فکر کنید به جای تبدیل مستقیم `&str` به `i32`، ما نیاز که `&str` رو به `u16`، `u16` رو به `String`، `String` رو به `i32`، تبدیل کنیم. خب اینجا میتونیم به جای کنترل کردن تمام `Result` ها از `?` استفاده کنیم و اون اینکار رو برامون انجام بده:
 ```rust
 use std::num::ParseIntError;
 
@@ -4802,26 +4807,34 @@ fn main() {
     }
 }
 ```
+این همون چیزی که قبلا پرینت شده بود رو پرینت میکنه. اما ایندفعه ما تعداد زیادی `Result` رو در یک خط با `?` کنترل کردیم. وقتی نیاز داریم با فایل ها کار کنیم زیاد از `?` استفاده میکنیم. به این دلیل که در هنگام کار با فایل ها امکان داره خیلی چیز ها درست پیش نره.
 
-This prints the same thing, but this time we handled three `Result`s in a single line. Later on we will do this with files, because they always return `Result`s because many things can go wrong.
+در هنگام کار با فایل باید بتونیم چنین عملیاتی رو انجام بدیم که هر کدوم امکان خطا درشون وجود داره:
 
-Imagine the following: you want to open a file, write to it, and close it. First you need to successfully find the file (that's a `Result`). Then you need to successfully write to it (that's a `Result`). With `?` you can do that on one line.
+باز کردن فایل، نوشتن/خوندن، بستن فایل
 
-### When panic and unwrap are good
+خب ما باید شرایطی که امکان خطا درش وجود داره رو کنترل کنیم، خب اون وقت `?` خیلی بدرد بخور میشه.
 
-Rust has a `panic!` macro that you can use to make it panic. It is easy to use:
+### زمان هایی که وحشت و ان‌ورپ خوبن | When panic and unwrap are good
+(اره به زور میخواستم که کلمه به کلمه ترجمه کنم )
+
+زبان `Rust` ماکرویی به نام `panic!` داره که میتونیم برای ساخت `Panic` ازش استفاده کنیم:
 
 ```rust
 fn main() {
     panic!("Time to panic!");
 }
 ```
+پیام `"Time to panic!"` وقتی نمایش داده میشه که برنامه رو اجرا کنیم و به این خط برسیم، پیام کامل چنین چیزی میشه:
+```text
+`thread 'main' panicked at 'Time to panic!', src\main.rs:2:3`
+```
 
-The message `"Time to panic!"` displays when you run the program: `thread 'main' panicked at 'Time to panic!', src\main.rs:2:3`
+بیاید پیام رو بررسی کنیم، یادتون هست که `src/main.rs` مسیر فایل اصلی برنامه هست. `2:3` هم خط و ستونی هست که درش `Panic` رخ داده. با این اطلاعات میتونیم به راحتی بفهمیم که چه مشکلی کجا رخ داده.
 
-You will remember that `src\main.rs` is the directory and file name, and `2:3` is the line and column name. With this information, you can find the code and fix it.
+ماکروی `panic!` میتونه زمانی خوب باشه که میخوایم به برنامه‌نویس یاداوری کنیم که یه چیزی داره اشتباه پیش میره.
 
-`panic!` is a good macro to use to make sure that you know when something changes. For example, this function called `prints_three_things` always prints index [0], [1], and [2] from a vector. It is okay because we always give it a vector with three items:
+برای مثال در کد زیر فانکشن `prints_three_things` همیشه `Index` های [0], [1], [2] رو از یک `Vec` پرینت میکنه. این مشکلی نداره چون همیشه ما یک `Vec` با سه عنصر بهش میفرستیم و اون هم پرینت میکنه:
 
 ```rust
 fn prints_three_things(vector: Vec<i32>) {
@@ -4834,9 +4847,11 @@ fn main() {
 }
 ```
 
-It prints `8, 9, 10` and everything is fine.
+خروجیش میشه: `8, 9, 10`
 
-But imagine that later on we write more and more code, and forget that `my_vec` can only be three things. Now `my_vec` in this part has six things:
+و همه چی ارومه و قصه‌ها خوابیدن...
+
+اما تصور کنید که بعدا ما کد های بیشتری مینویسیم و یادمون میره که `prints_three_things` فقط باید سه عنصر رو پرینت کنه. و ما `my_vex` رو با شش عنصر میدیم به فانکشن:
 
 ```rust
 fn prints_three_things(vector: Vec<i32>) {
@@ -4849,7 +4864,9 @@ fn main() {
 }
 ```
 
-No error happens, because [0] and [1] and [2] are all inside this longer `Vec`. But what if it was really important to only have three things? We wouldn't know that there was a problem because the program doesn't panic. We should have done this instead:
+هیچ خطایی رخ نمیده به این دلیل که `Vec` حداقل سه عنصر داره. اما فکر کنید که این واقعا مهم باشه که فقط `Vec` ورودی سه عنصر داشته باشه. خب اینطوری که نمیفهمیم مشکلی پیش اومده، پس میتونیم از `Panic` استفاده کنیم که برنامه‌نویس بفهمه که یه مشکلی پیش اومده.
+
+پس باید کد رو به چنین چیزی تغییر بدیم:
 
 ```rust
 fn prints_three_things(vector: Vec<i32>) {
@@ -4865,8 +4882,7 @@ fn main() {
 }
 ```
 
-Now we will know if the vector has six items because it panics as it should:
-
+کد زیر `Panic` میکنه چون ما کاری کردیم که باید `Panic` کنه، اینطوری میفهمیم که یه مشکلی وجود داره:
 ```rust
     // ⚠️
 fn prints_three_things(vector: Vec<i32>) {
@@ -4882,18 +4898,21 @@ fn main() {
 }
 ```
 
-This gives us `thread 'main' panicked at 'my_vec must always have three items', src\main.rs:8:9`. Thanks to `panic!`, we now remember that `my_vec` should only have three items. So `panic!` is a good macro to create reminders in your code.
+پیامی که نشون میده چنین چیزی هست: `thread 'main' panicked at 'my_vec must always have three items', src\main.rs:8:9`.
 
-There are three other macros that are similar to `panic!` that you use a lot in testing. They are: `assert!`, `assert_eq!`, and `assert_ne!`.
+با تشکر از `panic!`، حالا ما میدونیم که `prints_three_things` حتما باید ورودی بگیره که سه عنصر داشته باشه.
 
-Here is what they mean:
+پس `panic!` یک یاداور خوبی هست.
 
-- `assert!()`: if the part inside `()` is not true, the program will panic.
-- `assert_eq!()`: the two items inside `()` must be equal.
-- `assert_ne!()`: the two items inside `()` must not be equal. (*ne* means not equal)
+چند ماکروی دیگه هم هست که شبیه به `panic!` هستند، که خیلی در تست ها ازشون استفاده میکنیم، اونها `assert!`, `assert_eq!`, `assert_ne!`.
 
-Some examples:
+بزارید ببینیم چیکار میکنند:
 
+- `assert!()`: اگه شرط درون `()` مقدار `true` رو برنگردونه، برنامه `Panic` میکنه
+- `assert_eq!()`: ایتم هایی که درون `()` هستند باید برابر باشند
+- `assert_ne!()`: ایتم هایی که درون `()` هستند باید برابر نباشند
+
+چند مثال:
 ```rust
 fn main() {
     let my_name = "Loki Laufeyson";
@@ -4903,11 +4922,9 @@ fn main() {
     assert_ne!(my_name, "Mithridates");
 }
 ```
+کد بالا `Panic` نمیکنه چون ما شروطی گذاشتیم که نکنه.
 
-This will do nothing, because all three assert macros are okay. (This is what we want)
-
-You can also add a message if you want.
-
+ما میتونیم یک پیام برای `Panic` هم تنظیم کنیم:
 ```rust
 fn main() {
     let my_name = "Loki Laufeyson";
@@ -4930,8 +4947,7 @@ fn main() {
 }
 ```
 
-These messages will only display if the program panics. So if you run this:
-
+این پیام ها فقط در صورتی که برنامه `Panic` کنه نمایش داده میشند:
 ```rust
 fn main() {
     let my_name = "Mithridates";
@@ -4944,7 +4960,7 @@ fn main() {
 }
 ```
 
-It will display:
+خروجیش:
 
 ```text
 thread 'main' panicked at 'assertion failed: `(left != right)`
@@ -4952,14 +4968,12 @@ thread 'main' panicked at 'assertion failed: `(left != right)`
  right: `"Mithridates"`: You entered Mithridates. Input must not equal Mithridates', src\main.rs:4:5
 ```
 
-So it is saying "you said that left != right, but left == right". And it displays our message that says `You entered Mithridates. Input must not equal Mithridates`.
+همچنین استفاده از `unwrap` زمانی خوب هست که میخوایم اگه برنامه به مشکلی خورد، `Crash` کنه. بعدا که کدمون تکمیل شد بهتره که `unwrap` رو به چیزی تغییر بدیم که برنامه کرش نکنه و مشکل رو کنترل کنیم.
 
-`unwrap` is also good when you are writing your program and you want it to crash when there is a problem. Later, when your code is finished it is good to change `unwrap` to something else that won't crash.
 
-You can also use `expect`, which is like `unwrap` but a bit better because you give it your own message. Textbooks usually give this advice: "If you use `.unwrap()` a lot, at least use `.expect()` for better error messages."
+همچنین میتونیم از `expect` استفاده کنیم، که شبیه به `unwrap` هست اما کمی بهتر هست چون میتونیم پیامی رو هم همراه با `Panic` بفرستیم. معمولا اموزش های `Rust` پیشنهاد میکنند که بهتره از `()expect.` استفاده کنیم.
 
-This will crash:
-
+کد زیر `Crash` میکنه:
 ```rust
    // ⚠️
 fn get_fourth(input: &Vec<i32>) -> i32 {
@@ -4973,9 +4987,9 @@ fn main() {
 }
 ```
 
-The error message is `thread 'main' panicked at 'called Option::unwrap() on a None value', src\main.rs:7:18`.
+پیام خطاش چنین چیزی هست: `thread 'main' panicked at 'called Option::unwrap() on a None value', src\main.rs:7:18`.
 
-Now we write our own message with `expect`:
+ما الا با استفاده از `expect` پیام خودمون رو مینویسیم:
 
 ```rust
    // ⚠️
@@ -4990,8 +5004,11 @@ fn main() {
 }
 ```
 
-It crashes again, but the error is better: `thread 'main' panicked at 'Input vector needs at least 4 items', src\main.rs:7:18`. `.expect()` is a little better than `.unwrap()` because of this, but it will still panic on `None`. Now here is an example of a bad practice, a function that tries to unwrap two times. It takes a `Vec<Option<i32>>`, so maybe each part will have a `Some<i32>` or maybe a `None`.
+همچنان `Crash` میکنه اما پیام خطا بهتر شده: `thread 'main' panicked at 'Input vector needs at least 4 items', src\main.rs:7:18`. `.expect()`
 
+این یکم از `()unwrap.` بهتره چون پیام بهتری میده
+
+کد زیر یک مثالی از نوشتن کد بد هست، چون امکان  `Crash` کردن هست و کنترلی نشده.
 ```rust
 fn try_two_unwraps(input: Vec<Option<i32>>) {
     println!("Index 0 is: {}", input[0].unwrap());
@@ -5003,8 +5020,9 @@ fn main() {
     try_two_unwraps(vector);
 }
 ```
+پیامی که میده: ``thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', src\main.rs:2:32``
 
-The message is: ``thread 'main' panicked at 'called `Option::unwrap()` on a `None` value', src\main.rs:2:32``. We're not sure if it was the first `.unwrap()` or the second `.unwrap()` until we check the line. It would be better to check the length and also to not unwrap. But with `.expect()` at least it will be a *little* better. Here it is with `.expect()`:
+خب ما اطمینان نداریم که در اولین `()unwrap.`، `Crash` رخ داده یا دومی. در اولین مرحله که بهتره اول طول `Vec` رو چک کنیم که با `Crash` کردن برنامه مواجه نشیم. اما خب یک میتونیم از `()expect.` هم استفاده کنیم که حداقل بدونیم مشکل در کدوم خط رخ داده:
 
 ```rust
 fn try_two_unwraps(input: Vec<Option<i32>>) {
@@ -5018,15 +5036,17 @@ fn main() {
 }
 ```
 
-So that is a bit better: `thread 'main' panicked at 'The first unwrap had a None!', src\main.rs:2:32`. We have the line number as well so we can find it.
+پیام که میده: `thread 'main' panicked at 'The first unwrap had a None!', src\main.rs:2:32`.
 
-You can also use `unwrap_or` if you want to always have a value that you want to choose. If you do this it will never panic. That's:
+الان شماره‌ی خط رو داریم و میتونیم بفهمیم که مشکل کجا رخ داده.
 
-- 1) good because your program won't panic, but
-- 2) maybe not good if you want the program to panic if there's a problem.
+همچنین میتونیم از `unwrap_or` استفاده کنیم، وقتی از `unwrap_or` استفاده میکنیم، اگه مشکلی پیش بیاد دیگه برنامه `Crash` نمیکنه و اگه مشکلی پیش بیاد مقداری که ما مشخص کردیم رو برمیگردونه.
 
-But usually we don't want our program to panic, so `unwrap_or` is a good method to use.
+استفاده از `unwrap_or` خوبه چون برنامه دیگه `Panic` نمیکنه.
 
+البته اگه بخوایم برنامه `Panic` کنه استفاده ازش خب خوب نیست.
+
+اما خب معمولا نمیخوایم که برنامه `Panic` کنه و بهتره ز `unwrap_or` استفاده کنیم:
 ```rust
 fn main() {
     let my_vec = vec![8, 9, 10];
@@ -5039,8 +5059,7 @@ fn main() {
     println!("{}", fourth);
 }
 ```
-
-This prints `0` because `.unwrap_or(&0)` gives a 0 even if it is a `None`.
+خروجی کد بالا `0` هست، به این دلیل که `.unwrap_or(&0)` اگه مقدار `Vec`، `None` باشه، مقدار `0` رو میده.
 
 ## Traits
 
