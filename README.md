@@ -5061,9 +5061,9 @@ fn main() {
 ```
 خروجی کد بالا `0` هست، به این دلیل که `.unwrap_or(&0)` اگه مقدار `Vec`، `None` باشه، مقدار `0` رو میده.
 
-## Traits
+## ویژگی‌ها | Traits
 
-We have seen traits before: `Debug`, `Copy`, `Clone` are all traits. To give a type a trait, you have to implement it. Because `Debug` and the others are so common, we have attributes that automatically do it. That's what happens when you write `#[derive(Debug)]`: you are automatically implementing `Debug`.
+ما قبلا `Trait` ها رو دیدیم: `Debug`، `Copy`، `Clone` هر سه `Trait` هستند. برای اینکه به یک نوع یک `Trait` بدیم، باید اون `Trait` رو در اون نوع پیاده‌سازی کنیم. به این دلیل که `Debug` و... خیلی رایج هستند ما `Attribute` هایی داریم که اونهارو به صورت اتوماتیک برای یک نوع بسازیم. این اتفاق وقتی که `#[derive(Debug)]` رو مینویسیم میوفته.
 
 ```rust
 #[derive(Debug)]
@@ -5074,7 +5074,9 @@ struct MyStruct {
 fn main() {}
 ```
 
-But other traits are more difficult, so you need to implement them manually with `impl`. For example, `Add` (found at `std::ops::Add`) is used to add two things. But Rust doesn't know exactly how you want to add things, so you have to tell it.
+اما `Trait` های دیگه یکم سخت‌تر هستند و ما باید خودمون اونهارو به صورت دستی پیاده‌سازی کنیم. ما میتونیم با استفاده از کلمه‌کلیدی `impl` اینکار رو انجام بدیم. برای مثال `std::ops:Add` یک `Trait` هست که دو چیز که یک نوع دارند رو با هم جمع میزنه اما خب وقتی نوعی رو خودمون میسازیم `Rust` نمیدونه که چه چیز هایی رو باید با هم جمع بزنه، پس باید خودمون پیاده‌سازیش کنیم.
+
+برای مثال:
 
 ```rust
 struct ThingsToAdd {
@@ -5084,24 +5086,24 @@ struct ThingsToAdd {
 
 fn main() {}
 ```
-
-We can add `first_thing` and `second_thing`, but we need to give more information. Maybe we want an `f32`, so something like this:
+ما میتونیم `first_thing` رو با `second_thing` جمع بزنیم، اما باید اطلاعات بیشتری به `Rust` بدیم، شاید ما میخوایم نتیجه یک `f32` باشه، چیزی شبیه به این:
 
 ```rust
 // 🚧
 let result = self.second_thing + self.first_thing as f32
 ```
 
-But maybe we want an integer, so like this:
-
+شاید ما `Intger` میخوایم، چیزی شبیه به این:
 ```rust
 // 🚧
 let result = self.second_thing as u32 + self.first_thing
 ```
 
-Or maybe we want to just put `self.first_thing` next to `self.second_thing` and say that this is how we want to add. So if we add 55 to 33.4, we want to see 5533.4, not 88.4.
+یا شاید هم میخوایم `first_thing` رو جلوی `second_thing` بنویسیم، و اینطوری بخوایم جمع بزنیم، برای مثال اگه مقادیر `55` و `33.4` هستند، ما میخوایم وقتی جمع میزنیم نتیجش بشه `5533.4` و نه `88.4`.
 
-So first let's look at how to make a trait. The important thing to remember about `trait`s is that they are about behaviour. To make a trait, write `trait` and then create some functions.
+پس اول بیاید بفهمیم چطوری باید یک `Trait` ساخت. نکته‌ی مهم این هست که `Trait` ها رفتار/ویژگی ها رو مشخص میکنند.
+
+برای ساخت یک `Trait` باید از کلمه‌کلیدی `trait` استفاده کنیم و بعدش اسم رو بدیم و داخل بلوک کد فانکشن هایی که این `Trait` داره رو مشخص کنیم:
 
 ```rust
 struct Animal { // A simple struct - an Animal only has a name
@@ -5129,7 +5131,7 @@ fn main() {
 }
 ```
 
-This is okay, but we don't want to print "The dog is running". You can change the methods that a `trait` gives you if you want, but you have to have the same signature. That means that it needs to take the same things, and return the same things. For example, we can change the method `.run()`, but we have to follow the signature. The signature says:
+این کد مشکلی نداره، اما ما نمیخوایم که `The dog is runnig` رو پرینت کنیم. ما میتونیم `Method` هایی که یک `Trait` به یک نوع میده رو تغییر بدیم البته اگه میخوایم. اما باید امضای اون `Method` رو نگه داریم. این یعنی اینکه باید همون ورودی هارو بگیریم و همون خروجی هارو بدیم و اسم هم باید همون باشه:
 
 ```rust
 // 🚧
@@ -5138,7 +5140,7 @@ fn run(&self) {
 }
 ```
 
-`fn run(&self)` means "fn `run()` takes `&self`, and returns nothing". So you can't do this:
+کد `fn run(&self)` یعنی ``"fn `run()` takes `&self`, and returns nothing"``. پس نمیتونیم اینکار رو انجام بدیم:
 
 ```rust
 fn run(&self) -> i32 { // ⚠️
@@ -5146,14 +5148,13 @@ fn run(&self) -> i32 { // ⚠️
 }
 ```
 
-Rust will say:
-
+اگه کار بالا رو انجام بدیم، `Rust` چنین گیری به ما میده:
 ```text
    = note: expected fn pointer `fn(&Animal)`
               found fn pointer `fn(&Animal) -> i32`
 ```
 
-But we can do this:
+اما میتونیم چنین کنیم:
 
 ```rust
 struct Animal { // A simple struct - an Animal only has a name
@@ -5185,9 +5186,11 @@ fn main() {
 }
 ```
 
-Now it prints `Rover is running!`. This is okay because we are returning `()`, or nothing, which is what the trait says.
+الان چنین چیزی پرینت میکنه: `Rover is running!`.
 
-When you are writing a trait, you can just write the function signature. But if you do that, the user will have to write the function. Let's try that. Now we change `bark()` and `run()` to just say `fn bark(&self);` and `fn run(&self);`. This is not a full function, so the user must write it.
+این مشکلی نداره چون ما داریم `()` رو برمیگردونیم، که همون چیزی هست که `Trait` مشخص کرده.
+
+وقتی در حال ساخت یک `Trait` هستیم، میتونیم فقط امضای فانکشن هارو بدیم. اما اگه اینکار رو انجام بدیم برای هر نوع باید بدنه‌ی فانکشن هارو بنویسیم. یعنی پیاده‌سازی `Method` ها به عهده‌ی نوعی که میخواد این `Trait` رو پیاده‌سازی کنه هست:
 
 ```rust
 struct Animal {
@@ -5218,10 +5221,9 @@ fn main() {
     rover.run();
 }
 ```
+پس وقتی که داریم یک `Trait` میسازیم باید به این نکته توجه کنیم که چه فانکشن هایی رو باید ما پیاده‌سازی کنیم و چه فانکشن هایی رو باید نوع پیاده‌سازی کنه. اگه فکر کنیم که همه‌ی نوع ها باید یک پیاده‌سازی از فانکشن داشته باشند، خب بهتره که ما اون رو پیاده‌سازی کنیم. اما اگه فکر میکنیم که یک فانکشن باید با توجه به هر نوع پیاده‌سازی خاص خودش رو داشته باشه، بهتره که فقط امضا فانکشن رو مشخص کنیم.
 
-So when you create a trait, you must think: "Which functions should I write? And which functions should the user write?" If you think the user should use the function the same way every time, then write out the function. If you think the user will use it differently, then just write the function signature.
-
-So let's try implementing the Display trait for our struct. First we will make a simple struct:
+بزارید `Trait`، `Display` رو برای `Struct` خودمون پیاده‌سازی کنیم. اول از همه `Struct` رو میسازیم:
 
 ```rust
 struct Cat {
@@ -5236,8 +5238,7 @@ fn main() {
     };
 }
 ```
-
-Now we want to print `mr_mantle`. Debug is easy to derive:
+الان میخوایم که `mr_mantle` رو پرینت کنیم. پیاده‌سازی `Debug` اسون هست:
 
 ```rust
 #[derive(Debug)]
@@ -5256,13 +5257,15 @@ fn main() {
 }
 ```
 
-but Debug print is not the prettiest way to print, because it looks like this.
+اما `Debug` همچین بیریخت پرینت میکنه که چنین چیزی هست:
 
 ```text
 Mr. Mantle is a Cat { name: "Reggie Mantle", age: 4 }
 ```
 
-So we need to implement `Display` for `Cat` if we want nicer printing. On [https://doc.rust-lang.org/std/fmt/trait.Display.html](https://doc.rust-lang.org/std/fmt/trait.Display.html) we can see the information for Display, and one example. It says:
+پس ما باید `fmt::Display` رو برای `Cat` پیاده‌سازی کنیم.
+
+در [https://doc.rust-lang.org/std/fmt/trait.Display.html](https://doc.rust-lang.org/std/fmt/trait.Display.html) ما میتونیم مستندات `Display` رو بخونیم که میگه:
 
 ```rust
 use std::fmt;
@@ -5280,8 +5283,9 @@ impl fmt::Display for Position {
 
 fn main() {}
 ```
+بعضی از بخش های کد بالا رو ما هنوز متوجه نمیشیم، مثل `<'_>` و `f`. اما ما میتونیم بفهمیم که `Position` چی هست: این یک `Struct` هست که دو فیلد داره که نوع هر دو فیلد `f32` هست.
 
-Some parts of this we don't understand yet, like `<'_>` and what `f` is doing. But we understand the `Position` struct: it is just two `f32`s. We also understand that `self.longitude` and `self.latitude` are the fields in the struct. So maybe we can just use this code for our struct, with `self.name` and `self.age`. Also, `write!` looks a lot like `println!` so it is pretty familiar. So we write this:
+همچنین ما `self.longitude` و `self.latitude` رو متوجه میشیم. همجنین انگاری که `write!` شباهت زیادی به `println!` داره. پس ما میتونیم چیزی شبیه به این رو برای `Cat` پیاده‌سازی کنیم:
 
 ```rust
 use std::fmt;
@@ -5300,8 +5304,7 @@ impl fmt::Display for Cat {
 fn main() {}
 ```
 
-Let's add a `fn main()`. Now our code looks like this:
-
+بزارید کد فانکشن `()main` رو هم بنویسیم:
 ```rust
 use std::fmt;
 
@@ -5325,10 +5328,12 @@ fn main() {
     println!("{}", mr_mantle);
 }
 ```
+خروجی کد بالا چنین چیزی میشه:  `Reggie Mantle is a cat who is 4 years old.`
 
-Success! Now when we use `{}` to print, we get `Reggie Mantle is a cat who is 4 years old.`. This looks much better.
+خب موفق شدیم که `Display` رو برای `Cat` پیاده‌سازی کنیم، بهتره یه نگاهی به کدی که نوشتیم بکنید.
 
-By the way, if you implement `Display` then you get the `ToString` trait for free. That's because you use the `format!` macro for the `.fmt()` function, which lets you make a `String` with `.to_string()`. So we could do something like this where we pass `reggie_mantle` to a function that wants a `String`, or anything else.
+
+در ضمن، اگه `Display` رو پیاده‌سازی کنیم، ما میتونیم از `()to_string.` هم استفاده کنیم:
 
 ```rust
 use std::fmt;
@@ -5358,16 +5363,20 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Reggie Mantle is a cat who is 4 years old.
 Mr. Mantle's String is 42 letters long.
 ```
 
-The thing to remember about traits is that they are about the behaviour of something. How does your `struct` act? What can it do? That's what traits are for. If you think of some of the traits we've seen so far, they are all about behaviour: `Copy` is something that a type can do. `Display` is also something that a type can do. `ToString` is another trait, and it's also something that a type can do: it can change into a `String`. In our `Dog` trait the word *dog* doesn't mean something you can do, but it gives some methods that let it do things. You could also implement it for a `struct Poodle` or `struct Beagle` and they would all get `Dog` methods.
+نکته‌ای که باید به خاطر داشته باشید این هست که `Trait` ها رفتار یک نوع رو تا حدی مشخص میکنند.
 
-Let's look at another example that is even more connected to just behaviour. We'll imagine a fantasy game with some simple characters. One is a `Monster`, the other two are `Wizard` and `Ranger`. The `Monster` just has `health` so we can attack it, the other two don't have anything yet. But we made two traits. One is called `FightClose`, and lets you fight up close. The other is `FightFromDistance`, and lets you fight from far away. Only `Ranger` can use `FightFromDistance`. Here's what it looks like:
+یک نوع چه کار هایی رو میتونه انجام بده؟ یک نوع چطوری یک کار رو انجام میده؟ این ها چیز هایی هستند که `Trait` ها میتونند مشخص کنند.
+
+اگه به `Trait` هایی که تا به حال دیدیم فکر کنید میفهمید که همشون در مورد رفتار یک نوع هستند. `Copy`، `Display`، `ToString` و...
+
+بزارید روی یک مثال دیگه کار کنیم، ما یک بازی خیالی رو تصور میکنیم که کاراکتر های ساده‌ای هم دارند. یک کاراکتر `Monster` هست، دومیش `Wizard` هست و سومیش `Ranger` هست. کاراکتر `Monster` فقط `health` داره که ما بتونیم بهش اسیب بزنیم. بقیه فعلا چیزی ندارند. اما ما دو `Trait` میسازیم. یکی به اسم `FightClose` که باهاش میتونیم از نزدیک اسیب بزنیم و دیگری `FightFromDistance` که میتونیم باهاش از فاصله‌ی دور اسیب بزنیم. فقط `Ranger` میتونه از `FightFromDistance` استفاده کنیم. بیاید چیزی که گفتیم رو تبدیل به کد کنیم:
 
 ```rust
 struct Monster {
@@ -5429,14 +5438,14 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 You attack with your sword. Your opponent now has 30 health left.
 You attack with your bow. Your opponent now has 20 health left.
 ```
 
-We pass `self` inside our trait all the time, but we can't do much with it right now. That's because Rust doesn't know what type is going to use it. It could be a `Wizard`, it could be a `Ranger`, it could be a new struct called `Toefocfgetobjtnode` or anything else. To give `self` some functionality, we can add necessary traits to the trait. If we want to print with `{:?}` for example then we need `Debug`. You can add it to the trait just by writing it after `:` (a colon). Now our code looks like this:
+ما `self` رو همیشه در `Trait` ها میدیم، اما فعلا نمیتونیم باهاش کاری انجام بدیم چون `Rust` نمیدونه که `self` از چه نوعی هست و به همین خاطر نمیدونه که چه قابلیت هایی داره. برای اینکه بتونیم از قابلیت های `self` استفاده کنیم باید با استفاده از `Trait` ها به `Rust` بگیم که `self` چه چیز هایی رو پیاده‌سازی کرده و اینطوری میتونیم از قابلیت هاش استفاده کنیم. برای مثال اگه میخوایم `self` رو با استفاده از `{:?}` پرینت کنیم، اون باید `Debug` رو پیاده‌سازی کرده باشه. برای اینکه بگیم `self` چه چیز هایی رو باید پیاده‌سازی کرده باشه میتونیم بعد از اسم `Trait` کاراکتر `:` رو بزاریم و اسم `Trait` هایی که باید پیاده‌سازی کرده باشه رو نام ببریم. پس کدمون میشه چیزی شبیه به این:
 
 ```rust
 struct Monster {
@@ -5504,16 +5513,19 @@ fn main() {
 }
 ```
 
-Now this prints:
-
+الان چنین چیزی رو پرینت میکنه:
 ```text
 You attack with your sword. Your opponent now has 30 health left. You are now at: Wizard { health: 60 }
 You attack with your bow. Your opponent now has 20 health left.  You are now at: Ranger { health: 80 }
 ```
 
-In a real game it might be better to rewrite this for each type, because `You are now at: Wizard { health: 60 }` looks funny. That's also why methods inside traits are usually simple, because you don't know what type is going to use it. You can't write things like `self.0 += 10` for example. But this example shows that we can use other traits inside a trait we are writing. And when we do that, we get some methods that we can use.
+در یک بازی واقعی احتمالا باید هر نوع این فانکشن هارو برای خودش پیاده‌سازی بکنه. به این دلیل که `` احتمالا مسخره هست، اما فهمیدیم که چرا `Method` های داخل `Trait` ها ساده هستند، به این دلیل که نوعی که قرار این رو پیاده‌سازی کنه رو نمیدونیم و نمیتونیم از قابلیت هاش استفاده کنیم. برای مثال نمیتونیم کدی مثال `self.0 += 10` رو بنویسیم.
 
-One other way to use a trait is with what are called `trait bounds`. That means "limitations by a trait". Trait bounds are easy because a trait actually doesn't need any methods, or anything at all. Let's rewrite our code with something similar but different. This time our trait doesn't have any methods, but we have other functions that require traits to use.
+اما این مثال نشون داد که میتونیم از `Trait` ها داخل `Trait` هایی که داریم مینویسیم استفاده کنیم.
+
+میتونیم به نحو دیگه‌ای هم از `Trait` ها استفاده کنیم، که بهش میگیم `Trait Bounds`. با اینکار میتونیم با استفاده از `Trait` ها محدودیت ایجاد کنیم.
+
+بزارید کدی که نوشتیم رو برای این مثال تغییر بدیم، ایندفعه از `Method` ها استفاده نمیکنیم، و از فانکشن های جنریکی استفاده میکنیم که از `Trait` ها استفاده میکنند:
 
 ```rust
 use std::fmt::Debug;  // So we don't have to write std::fmt::Debug every time now
@@ -5578,19 +5590,19 @@ fn main() {
 }
 ```
 
-This prints almost the same thing:
-
+خروجیش میشه:
 ```text
 You attack with your sword. Your opponent now has 30 health left. You are now at: Wizard { health: 60 }
 You attack with your bow. Your opponent now has 20 health left.  You are now at: Ranger { health: 80 }
 You raise your hands and cast a fireball! Your opponent now has 0 health left. You are now at: Wizard { health: 60 }
 ```
 
+خب دیدیم که راه های زیادی برای استفاده از `Trait` ها وجود داره. که ما براساس چیزی که میخوایم انتخابشون کنیم.
 So you can see there are many ways to do the same thing when you use traits. It all depends on what makes the most sense for the program that you are writing.
 
-Now let's look at how to implement some of the main traits you will use in Rust.
+خب حالا بزارید ببینیم چطور باید از `Trait` های اصلی استفاده کنیم.
 
-### The From trait
+### تریت از | The From trait
 
 *From* is a very convenient trait to use, and you know this because you have seen it so much already. With *From* you can make a `String` from a `&str`, but you can make many types from many other types. For example, Vec uses *From* for the following:
 
