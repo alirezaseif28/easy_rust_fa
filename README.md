@@ -4613,24 +4613,25 @@ You need to: Watch some YouTube
 
 ### VecDeque
 
-A `VecDeque` is a `Vec` that is good at popping items both off the front and the back. Rust has `VecDeque` because a `Vec` is great for popping off the back (the last item), but not so great off the front. When you use `.pop()` on a `Vec`, it just takes off the last item on the right and nothing else is moved. But if you take it off another part, all the items to the right are moved over one position to the left. You can see this in the description for `.remove()`:
+نوع `VecDeque` شبیه به `Vec` هست اما برای برداشت ایتم هم از اخر و هم از اول بهینه هست. `Rust` نوع `VecDeque` رو داره به این دلیل که نوع `Vec` برای گرفتن اخرین عنصر بهینه عمل میکنه اما اگه بخوای اولین ایتم رو از `Vec` بگیری، باید همه‌ی عنصر ها به سمت چپ حرکت کنند و این هزینه‌ی زیادی داره.
 
+این رو میتونید در توضیحات `()remove.` ببینیم:
 ```text
 Removes and returns the element at position index within the vector, shifting all elements after it to the left.
 ```
+(عنصری که در `index`‌ای که مشخص شده برداشته و حذف میشه و تمام عناصر بعد اون به سمت چپ جابجا میشند)
 
-So if you do this:
 
+پس اگه اینکار رو انجام بدیم:
 ```rust
 fn main() {
     let mut my_vec = vec![9, 8, 7, 6, 5];
     my_vec.remove(0);
 }
 ```
+مقدار `9` از `Vec` حذف و برگردونده میشه و تمام عناصر به سمت چپ جابجا میشند، یعنی مقدار `8` در `index`، `0` قرار میگیره و `7` در `1` و...
 
-it will remove `9`. `8` in index 1 will move to index 0, `7` in index 2 will move to index 1, and so on. Imagine a big parking lot where every time one car leaves all the cars on the right side have to move over.
-
-This, for example, is a *lot* of work for the computer. In fact, if you run it on the Playground it will probably just give up because it's too much work.
+برای مثال کد زیر فشار بسیار زیادی بر روی `CPU` وارد میکنه. در حقیقت اگه در `Playground` بخوایم اجراش کنیم، احتمالا به دلیل فشار زیادی که وارد میکنه اصلا اجرا نمیشه:
 
 ```rust
 fn main() {
@@ -4641,9 +4642,11 @@ fn main() {
 }
 ```
 
-This is a `Vec` of 600,000 zeros. Every time you use `remove(0)` on it, it moves each zero left one space to the left. And then it does it 600,000 times.
+کد بالا یک `Vec` با `600000` صفر ایجاد میکنه. و `600000` بار، هر بار عنصر `0` رو حذف میکنه و بقیه عناصر به سمت چپ جابجا میشند.
 
-You don't have to worry about that with a `VecDeque`. It is usually a bit slower than a `Vec`, but if you have to do things on both ends then it is much faster. You can just use `VecDeque::from` with a `Vec` to make one. Our code above then looks like this:
+وقتی از `VecDeque` استفاده کنیم دیگه نیازی به نگرانی در مورد این موضوع نداریم. معمولا `VecDeque` یکم از `Vec` کند‌تر هست، اما اگه میخوایم کارهایی بر روی هم اول و هم اخر یک مجموعه‌ای مثال `Vec` انجام بدیم، بهتره از `VecDeque` استفاده کنیم. چون در انجام اینکار سریع هست.
+
+میتونیم با استفاده از `VecDeque::from` یک `VecDeque` با استفاده از `Vec` بسازیم:
 
 ```rust
 use std::collections::VecDeque;
@@ -4656,11 +4659,13 @@ fn main() {
 }
 ```
 
-It is now much faster, and on the Playground it finishes in under a second instead of giving up.
+کد بالا هزینه‌ی بسیار کمتری به `CPU` وارد میکنه و سریع و بهینه هم هست.
 
-In this next example we have a `Vec` of things to do. Then we make a `VecDeque` and use `.push_front()` to put them at the front, so the first item we added will be on the right. But each item we push is a `(&str, bool)`: `&str` is the description and `false` means it's not done yet. We use our `done()` function to pop an item off the back, but we don't want to delete it. Instead, we change `false` to `true` and push it at the front so that we can keep it.
+در کد زیر، ما کار هایی رو برای انجام در یک `Vec` داریم. بعد یک `VecDeque` میسازیم و کار ها رو با استفاده از `()push_front.` درش وارد میکنیم که در اولش وارد میشه.
 
-It looks like this:
+هر ایتمی که وارد میکنیم یک `(str, bool&)` هست. که `str&`، توضیحات رو نشون میده و `bool` میگه که کار انجام شده یا خیر. ما با استفاده از `()done` یک ایتم رو از اخر برمیداریم (که به طور خودکار از `VecDeque` حذف هم میشه) و مقدار `bool` رو به `true` تغییر میدیم که بفهمیم انجام شده، و چون نمیخوایم که ایتم حذف بشه، دوباره با استفاده از `()push_front.` به `VecDeque` اضافش میکنیم.
+
+پس کدمون چنین چیزی میشه:
 
 ```rust
 use std::collections::VecDeque;
@@ -4698,7 +4703,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 You must: phone Loki back
