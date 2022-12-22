@@ -5763,13 +5763,19 @@ Odd numbers: [7, -1, 3, 9787, -47, 77, 55, 7]
 ```
 نوعی مثل `EvenOddVec` بهتر بود که جنریک باشه که بتونه با نوع های بیشتری کار کنه. برای تمرین میتونید جنریکش کنید.
 
-### Taking a String and a &str in a function
+### گرفتن یک استرینگ یا/و `str&` در یک فانکشن | Taking a String and a &str in a function
 
-Sometimes you want a function that can take both a `String` and a `&str`. You can do this with generics and the `AsRef` trait. `AsRef` is used to give a reference from one type to another type. If you look at the documentation for `String`, you can see that it has `AsRef` for many types:
+گاهی اوقات به فانکشنی نیاز داریم که بتونه هم `String` و هم `str&` رو در یک متغییر به عنوان ورودی بگیره.
+
+ما میتونیم با استفاده از `Trait`، `AsRef` اینکار رو انجام بدیم.
+
+با استفاده از `AsRef` میتونیم یک `Reference` به یک نوع رو به یک `Reference` به نوع دیگه‌ای تبدیل کنیم.
+
+اگه به صفحه‌ی مستندات `String` نگاه کنیم میتونیم ببینیم که `AsRef` رو برای نوع های زیادی پیاده‌سازی کرده.
 
 [https://doc.rust-lang.org/std/string/struct.String.html](https://doc.rust-lang.org/std/string/struct.String.html)
 
-Here are some function signatures for them.
+در پایین میتونیم یکسری امضای فانکشن در این رابطه رو ببینیم:
 
 `AsRef<str>`:
 
@@ -5798,9 +5804,10 @@ impl AsRef<OsStr> for String
 fn as_ref(&self) -> &OsStr
 ```
 
-You can see that it takes `&self` and gives a reference to the other type. This means that if you have a generic type T, you can say that it needs `AsRef<str>`. If you do that, it will be able to take a `&str` and a `String`.
+میتونیم ببینیم که `self&` رو میگیره و یک `Reference` به نوع دیگه‌ای میده.
+این یعنی اینکه اگه ما یک نوع جنریک به نام `T` داشته باشیم. میتونیم بگیم که اون باید `AsRef<str>` رو پیاده‌سازی کرده باشه. اگه این کار رو انجام بدیم، نوعی که میگیریم میتونه هم `str&` باشه و هم `String`.
 
-Let's start with the generic function. This doesn't work yet:
+بزارید یک فانکشن جنریک درست کنیم، این هنوز کار نمیکنه:
 
 ```rust
 fn print_it<T>(input: T) {
@@ -5812,7 +5819,7 @@ fn main() {
 }
 ```
 
-Rust says `error[E0277]: T doesn't implement std::fmt::Display`. So we will require T to implement Display.
+کامپایلر خطای `error[E0277]: T doesn't implement std::fmt::Display` رو میده، پس نوع `T` باید `Display` رو پیاده‌سازی کرده باشه:
 
 ```rust
 use std::fmt::Display;
@@ -5825,8 +5832,11 @@ fn main() {
     print_it("Please print me");
 }
 ```
+الان کار میکنه و `Please print me` رو پرینت میکنه.
 
-Now it works and prints `Please print me`. That is good, but T can still be too many things. It can be an `i8`, an `f32` and anything else with just `Display`. So we add `AsRef<str>`, and now T needs both `AsRef<str>` and `Display`.
+خب خوبه، اما همچنان نوع `T` میتونه خیلی چیز ها باشه، یعنی هر چیزی که `Display` رو پیاده‌سازی کرده باشه.
+
+پس `AsRef<str>` رو اضافه میکنیم، الان `T` باید هم `Display` و هم `AsRef<str>` رو پیاده‌سازی کرده باشه:
 
 ```rust
 use std::fmt::Display;
@@ -5842,9 +5852,11 @@ fn main() {
 }
 ```
 
-Now it won't take types like `i8`.
+الان فانکشن `print_it` نوعی مثل `i8` رو به عنوان ورودی نمیتونه بگیره.
 
-Don't forget that you can use `where` to write the function differently when it gets long. If we add Debug then it becomes `fn print_it<T: AsRef<str> + Display + Debug>(input: T)` which is long for one line. So we can write it like this:
+همچنین فراموش نکنیم که میتونیم از `where` هم استفاده کنیم. معمولا زمانی که تعریف فانکشن طولانی میشه ایده‌ی خوبی هست که از `where` استفاده کنیم.
+
+برای مثال اگه ما `Debug` رو هم اضافه کنیم، خط طولانی‌ای میشه و خب اونوقت بهتره که کد رو اینطوری بنویسیم:
 
 ```rust
 use std::fmt::{Debug, Display}; // add Debug
