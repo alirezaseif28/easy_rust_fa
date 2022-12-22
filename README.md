@@ -5602,9 +5602,13 @@ So you can see there are many ways to do the same thing when you use traits. It 
 
 خب حالا بزارید ببینیم چطور باید از `Trait` های اصلی استفاده کنیم.
 
-### تریت از | The From trait
+### تریت "از" | The From trait
 
-*From* is a very convenient trait to use, and you know this because you have seen it so much already. With *From* you can make a `String` from a `&str`, but you can make many types from many other types. For example, Vec uses *From* for the following:
+استفاده از `From` خیلی اسون هست. تا الان هم خیلی ارش استفاده کردیم.
+
+با استفاده از `From`، میتونیم `str&` رو به `String` تبدیل کنیم. اما همچنین میتونیم خیلی نوع ها رو به نوع های دیگه باهاش تبدیل کنیم.
+
+برای مثال نوع `Vec` با استفاده از `From` میتونه خیلی چیز ها رو به `Vec` تبدیل کنه:
 
 ```text
 From<&'_ [T]>
@@ -5622,7 +5626,7 @@ From<Vec<T>>
 From<VecDeque<T>>
 ```
 
-That is a lot of `Vec::from()` that we have not tried yet. Let's make a few and see what happens.
+خیلی از این هارو هنوز استفاده نکردیم، بزارید امتحان کنیم:
 
 ```rust
 use std::fmt::Display; // We will make a generic function to print them so we want Display
@@ -5647,19 +5651,22 @@ fn main() {
 }
 ```
 
-It prints the following:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 8 9 10
 87 104 97 116 32 107 105 110 100 32 111 102 32 118 101 99 32 119 105 108 108 32 73 32 98 101 63
 87 104 97 116 32 107 105 110 100 32 111 102 32 118 101 99 32 119 105 108 108 32 97 32 83 116 114 105 110 103 32 98 101 63
 ```
+اگه به نوع ها نگاه کنیم، میفهمیم که اولین و دومین `Vec` ها `Vec<u8>` هستند. که یعنی بایت های `str&` و `String` هستند.
 
-If you look at the type, the second and third vectors are `Vec<u8>`, which means the bytes of the `&str` and the `String`. So you can see that `From` is very flexible and used a lot. Let's try it with our own types.
+خب بزارید `From` رو روی نوعی که خودمون میسازیم استفاده کنیم:
 
-We'll make two structs and then implement `From` for one of them. One struct will be `City`, and the other will be `Country`. We want to be able to do this: `let country_name = Country::from(vector_of_cities)`.
+ما دو `Struct` میسازیم و بعد `From` رو براشون پیاده‌سازی میکنیم. یکی `City` هست و دیگری `Country` هست.
 
-It looks like this:
+ما میخوایم که در نهایت بتونیم از چنین چیزی استفاده کنیم: `let country_name = Country::from(vector_of_cities)`
+
+خب کدش چنین چیزی میشه:
 
 ```rust
 #[derive(Debug)] // So we can print City
@@ -5709,14 +5716,16 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 "Helsinki" has a population of 631695.
 "Turku" has a population of 186756.
 ```
 
-You can see that `From` is easy to implement from types you didn't create like `Vec`, `i32`, and so on. Here is one more example where we create a vector that has two vectors. The first vector holds even numbers, and the second holds odd numbers. With `From` you can give it a vector of `i32`s and it will turn it into a `Vec<Vec<i32>>`: a vector that holds vectors of `i32`.
+خب پس پیاده‌سازی `From` اسون هست.
+
+در مثال زیر ما یک `Vec` میسازیم که دو `Vec` رو در خودش داره. اولین `Vec` اعداد زوج رو نگه میداره و دومی اعداد فرد رو نگه میداره. ما با استفاده از `From` یک `Vec<i32>` میدیم و اون، اعداد زوج رو در اولین `Vec` میریزه و اعداد فرد رو در دومین `Vec` میریزه:
 
 ```rust
 use std::convert::From;
@@ -5746,14 +5755,13 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 Even numbers: [8, 222, 0, 8]
 Odd numbers: [7, -1, 3, 9787, -47, 77, 55, 7]
 ```
-
-A type like `EvenOddVec` is probably better as a generic `T` so we can use many number types. You can try to make the example generic if you want for practice.
+نوعی مثل `EvenOddVec` بهتر بود که جنریک باشه که بتونه با نوع های بیشتری کار کنه. برای تمرین میتونید جنریکش کنید.
 
 ### Taking a String and a &str in a function
 
