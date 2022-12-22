@@ -5941,17 +5941,19 @@ fn main() {
 
 خب پس بیاید یادشون بگیریم.
 
-## Iterators
+## تکرار کننده‌ها | Iterators
 
-An iterator is a construct that can give you the items in the collection, one at a time. Actually, we have already used iterators a lot: the `for` loop gives you an iterator. When you want to use an iterator other times, you have to choose what kind:
+یک `Iterator` یک ساختار است که میتواند ایتم های موحود در یک مجموعه یکی یکی به ما بده. در حقیقت ما همین الانش هم خیلی از `Iterator` ها استفاده کردیم.
 
-- `.iter()` for an iterator of references
-- `.iter_mut()` for an iterator of mutable references
-- `.into_iter()` for an iterator of values (not references)
+حلقه‌ی `for` یک `Iterator` میده. چندین نوع `Iterator` وجود داره:
+- متود `()iter.` یک `Reference` به ایتم رو میده
+- متود `()iter_mut.` یک `Mutable Reference` به یک ایتم رو میده
+- متود `()into_iter.` خود مقدار رو میده و برخلاف بقیه `Reference` نمیده
 
-A `for` loop is actually just an iterator that owns its values. That's why it can make it mutable and then you can change the values when you use it.
 
-We can use iterators like this:
+حلقه‌ی `for` در حقیقت یک `Iterator` هست که مقدار رو میده، به همین دلیل هست که میتونیم `Mutable` کنیمش و مقدار رو تغییر بدیم.
+
+میتونیم از `Iterator` ها اینطوری استفاده کنیم:
 
 ```rust
 fn main() {
@@ -5968,7 +5970,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 [2, 3, 4]
@@ -5976,15 +5978,23 @@ This prints:
 [10, 20, 30]
 ```
 
-The first two we used a method called `.map()`. This method lets you do something to every item, then pass it on. The last one we used is one called `.for_each()`. This method just lets you do something to every item. `.iter_mut()` plus `for_each()` is basically just a `for` loop. Inside each method we can give a name to every item (we just called it `x`) and use that to change it. These are called closures and we will learn about them in the next section.
+در دوتای اولی ما از متود `()map.` استفاده کردیم که اجازه میده هر بار با یک ایتم یه کاری کنیم و بعدش اون رو به عنوان خروجی میده.
 
-Let's go over them again, one at a time.
+در اخری ما از متود `()for_each.` استفاده کردیم که اجازه میده یه کاری به مقدار انجام بدیم و چیزی هم به عنوان خروجی نمیده.
 
-First we used `.iter()` on `vector1` to get references. We added 1 to each, and made it into a new Vec. `vector1` is still alive because we only used references: we didn't take by value. Now we have `vector1`, and a new Vec called `vector1_a`. Because `.map()` just passes it on, we needed to use `.collect()` to make it into a `Vec`.
+متود `()iter_mut.` و `for_each` در کنار هم، دقیقا مثل یک حلقه‌ی `for` عمل میکنند.
 
-Then we used `into_iter` to get an iterator by value from `vector1`. This destroys `vector1`, because that's what `into_iter()` does. So after we make `vector1_b` we can't use `vector1` again.
+در هر متود با میتونیم به ایتمی که هر بار بهمون میده یک اسم بدیم، که ما `x` رو انتخاب کردیم.
 
-Finally we used `.iter_mut()` for `vector2`. It is mutable, so we don't need to use `.collect()` to create a new Vec. Instead, we change the values in the same Vec with mutable references. So `vector2` is still there. Because we don't need a new Vec, we use `for_each`: it's just like a `for` loop.
+به این ها `Closure` میگیم که بعدا دربارشون میخونیم.
+
+بزارید دوباره ببینیم که در کد بالا چیکار کردیم.
+
+اول، ما از `()iter.` روی `vector1` استفاده کردیم که هر بار به ما یک `Reference` به ایتم رو میده. و وقتی که `Reference` رو میگیریم اون رو به علاوه‌ی `1` میکنیم و به عنوان خروجی میدیم. برای اینکه مقدار هایی رو که `()map.` به عنوان خروجی میده رو در جایی نگهداری کنیم از `()collect.` استفاده کردیم که به ما اجازه میده یک مجموعه بسازیم. به این دلیل که ما با `Reference` به ایتم ها دسترسی داشتیم و مالکیتشون تغییری نکرده، `vector1` هنوز قابل استفاده هست. و یک `vector1_a` هم درست کردیم که همون مقدار های `vector1` رو داره اما هر ایتم به علاوه‌ی `1` شده.
+
+دوم، ما از `()into_iter.` استفاده کردیم که خود مقدار هر ایتم رو به ما میده، پس مالکیتشون هم به ما میرسه، و این یعنی `vector1` از بین میره. چون این کاری هست که `()into_iter.` انجام میده.
+
+و در اخر ما از `()iter_mut.` روی `vector2` استفاده کردیم که هر بار به ما یک `Mutable Reference` به یک ایتم میده. خب از اونجایی که `Mutable` هست و میتونیم تغییرش بدیم، پس نیازی نداریم که یک `Vec` جدید بسازیم. عوضش ما مقدار هر ایتم رو با استفاده از `Mutable Reference` تغییر میدیم، با این کار مقدار `vector2` هم تغییر میکنه. متود `()for_each.` هم فقط یه کاری روی ایتم انجام میده و چیزی به عنوان خروجی نمیده. پس شد چیزی مثل حلقه‌ی `for` شد. یعنی ما هر بار یک `Mutable Reference` به ایتم داریم و میتونیم ازش استفاده کنیم و چیزی هم به عنوان خروجی نمیدیم.
 
 ### How an iterator works
 
