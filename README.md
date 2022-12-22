@@ -5996,11 +5996,13 @@ fn main() {
 
 و در اخر ما از `()iter_mut.` روی `vector2` استفاده کردیم که هر بار به ما یک `Mutable Reference` به یک ایتم میده. خب از اونجایی که `Mutable` هست و میتونیم تغییرش بدیم، پس نیازی نداریم که یک `Vec` جدید بسازیم. عوضش ما مقدار هر ایتم رو با استفاده از `Mutable Reference` تغییر میدیم، با این کار مقدار `vector2` هم تغییر میکنه. متود `()for_each.` هم فقط یه کاری روی ایتم انجام میده و چیزی به عنوان خروجی نمیده. پس شد چیزی مثل حلقه‌ی `for` شد. یعنی ما هر بار یک `Mutable Reference` به ایتم داریم و میتونیم ازش استفاده کنیم و چیزی هم به عنوان خروجی نمیدیم.
 
-### How an iterator works
+### یک تکرار کننده چطوری کار میکنه | How an iterator works
 
-An iterator works by using a method called `.next()`, which gives an `Option`. When you use an iterator, Rust calls `next()` over and over again. If it gets `Some`, it keeps going. If it gets `None`, it stops.
+یک `Iterator` با استفاده از متود `()next.` کار میکنه، که این متود به عنوان خروجی یک `Option` میده. وقتی از یک `Iterator` استفاده میکنیم. کامپایلر بار ها `()next.` رو صدا میزنه، اگه در خروجی `Some` بگیره ادامه میده و اگه `None` بگیره، دیگه ادامه نمیده چون دیگه ایتمی وجود نداره. دیدید چقدر سادست...
 
-Do you remember the `assert_eq!` macro? In documentation, you see it all the time. Here it is showing how an iterator works.
+ماکروی `assert_eq!` رو یادتون هست؟ همیشه توی کد های مستدات این رو میبینیم.
+
+در پایین میبینیم که یک `Iterator` چطوری کار میکنه:
 
 ```rust
 fn main() {
@@ -6016,8 +6018,9 @@ fn main() {
     assert_eq!(my_vec_iter.next(), None);        // You can keep calling .next() but it will always be None
 }
 ```
+پیاده‌سازی `Iterator` برای یک `Struct` یا `Enum` ای که خودمون ساختیم زیاد سخت نیست.
 
-Implementing `Iterator` for your own struct or enum is not too hard. First let's make a book library and think about it.
+برای مثال بیاید یک کتابخونه بسازیم:
 
 ```rust
 #[derive(Debug)] // we want to print it with {:?}
@@ -6056,8 +6059,9 @@ fn main() {
     println!("{:?}", my_library.books); // we can print our list of books
 }
 ```
+این به خوبی کار میکنه، حالا ما میخوایم که برای `Library` یک `Iterator` بسازیم. اگه یک `Iterator` براش بسازیم بعدش میتونیم توی حلقه‌ی `for` ازش استفاده کنیم.
 
-That works well. Now we want to implement `Iterator` for the library so we can use it in a `for` loop. Right now if we try a `for` loop, it doesn't work:
+الان اگه بخوایم ازش در `for` استفاده کنیم، کامپایلر خطا میده:
 
 ```rust
 for item in my_library {
@@ -6065,7 +6069,7 @@ for item in my_library {
 }
 ```
 
-It says:
+خطایی که میده:
 
 ```text
 error[E0277]: `Library` is not an iterator
@@ -6078,12 +6082,16 @@ error[E0277]: `Library` is not an iterator
    = note: required by `std::iter::IntoIterator::into_iter`
 ```
 
-But we can make library into an iterator with `impl Iterator for Library`. Information on the `Iterator` trait is here in the standard library: [https://doc.rust-lang.org/std/iter/trait.Iterator.html](https://doc.rust-lang.org/std/iter/trait.Iterator.html)
+خب ما میتونیم با استفاده از `impl Iterator for Library`، `Trait`، `Iterator` رو برای `Library` پیاده‌سازی کنیم.
+But we can make library into an iterator with `impl Iterator for Library`
 
-On the top left of the page it says: `Associated Types: Item` and `Required Methods: next`. An "associated type" means "a type that goes together". Our associated type will be `String`, because we want the iterator to give us Strings.
+مستندات `Trait`، `Iterator` رو میتونیم اینجا پیدا کنیم: [https://doc.rust-lang.org/std/iter/trait.Iterator.html](https://doc.rust-lang.org/std/iter/trait.Iterator.html)
 
-In the page it has an example that looks like this:
+در سمت چپ بالا، میتونیم ببینیم که نوشته: `Associated Types: Item` و `Required Methods: next`.
 
+خب `Associated Types: Item` ما میشه، `String`، به این دلیل که ما مجموعه‌ای از `String` ها داریم و خب هر بار باید یک `String` رو بدیم بیرون.
+
+در همون صفحه‌ی مستند یک مثالی زده:
 ```rust
 // an iterator which alternates between Some and None
 struct Alternate {
@@ -6108,10 +6116,13 @@ impl Iterator for Alternate {
 
 fn main() {}
 ```
+ما میتونیم `type Item = 32` رو ببینیم. این همون `Associated Type` هست.
 
-You can see that under `impl Iterator for Alternate` it says `type Item = i32`. This is the associated type. Our iterator will be for our list of books, which is a `Vec<String>`. When we call next, it will give us a `String`. So we will write `type Item = String;`. That is the associated item.
+خب `Iterator` ما باید روی لیستی از کتاب ها باشه که یک `Vec<String>` هست. وقتی هم ما `()next.` رو صدا میزنیم باید یک ایتم از این مجموعه رو بدیم که یک `String` میشه. پس ما `type Item = String` رو مینویسیم.
 
-To implement `Iterator`, you need to write the `fn next()` function. This is where you decide what the iterator should do. For our `Library`, we want it to give us the last books first. So we will `match` with `.pop()` which takes the last item off if it is `Some`. We also want to print " is found!" for each item. Now it looks like this:
+برای پیاده‌سازی `Iterator`، ما باید فانکشن `()next` رو پیاده‌سازی کنیم. اینجا، اونجاست که تعریف میکنیم این `Iterator` چطوری باید کار کنه. برای یک کتابخونه میخوایم که کتاب ها رو از اخر بگیریم. پس از `match` و `()pop.` استفاده میکنیم که اخرین کتاب رو بگیریم. اگه خروجی `Some` بود ما اون مقدار `String` رو با `is found!` جمع میکنیم و میدیم بیرون. اگه مقدار `None` بود ما مقدار `None` رو میدیم بیرون که وقتی کامپایلر `None` رو ببینه دیگه `()next.` رو صدا نمیزنه چون میفهمه که دیگه‌ای وجود نداره.
+
+خب کدمون این میشه:
 
 ```rust
 #[derive(Debug, Clone)]
@@ -6164,7 +6175,7 @@ fn main() {
 }
 ```
 
-This prints:
+چیزی که پرینت میکنه:
 
 ```text
 吾輩は猫である is found!
