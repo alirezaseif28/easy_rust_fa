@@ -6448,11 +6448,11 @@ fn main() {
 
 خروجیش: `140     399     923     481     800     622     623     218     009     598    281`.
 
-### |_| in a closure
+### |_| در یک "`Closure`" | |_| in a closure
 
-Sometimes you see `|_|` in a closure. This means that the closure needs an argument (like `x`), but you don't want to use it. So `|_|` means "Okay, this closure takes an argument but I won't give it a name because I don't care about it".
+گاهی وقت ها ما `|_|` رو در یک `Closure` میبینیم. این به معنی این هست که این `Closure` به ورودی نیاز داره اما نیمخوایم ازش استفاده کنیم.
 
-Here is an example of an error when you don't do that:
+در زیر یک کدی رو میبینیم که کامپایل نمیشه:
 
 ```rust
 fn main() {
@@ -6462,8 +6462,7 @@ fn main() {
 }
 ```
 
-Rust says that
-
+کامپایلر میگه:
 ```text
 error[E0593]: closure is expected to take 1 argument, but it takes 0 arguments
   --> src\main.rs:28:36
@@ -6474,15 +6473,14 @@ error[E0593]: closure is expected to take 1 argument, but it takes 0 arguments
    |                                    expected closure that takes 1 argument
 ```
 
-The compiler actually gives you some help:
-
+همچنین کامپایلر یه کمکی هم به ما میکنه:
 ```text
 help: consider changing the closure to take and ignore the expected argument
    |
 28 |     println!("{:?}", my_vec.iter().for_each(|_| println!("We didn't use the variables at all")));
 ```
 
-This is good advice. If you change `||` to `|_|` then it will work.
+خب کمک خوبی هست، پس ما `||` رو به `|_|` تغییر میدیم. بعدش کد کار میکنه.
 
 ### Helpful methods for closures and iterators
 
