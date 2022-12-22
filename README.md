@@ -5874,9 +5874,11 @@ fn main() {
 }
 ```
 
-## Chaining methods
+## زنجیر کردن متود ها | Chaining methods
 
-Rust is a systems programming language like C and C++, and its code can be written as separate commands in separate lines, but it also has a functional style. Both styles are okay, but functional style is usually shorter. Here is an example of the non-functional style (called "imperative style") to make a `Vec` from 1 to 10:
+زبان `Rust` یک زبان برای برنامه‌نویسی سیستمی مثل `C` و `++C` هست. و کدش میتونه در دستور های جدا نوشته بشه. اما همچنین از سبک زبان های برنامه‌نویسی تابعی پشتیبانی میکنه. هردو سبک خوب هستند، اما معمولا سبک تابعی کوتاه‌تر هست.
+
+در کد زیر سبک دستوری(`Imperative`) رو میبینیم:
 
 ```rust
 fn main() {
@@ -5892,9 +5894,9 @@ fn main() {
 }
 ```
 
-This prints `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`.
+خروجیش میشه: `[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]`
 
-And here is an example of functional style:
+و در زیر سبک `Functional` رو میبینیم:
 
 ```rust
 fn main() {
@@ -5904,10 +5906,9 @@ fn main() {
     println!("{:?}", new_vec);
 }
 ```
+متود `()collect.` میتونه از نوع های زیادی، مجموعه بسازه، پس بهش نوع رو میگیم.
 
-`.collect()` can make collections of many types, so we have to tell it the type.
-
-With functional style you can chain methods. "Chaining methods" means to put many methods together in a single statement. Here is an example of many methods chained together:
+با استفاده از سبک تابعی میتونیم متود هارو به هم زنجیر کنیم، یعنی چندین متود رو پشت‌سر هم استفاده کنیم. برای مثال:
 
 ```rust
 fn main() {
@@ -5918,8 +5919,9 @@ fn main() {
     println!("{:?}", new_vec);
 }
 ```
+در کد بالا مقدار `[3, 4, 5, 6]` در متغییر `new_vec` قرار میگیره.
 
-This creates a Vec with `[3, 4, 5, 6]`. This is a lot of information for one line, so it can help to put each method on a new line. Let's do that to make it easier to read:
+این همه کد رو وقتی در یک خط میبینیم، خوندش سخت میشه، پس بهتره هر متود رو در یک خط استفاده کنیم، مثل زیر:
 
 ```rust
 fn main() {
@@ -5935,7 +5937,9 @@ fn main() {
 }
 ```
 
-You can use this functional style best when you understand closures and iterators. So we will learn them next.
+وقتی که `Closure` ها و `Iterator` ها رو فهمیدیم، میفهمیم که چقدر سبک تابعی کاربردی هست.
+
+خب پس بیاید یادشون بگیریم.
 
 ## Iterators
 
