@@ -6184,11 +6184,11 @@ Demian - die Geschichte einer Jugend is found!
 The Doom of the Darksword is found!
 ```
 
-## Closures
+## بسته ها | Closures
 
-Closures are like quick functions that don't need a name. Sometimes they are called lambdas. Closures are easy to find because they use `||` instead of `()`. They are very common in Rust, and once you learn to use them you will wonder how you lived without them.
+خب `Closure` ها مثال یک فانکشن هستند که اسم ندارند. گاهی اوقات بهشون `Lambda` هم میگیم. پیدا کردن `Closure` ها خیلی اسون هست به این دلیل که به جای `()`، علامت `||` دارند. `Closure` ها در `Rust` خیلی رایج هستند، وقتی که این ها رو یاد بگیریم بعدش میگیم که چطوری بدون این ها کد میزدیم.
 
-You can bind a closure to a variable, and then it looks exactly like a function when you use it:
+میتونیم یک `Closure` رو به یک متغییر بدیم، و بعد اون متغییر دقیقا مثال یک فانکشن میشه.:
 
 ```rust
 fn main() {
@@ -6197,9 +6197,9 @@ fn main() {
 }
 ```
 
-So this closure takes nothing: `||` and prints a message: `This is a closure`.
+خب `Closure` بالا هیچی نمیگیره و `This is a closure` رو پرینت میکنه.
 
-In between the `||` we can add input variables and types, like inside `()` for a function:
+ما میتونیم ورودی هایی که میخوایم رو درون `||` تعریف کنیم:
 
 ```rust
 fn main() {
@@ -6210,15 +6210,13 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 5
 10
 ```
-
-When the closure becomes more complicated, you can add a code block. Then it can be as long as you want.
-
+وقتی `Closure` ها طولانی و پیچیده میشند میتونیم از بلوک کد استفاده کنیم، اینطوری میتونیم هر چقدر که میخوایم طولانی بشه:
 ```rust
 fn main() {
     let my_closure = || {
@@ -6232,7 +6230,7 @@ fn main() {
 }
 ```
 
-But closures are special because they can take variables that are outside the closure even if you only write `||`. So you can do this:
+اما `Closure` ها خاص هستند، به این دلیل که اونها میتونند به متغییر هایی که بیرون `Closure` هستند هم دسترسی داشته باشند:
 
 ```rust
 fn main() {
@@ -6244,18 +6242,18 @@ fn main() {
 }
 ```
 
-So this prints `16`. You didn't need to put anything in `||` because it can just take `number_one` and `number_two` and add them.
+کد بالا `16` رو پرینت میکنه.
 
-By the way, that is where the name **closure** comes from, because they take variables and "enclose" them inside. And if you want to be very correct:
+در ضمن، اسم "بسته" هم از اینجا میاد، به این دلیل که اونها میتونند متغییر های بیرونی رو داخل خودشون "محصور" کنند. اگه بخوایم دقیق‌تر باشیم:
+- یک `||`‌ای که متغییری رو که بیرون از خودش هست، در خودش محصور نمیکنه(استفاده نمیکنه) بهش میگیم `Anonymous Function`، این به معنای این هست که اسمی ندارند، مثل یک فانکشن معمولی هستند.
+- یک `||`‌ای که متغییری رو که بیرون از خودش هست استفاده میکنه بهش میگیم `Closure`.
 
-- a `||` that doesn't enclose a variable from outside is an "anonymous function". Anonymous means "doesn't have a name". It works more like a regular function.
-- a `||` that does enclose a variable from outside is a "closure". It "encloses" the variables around it to use them.
 
-But people will often call all `||` functions closures, so you don't have to worry about the name. We will just say "closure" for anything with a `||`, but remember that it can mean an "anonymous function".
+اما اغلب همه وقتی `||` رو میبینند میگند یک `Closure` هست، پس زیاد در مورد اسم نگران نباشید. اما اگه اسم `Anonymous Function` هم شنیدید، وحشت نکنید.
 
-Why is it good to know the difference? It's because an anonymous function actually makes the same machine code as a function with a name. They feel "high level", so sometimes people think that the machine code will be complicated. But the machine code that Rust makes from it is just as fast as a regular function.
+خب چه فایده‌ای داره که تفاوتشون رو بدونیم؟ خب به این دلیل هست که `Anonymous Function` ها دقیقا کد ماشینی مثل یک فانکشن معمولی رو تولید میکنند. اما خب در مورد `Closure` ها اوضاع فرق میکنه.
 
-So let's look at some more things that closures can do. You can also do this:
+خب بیاید ببینیم `Closure` ها چه کار هایی میتونند انجام بدند:
 
 ```rust
 fn main() {
@@ -6267,11 +6265,13 @@ fn main() {
 }
 ```
 
-This closure takes `number_one` and `number_two`. We also gave it a new variable `x` and said that `x` is 5. Then it adds all three together to print `21`.
+در بالا یک `Closure` میبینیم که `number_one` و `number_two` رو که بیرون از خودش هستند، رو استفاده میکنه و همچنین یک `x` هم به عنوان ورودی میگیره در همه اینها رو با هم جمع میزنه چاپ میکنه.
 
-Usually you see closures in Rust inside of a method, because it is very convenient to have a closure inside. We saw closures in the last section with `.map()` and `.for_each()`. In that section we wrote `|x|` to bring in the next item in an iterator, and that was a closure.
+معمولا ما `Closure` ها رو در `Rust` درون یک `Method` میبینیم. در بخش قبلی ما از `Closure` ها درون `()map.` و `()for_each.` استفاده کردیم.
 
-Here is another example: the `unwrap_or` method that we know that you can use to give a value if `unwrap` doesn't work. Before, we wrote: `let fourth = my_vec.get(3).unwrap_or(&0);`. But there is also an `unwrap_or_else` method that has a closure inside. So you can do this:
+بزارید یک مثال دیگه ببینیم، میدونیم که میتونیم به `unwrap_or` یک مقدار بدیم که اگه نتونستیم مقدار رو بگیریم، برنامه `Panic` نکنه و مقدار ما رو به عنوان خروجی بده.
+
+ما قبلا از `my_vec.get(3).unwrap_or(&0)` استفاده کردیم، اما یک `unwrap_or_else` هم وجود داره که به مقدار نمیگیره و یک `Closure` داخل خودش میگیره، پس میتونیم همچین کاری کنیم:
 
 ```rust
 fn main() {
@@ -6289,9 +6289,11 @@ fn main() {
 }
 ```
 
-Of course, a closure can be very simple. You can just write `let fourth = my_vec.get(3).unwrap_or_else(|| &0);` for example. You don't always need to use a `{}` and write complicated code just because there is a closure. As long as you put the `||` in, the compiler knows that you have put in the closure that you need.
+البته `Closure` ها میتونند خیلی ساده هم باشند. ما میتونیم فقط `let fourth = my_vec.get(3).unwrap_or_else(|| &0)` رو بنویسیم.
 
-The most frequent closure method is maybe `.map()`. Let's take a look at it again. Here is one way to use it:
+لازم نیست همیشه از `{}` استفاده کنیم و کد های پیچیده بنویسیم.
+
+رایج ترین متودی درش از `Closure` استفاده میکنیم احتمالا `()map.` هست:
 
 ```rust
 fn main() {
@@ -6305,8 +6307,11 @@ fn main() {
 }
 ```
 
-Another good example is with `.for_each()` after `.enumerate()`. The `.enumerate()` method gives an iterator with the index number and the item. For example: `[10, 9, 8]` becomes `(0, 10), (1, 9), (2, 8)`. The type for each item here is `(usize, i32)`. So you can do this:
+متود `()enumerate.` رو میتونیم روی یک `Iterator` استفاده کنیم. این متود ایتم و `Index`‌ اون ایتم رو در یک `Tuple` میده.
 
+برای مثال اگه از `()enumerate.` روی `[10 ,9, 8]` استفاده کنیم، نتیجش میشه: `(0, 10), (1, 9), (2, 8)`
+
+در کد زیر میتونیم استفاده از `()enumerate.` و `()for_each.` رو ببینیم:
 ```rust
 fn main() {
     let num_vec = vec![10, 9, 8];
@@ -6318,7 +6323,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Index number 0 has number 10
@@ -6326,9 +6331,11 @@ Index number 1 has number 9
 Index number 2 has number 8
 ```
 
-In this case we use `for_each` instead of `map`. `map` is for **doing something to** each item and passing it on, and `for_each` is **doing something when you see each item**. Also, `map` doesn't do anything unless you use a method like `collect`.
+متود `()for_each` برای انجام دادن یک عملیات روی ایتم هست و خروجی نمیده.
 
-Actually, this is the interesting thing about iterators. If you try to `map` without a method like `collect`, the compiler will tell you that it doesn't do anything. It won't panic, but the compiler will tell you that you didn't do anything.
+متود `()map.` برای انجام یک عملیات روی هر ایتم و دادن اون به عنوان خروجی هست. همچنین `()map.` کاری انجام نمیده تا زمانی که از متودی مثل `()collect.` استفاده کنیم.
+
+در حقیقت این نکته‌ی جالبی هست، اگه از `()map.` بدون متودی مثل `()collect.` استفاده کنیم، کامپایلر یک اخطار بهمون میده که این هیچ کاری رو انجام نمیده، `Panic` نمیکنه اما کامپایلر میگه که این کاری انجام نمیده.
 
 ```rust
 fn main() {
@@ -6342,7 +6349,7 @@ fn main() {
 }
 ```
 
-It says:
+اخطاری که میده:
 
 ```text
 warning: unused `std::iter::Map` that must be used
@@ -6358,24 +6365,30 @@ warning: unused `std::iter::Map` that must be used
   = note: iterators are lazy and do nothing unless consumed
 ```
 
-This is a **warning**, so it's not an error: the program runs fine. But why doesn't num_vec do anything? We can look at the types to see.
+در بالا یک اخطار میبینیم و خطا نیست، پس برنامه اجرا میشه. اما چرا `num_vec` اون خط کاری انجام نمیده؟ بزارید ببینیم چیکار کردیم:
 
-- `let num_vec = vec![10, 9, 8];` Right now it is a `Vec<i32>`.
-- `.iter()` Now it is an `Iter<i32>`. So it is an iterator with items of `i32`.
-- `.enumerate()` Now it is an `Enumerate<Iter<i32>>`. So it is a type `Enumerate` of type `Iter` of `i32`s.
-- `.map()` Now it is a type `Map<Enumerate<Iter<i32>>>`. So it is a type `Map` of type `Enumerate` of type `Iter` of `i32`s.
+- کد `;let num_vec = vec![10, 9, 8]`،‌ یک `Vec<i32>` میده
+- کد `()iter.`، یک `Iter<i32>`میده
+- کد `()enumerate.`، یک `Enumerate<Iter<i32>>` میده
+- کد `()map.`، یک `Map<Enumerate<Iter<i32>>>` میده
 
-All we did was make a more and more complicated structure. So this `Map<Enumerate<Iter<i32>>>` is a structure that is ready to go, but only when we tell it what to do. Rust does this because it needs to be fast. It doesn't want to do this:
+تمام کاری که کردیم این هست که ساختار پیچیده و پیچیده‌تر ساختیم. پس ``Map<Enumerate<Iter<i32>>>` یک ساختار هست که اماده‌ی استفاده هست، اما ما باید بگیم که باید با این ساختار چیکار کنیم، اگه نگیم `Rust` بدون دلیل این ساختار رو درست نمیکنه که ما باهاش هیچ کاری نکنیم. `Rust` اینکار رو انجام میده به این دلیل که نیاز داره سریع باشه.
 
-- iterate over all the `i32`s in the Vec
-- then enumerate over all the `i32`s from the iterator
-- then map over all the enumerated `i32`s
+و خب اینکار رو نمیکنه:
 
-Rust only wants to do one calculation, so it creates the structure and waits. Then if we say `.collect::<Vec<i32>>()` it knows what to do, and starts moving. This is what `iterators are lazy and do nothing unless consumed` means. The iterators don't do anything until you "consume" them (use them up).
+- یک `Iterator` رو روی `Vec<i32>` اجرا نمیکه
+- روی کل خروجی `Iterator`، متود `()enumerate.` رو اجرا نمیکنه
+- روی خروجی های `()enumerate.`، متود `()map.` رو اجرا نمیکنه
 
-You can even create complicated things like `HashMap` using `.collect()`, so it is very powerful. Here is an example of how to put two vecs into a `HashMap`. First we make the two vectors, and then we will use `.into_iter()` on them to get an iterator of values. Then we use the `.zip()` method. This method takes two iterators and attaches them together, like a zipper. Finally, we use `.collect()` to make the `HashMap`.
+اگه تمام این کار ها رو انجام بده، باز هم نتیجه‌ی این کار استفاده نمیکنه. `Rust` فقط میخواد یک محاسبه رو انجام بده، پس این کار ها رو انجام نمیده تا زمانی که ما از چیزی مثل `()collect::<Vec<i32>>.` استفاده کنیم. وقتی از چنین چیزی استفاده میکنیم `Rust` میفهمه که باید چیکار کنه.
 
-Here is the code:
+به همین دلیل هست که اخطار `iterators are lazy and do nothing unless consumed` رو میده، این یعنی اینکه `Iterator` کاری انجام نمیده تا زمانی که از خروجیش استفاده بشه.
+
+همچنین با استفاده از `()collect.` میتونیم خروجی رو به چیز های دیگه‌ای هم تبدیل کنیم، مثل `HashMap`. پس خیلی قدرتمند هست.
+
+در زیر یک مثالی رو میبینیم که دو `Vec` رو در یک `HashMap` میکنیم.
+
+اول دوتا `Vec` میسازیم، بعدش از `()into_iter.` استفاده میکنیم تا یک `Iterator` بگیریم، بعدش از `()zip.` استفاده میکنیم که دوتا `Iterator` رو به هم میچسبونه. در نهایت از `()collect.` استفاده میکنیم که خروجی رو در یک `HashMap` بریزیم:
 
 ```rust
 use std::collections::HashMap;
@@ -6393,13 +6406,15 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 For key 2 we get two.
 ```
 
-You can see that we wrote `<HashMap<_, _>>` because that is enough information for Rust to decide on the type `HashMap<i32, &str>`. You can write `.collect::<HashMap<i32, &str>>();` if you want, or you can write it like this if you prefer:
+میتونیم ببینیم که کد `<HashMap<_, _>>` نوشته شده. با اینکار `Rust` خودش نوع هارو حدس میزنه، یعنی تهش `HashMap<i32, &str>` میشه.
+
+البته اگه بخوایم میتونیم `;collect::<HashMap<i32, &str>>()` رو بنویسیم یا حتی در نوع رو در تعریف متغییر مشخص کنیم:
 
 ```rust
 use std::collections::HashMap;
@@ -6414,7 +6429,9 @@ fn main() {
 }
 ```
 
-There is another method that is like `.enumerate()` for `char`s: `char_indices()`. (Indices means "indexes"). You use it in the same way. Let's pretend we have a big string that made of 3-digit numbers.
+یک متود دیگه هم وجود داره که شبیه به `()enumerate.` هست، البته برای نوع `char` که اون هم `char_indices()` هست.
+
+برای مثال فکر کنید که ما یک `char` داریم که از اعداد تشکیل شده و میخوایم اون اعداد رو سه رقم سه رقم جدا کنیم:
 
 ```rust
 fn main() {
@@ -6429,7 +6446,7 @@ fn main() {
 }
 ```
 
-This prints `140     399     923     481     800     622     623     218     009     598    281`.
+خروجیش: `140     399     923     481     800     622     623     218     009     598    281`.
 
 ### |_| in a closure
 
