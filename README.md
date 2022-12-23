@@ -7354,12 +7354,15 @@ It is even.
 In binary it is 1010.
 ```
 
-## Types of &str
+## نوع های "&str" | Types of &str
 
-There is more than one type of `&str`. We have:
+خب، باید بدونیم که نوع های بیشتری از `&str` وجود داره:
 
-- String literals: you make these when you write `let my_str = "I am a &str"`. They last for the whole program, because they are written directly into the binary. They have the type `&'static str`. `'` means its lifetime, and string literal have a lifetime called `static`.
-- Borrowed str: This is the regular `&str` form without a `static` lifetime. If you create a `String` and get a reference to it, Rust will convert it to a `&str` when you need it. For example:
+- نوع `String Literal`: این نوع از `str` ها تا اخر برنامه در حافظه وجود دارند چون در فایل باینری هستند، برای مثال زمانی که ما کد `let my_str = "I am a &str"` رو مینویسیم یک `String Literal` ساختیم. نوع این `str` ها `&'static str` هست. `'` برای مشخص کردن طول عمر استفاده میشه و طول عمر این `str`، `static` هست.
+
+- نوع `Borrowed str`: اینها `str` های معمولی هستند، بدون داشتن طول عمر `static`. برای مثال اگه ما یک `String` بسازیم و یک `Reference` بهش رو بگیریم. `Rust` زمانی که لازم باشه اون رو به `&str` تبدیل میکنه.
+
+بزارید در مورد تبدیل `&String` به `&str` یک مثال ببینیم:
 
 ```rust
 fn prints_str(my_str: &str) { // it can use &String like a &str
@@ -7371,8 +7374,7 @@ fn main() {
     prints_str(&my_string); // we give prints_str a &String
 }
 ```
-
-So what is a lifetime? We will learn that now.
+خب حالا `LifeTime` یا همون طول عمر چیه؟ در بخش بعدی میفهمیم.
 
 ## Lifetimes
 
