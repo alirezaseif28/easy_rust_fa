@@ -6482,11 +6482,11 @@ help: consider changing the closure to take and ignore the expected argument
 
 خب کمک خوبی هست، پس ما `||` رو به `|_|` تغییر میدیم. بعدش کد کار میکنه.
 
-### Helpful methods for closures and iterators
+### متود های مفید برای "`Iterator`" ها و "`Closures`" ها | Helpful methods for closures and iterators
 
-Rust becomes a very fun to language once you become comfortable with closures. With closures you can *chain* methods to each other and do a lot of things with very little code. Here are some closures and methods used with closures that we didn't see yet.
+زبان `Rust` به یک زبان باحال تبدیل میشه وقتی که بتونیم با `Closure` ها کار کنیم. با استفاده از `Closure` ها میتونیم متود ها رو به هم زنجیر کنیم و کار های جالبی باهاش انجام بدیم. الان میخوایم متود های مفیدی که میتونیم استفاده کنیم رو ببینیم:
 
-`.filter()`: This lets you keep the items in an iterator that you want to keep. Let's filter the months of the year.
+متود `.filter()`: این به ما اجازه میده که ایتم ها رو فیلتر کنیم، یک شرط میزاریم و هر ایتمی که با شرط مشکلی نداشت به عنوان خروجی در نظر گرفته میشه و اگه نتونه از شرط بگذره استفاده نمیشه. بزارید ماه های سال رو فیلتر کنیم:
 
 ```rust
 fn main() {
@@ -6503,11 +6503,13 @@ fn main() {
 }
 ```
 
-This prints `["June", "July"]`.
+خروجیش: `["June", "July"]`.
 
-`.filter_map()`. This is called `filter_map()` because it does `.filter()` and `.map()`. The closure must return an `Option<T>`, and then `filter_map()` takes the value out of each `Option` if it is `Some`. So for example if you were to `.filter_map()` a `vec![Some(2), None, Some(3)]`, it would return `[2, 3]`.
+متود `.filter_map()`، هم کار `.filter()` و هم `.map()` رو انجام میده. این متود یک `Option` میگیره و یک `Option` برمیگردونه، حالا کدومارو از فیلتر رد میکنه؟ اون `Option` هایی که مقدارشون `Some` هست.
 
-We will write an example with a `Company` struct. Each company has a `name` so that field is `String`, but the CEO might have recently quit. So the `ceo` field is `Option<String>`. We will `.filter_map()` over some companies to just keep the CEO names.
+برای مثال اگه این متود رو روی `vec![Some(2), None, Some(3)]` اجرا کنیم خروجی `[2, 3]` رو میده.
+
+ما یک مثال با استفاده از ساختار `Company` درست میکنیم. هر `Company` یک `name` داره که نوعش `String` هست، اما `CEO` شرکت شاید به تازگی شرکت رو ترک کرده باشه، پس فیلد `ceo` باید یک `Option<String>` باشه. ما از `.filter_map()` استفاده میکنیم که فقط اسم `CEO` های شرکت هایی رو بگیریم که مقدار فیلد `ceo` شون برابر `Some` هست.
 
 ```rust
 struct Company {
@@ -6549,11 +6551,15 @@ fn main() {
 }
 ```
 
-This prints `["Unknown", "Doug Suttles"]`.
+خروجیش: `["Unknown", "Doug Suttles"]`.
 
-Since `.filter_map()` needs an `Option`, what about `Result`? No problem: there is a method called `.ok()` that turns `Result` into `Option`. It is called `.ok()` because all it can send is the `Ok` result (the `Err` information is gone). You remember that `Option` is `Option<T>` while `Result` is `Result<T, E>` with information for both `Ok` and `Err`. So when you use `.ok()`, any `Err` information is lost and it becomes `None`.
+از اونجایی که `.filter_map()` به یک `Option` نیاز داره، پس ما باید برای `Result` چیکار کنیم؟
 
-Using `.parse()` is an easy example for this, where we try to parse some user input. `.parse()` here takes a `&str` and tries to turn it into an `f32`. It returns a `Result`, but we are using `filter_map()` so we just throw out the errors. Anything that is `Err` becomes `None` and is filtered out by `.filter_map()`.
+خب مشکلی نداریم، چون یک متودی به نام `.ok()` وجود داره که یک `Result` رو به `Option` تبدیل میکنه. اسمش از اینجا میاد که فقط روی مقدار `Ok` کار میکنه. یعنی با مقدار `Err`، نوع `Result` کاری نداره.
+
+یادمون هست که `Option` یک `Option<T>` هست اما `Result` یک `Result<T, E>` هست. پس ما نمیتونیم مقدار `Err` رو در یک `Option` بریزیم و اگه مقدار یک `Reuslt` برابر `Err` باشه ما اون رو به طور کلی به `None` تبدیل میکنیم تا بتونیم نوع `Result` رو به یک `Option` تبدیل کنیم.
+
+استفاده از `.parse()` مثال خوبی برای این مبحث هست، ما در مثال زیر ورودی های کاربر رو شبیه سازی کردیم و میخوایم اون ها رو به `f32` تبدیل کنیم. که خب باید از متود `.parse()` استفاده کنیم که یک `Result` برمیگردونه، اما از اونجایی که ما داریم از `.filter_map()` استفاده میکنیم باید `Result` رو تبدیل به `Option` کنیم. خب ما از متود `.ok()` استفاده میکنیم که هر `Result`ای که مقدارش `Err` باشه رو به یک `Option` که مقدارش `None` هست تبدیل میکنه و هر `Result`ای که مقدارش `Ok` هست رو به یک `Option` که مقدارش `Some` هست تبدیل میکنه:
 
 ```rust
 fn main() {
@@ -6568,11 +6574,15 @@ fn main() {
 }
 ```
 
-This prints `[8.9, 8.0, 7.6]`.
+خروجیش: `[8.9, 8.0, 7.6]`.
 
-On the opposite side of `.ok()` is `.ok_or()` and `ok_or_else()`. This turns an `Option` into a `Result`. It is called `.ok_or()` because a `Result` gives an `Ok` **or** an `Err`, so you have to let it know what the `Err` value will be. That is because `None` in an `Option` doesn't have any information. Also, you can see now that the *else* part in the names of these methods means that it has a closure.
+در سمت مخالف `.ok()`، متود `.ok_or()` و `.ok_or_else()` هست. این متود ها یک `Option` رو به یک `Result` تبدیل میکنند.
 
-We can take our `Option` from the `Company` struct and turn it into a `Result` this way. For long-term error handling it is good to create your own type of error. But for now we just give it an error message, so it becomes a `Result<String, &str>`.
+به این دلیل اسمش `.ok_or` هست که نوع `Result` مقدارش یا `Ok` هست **یا** `Err` هست. خب اینجا یه مشکلی پیش میاد اونم این هست که مقدار `None` هیچ اطلاعاتی نداره،‌ پس اگه مقدار یک `Option`، `None` بود. باید به یک `Result`‌ای که مقدارش `Err` هست تبدیل بشه اما مقدار و نوع `Err` باید چی باشه؟ خب ما باید مقدار رو درون `.ok_or()` مشخص کنیم.
+
+همچنین متود `ok_or_else()` هم شبیه به `.ok_or()` هست با این تفاوت که به عنوان ورودی به جای یک مقدار باید یک `Closure` بهش بدیم.
+
+برای کنترل کردن `Error` ها در یک برنامه واقعی بهتره نوع `Error` یک `Struct` باشه و ما باید اون رو بسازیم ما برای این مثال ما فقط یک پیام خطا که از نوع `&str` هست میدیم. پس نوع نهایی `.ok_or()` میشه `Result<String, &str>`.
 
 ```rust
 // Everything before main() is exactly the same
@@ -6618,16 +6628,16 @@ fn main() {
 }
 ```
 
-This line is the biggest change:
+خطی که تغییر بزرگ رو ایجاد کرد این خط هست:
 
 ```rust
 // 🚧
 .for_each(|company| results_vec.push(company.get_ceo().ok_or("No CEO found")));
 ```
 
-It means: "For each company, use `get_ceo()`. If you get it, then pass on the value inside `Ok`. And if you don't, pass on "No CEO found" inside `Err`. Then push this into the vec."
+این خط به این معنا هست که: برای هر ایتم، مقدار `ceo` رو از طریق `.get_ceo()` بگیر، اگه مقدارش `Some` بود اون رو درون یک `Result` که مقدارش `Ok` هست قرار بده و بعد به عنوان خروجی بده بره. اما اگه مقداری که گرفتی `None` بود، بیا مقدار `No CEO found` رو درون `Result` قرار بده که مقدارش `Err` هست و تهش هم اینو به عنوان خروجی بده. و این خروجی هایی که صحبت کردیم درون متغییر `results_vec`، `push` میشند.
 
-So when we print `results_vec` we get this:
+پس وقتی متغییر `results_vec` رو پرینت کنیم، این رو میگیریم:
 
 ```text
 Ok("Unknown")
@@ -6635,8 +6645,7 @@ Ok("Doug Suttles")
 Err("No CEO found")
 Err("No CEO found")
 ```
-
-So now we have all four entries. Now let's use `.ok_or_else()` so we can use a closure and get a better error message. Now we have space to use `format!` to create a `String`, and put the company name in that. Then we return the `String`.
+خب حالا بیاید از `.ok_or_else()` استفاده کنیم که پیام های خطای بهتری بدیم بیرون. در برای ساخت پیام خطا از ماکروی `format!` استفاده میکنیم که یک `String` بسازیم و اسم شرکت هم درش قرار میدیم،‌ بعدش اون `String` رو برمیگردونیم:
 
 ```rust
 // Everything before main() is exactly the same
@@ -6685,7 +6694,7 @@ fn main() {
 }
 ```
 
-This gives us:
+خروجیش:
 
 ```text
 Ok("Unknown")
@@ -6694,9 +6703,9 @@ Err("No CEO found for The Red-Headed League")
 Err("No CEO found for Stark Enterprises")
 ```
 
-`.and_then()` is a helpful method that takes an `Option`, then lets you do something to its value and pass it on. So its input is an `Option`, and its output is also an `Option`. It is sort of like a safe "unwrap, then do something, then wrap again".
+متود `.and_then()` یک متود مفید هست که یک `Option` میگیره و اجازه یه کاری باهاش انجام بدیم بعدش دوباره یک `Option` به عنوان خروجی میده بیرون.
 
-An easy example is a number that we get from a vec using `.get()`, because that returns an `Option`. Now we can pass it to `and_then()`, and do some math on it if it is `Some`. If it is `None`, then the `None` just gets passed through.
+یک مثال ساده وقتی هست از `.get()` برای گرفتن یک عدد از یک `Vec` استفاده میکنیم، به این دلیل مثال خوبی هست که یک `Option` برمیگردونه که ما میتونیم اون رو بدیم به `.and_then()` که یه کاری باهاش انجام بدیم، البته اگه مقدار `Option`ای که بهش میدیم `Some` باشه. اگه مقدار `None` باشه همون `None` برمیگرده.
 
 ```rust
 fn main() {
@@ -6718,12 +6727,12 @@ fn main() {
 }
 ```
 
-This prints `[Some(14), Some(15), Some(6), None, None]`. You can see that `None` isn't filtered out, just passed on.
+خروجیش: `[Some(14), Some(15), Some(6), None, None]`
+میتونیم ببینیم که مقادیر `None` فیلتر نشدند و توی نتیجه‌ی نهایی هم دیده میشند.
 
-`.and()` is sort of like a `bool` for `Option`. You can match many `Option`s to each other, and if they are all `Some` then it will give the last one. And if one of them is a `None`, then it will give `None`.
+متود `.and()` یک جورایی مثل `&&` برای `Option` هست. ما میتونیم چندین `Option` رو در شرط قرار بدیم اگه همه اونها مقدارشون `Some` باشه، مقدار اخرین `Option` رو میگیریم و اگه حتی یکی از اونها مقدارشون `None` باشه، مقدار `None` رو میگیریم.
 
-First here is a `bool` example to help imagine. You can see that if you are using `&&` (and), even one `false` makes everything `false`.
-
+اول بزارید برای نوع `bool` اینکار رو انجام بدیم، که مثال رو درست متوجه بشیم:
 ```rust
 fn main() {
     let one = true;
@@ -6736,8 +6745,9 @@ fn main() {
 }
 ```
 
-Now here is the same thing with `.and()`. Imagine we did five operations and put the results in a Vec<Option<&str>>. If we get a value, we push `Some("success!")` to the vec. Then we do this two more times. After that we use `.and()` to only show the indexes that got `Some` every time.
+در پایین همون هم چیزی مشابهی رو میبینیم اما با استفاده از `.and()` و نوع `Option`.
 
+فکر کنید که ما پنچ عملیات رو سه بار انجام دادیم و نتیجشون رو داخل یک `Vec<Option<&str>>` ریختیم:
 ```rust
 fn main() {
     let first_try = vec![Some("success!"), None, Some("success!"), Some("success!"), None];
@@ -6750,7 +6760,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 None
@@ -6760,13 +6770,23 @@ Some("success!")
 None
 ```
 
-The first one (index 0) is `None` because there is a `None` for index 0 in `second_try`. The second is `None` because there is a `None` in `first_try`. The next is `Some("success!")` because there is no `None` for `first_try`, `second try`, or `third_try`.
+اولی `None` هست به این دلیل که ما یک مقدار `None` در `second_try[0]` داریم.
 
-`.any()` and `.all()` are very easy to use in iterators. They return a `bool` depending on your input. In this example we make a very large vec (about 20,000 items) with all the characters from `'a'` to `'働'`. Then we make a function to check if a character is inside it.
+دومی `None` هست به این دلیل که ما یک مقدار `None` در `first_try[1]` داریم.
 
-Next we make a smaller vec and ask it whether it is all alphabetic (with the `.is_alphabetic()` method). Then we ask it if all the characters are less than the Korean character `'행'`.
+سومی `success!` هست به این دلیل که ما مقدار `None`ای نداریم.
 
-Also note that you put a reference in, because `.iter()` gives a reference and you need a `&` to compare with another `&`.
+بقیه رو هم میتونید بفهمید که چرا چنین خروجی رو دادند، اگه نفهمیدید دوباره توضیح متود `.and()` رو بخونید.
+
+استفاده از متود های `.any()` و `.all()` خیلی اسون هست. اونا براساس وجودی که بهشون میدن یک مقدار از نوع `bool` میدن. در مثال زیر ما یک `Vec` بزرگ میسازیم، که کاراکتر هایی از `a` تا `働` رو در خودش داره. بعد یک فانکشن میسازیم که چک کنه ایا کاراکتر ورودی در این `Vec` وجود داره یا نه.
+
+بعد یک `Vec` کوچیک‌تر میسازیم و چک میکنیم که ایا همه‌ی ایتم هاش `Alphabetic` هستند یا نه، برای این کار از متود `.is_alphabetic()` استفاده میکنیم که یک کاراکتر میگیره و میگه که ایا این کاراکتر `Alphabetic` هست یا خیر.
+
+بعد چک میکنیم که ایا همه‌ی کاراکتر هایی که در `Vec` کوچیک هستند، از حرف کره‌ای `행`، کوچیک‌تر هستند یا خیر.
+
+همچنین به این نکته توجه کنید که ما وقتی از `.iter()` استفاده میکنیم یک `Reference` به مقدار داریم پس برای مقایسه باید از `&` استفاده کنیم.
+
+بزارید کد رو ببینیم:
 
 ```rust
 fn in_char_vec(char_vec: &Vec<char>, check: char) {
@@ -6785,7 +6805,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Is i inside? true
@@ -6795,7 +6815,13 @@ All alphabetic? false
 All less than the character 행? true
 ```
 
-By the way, `.any()` only checks until it finds one matching item, and then it stops. It won't check them all if it has already found a match. If you are going to use `.any()` on a `Vec`, it might be a good idea to push the items that might match near the front. Or you can use `.rev()` after `.iter()` to reverse the iterator. Here's one vec like that:
+در ضمن، متود `.any()` فقط تا زمانی به چک کردن ادامه میده که یک ایتم هماهنگ با شرط پیدا کنه. بعد از اینکه پیدا کرد، دیگه ادامه نمیده. پس لزوما همه رو چک نمیکنه.
+
+اگه از `.any()` روی یک `Vec` استفاده میکنیم،‌ ایده‌ی خوبی هست که ایتم هایی که ممکنه با شرط هماهنگ باشند رو اول `Vec` بزاریم که همه رو چک نکنه تا برسه به اون...
+
+همچنین ما میتونیم با استفاده از `.rev()` یک `Vec` رو برعکس کنیم.
+
+کد زیر رو در نظر بگیرید:
 
 ```rust
 fn main() {
@@ -6804,7 +6830,8 @@ fn main() {
 }
 ```
 
-So this `Vec` has 1000 `6` followed by one `5`. Let's pretend that we want to use `.any()` to see if it contains 5. First let's make sure that `.rev()` is working. Remember, an `Iterator` always has `.next()` that lets you check what it does every time.
+پس وکتور `big_vec` `1000` تا عدد `6` رو در خودش داره که تهش یه `5` هم اضافه شده. بزارید تصور کنیم که میخوایم چک کنیم که عدد `5` در `Vec` وجود داره یا خیر. اول بزارید اطمینان پیدا کنیم که `.rev()` کار میکنه. یادمون هست که یک `Iterator` همیشه متود `.next()` رو داره. پس میتونیم با این متود چک کنیم.
+حواسمون هست که `Vec` رو با استفاده از `.rev()` برعکس کردیم:
 
 ```rust
 fn main() {
@@ -6816,15 +6843,15 @@ fn main() {
     println!("{:?}", iterator.next());
 }
 ```
-
-It prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 Some(5)
 Some(6)
 ```
+خب همونطور که حدس میزدیم یک `5` ته `Vec` وجود داره و بعدش هزارتا `6` وجود داره.
 
-We were right: there is one `Some(5)` and then the 1000 `Some(6)` start. So we can write this:
+پس چیزی که میخواستیم رو میتونیم اینطوری بنویسیم:
 
 ```rust
 fn main() {
@@ -6835,7 +6862,11 @@ fn main() {
 }
 ```
 
-And because it's `.rev()`, it only calls `.next()` one time and stops. If we don't use `.rev()` then it will call `.next()` 1001 times before it stops. This code shows it:
+و به این دلیل که وکتور رو برعکس کردیم با یکبار صدا زدن `.next()` ما عدد `5` رو میگیریم و چون با شرط هماهنگ هست دیگه به چک کردن ادامه نمیده.
+
+اگه از `.rev()` استفاده نمیکردیم،‌ باید `1001` بار چک میکردیم...
+
+در کد زیر این قضیه ثابت میشه:
 
 ```rust
 fn main() {
@@ -6855,14 +6886,19 @@ fn main() {
 }
 ```
 
-This prints `Final counter is: 1001` so we know that it had to call `.next()` 1001 times before it found 5.
+چنین چیزی رو پرینت میکنه: `Final counter is: 1001`
 
-`.find()` tells you if an iterator has something, and `.position()` tells you where it is. `.find()` is different from `.any()` because it returns an `Option` with the value inside (or `None`). Meanwhile, `.position()` is also an `Option` with the position number, or `None`. In other words:
+پس ما میفهمیم که مجبور شده `1001` بار متود `.next()` رو صدا بزنه و ایتمی که میده رو با شرط چک کنه.
 
-- `.find()`: "I'll try to get it for you"
-- `.position()`: "I'll try to find where it is for you"
+متود `.find()` یک شرط میگیره و اگه ایتمی با اون شرط هماهنگ بود،‌ اون ایتم رو در یک `Option` میده بیرون.
 
-Here is a simple example:
+متود `.position()` یک شرط میگیره و اگه ایتمی با اون شرط هماهنگ بود،‌ `Index` اون ایتم رو در یک `Option` میده بیرون.
+
+پس:
+- متود `.find()`: میگه من سعی میکنم چیزی رو که میخوای پیدا کنم و بیارم برات
+- متود `.position()`: میگه من سعی میکنم مکان چیزی رو که میخوای برات پیدا کنم
+
+بیاید با کد کار کنیم:
 
 ```rust
 fn main() {
@@ -6877,7 +6913,7 @@ fn main() {
 }
 ```
 
-This prints:
+کد بالا چنین چیزی رو پرینت میکنه:
 
 ```text
 Some(30) // This is the number itself
@@ -6886,8 +6922,10 @@ Some(2) // This is the position
 None
 ```
 
-With `.cycle()` you can create an iterator that loops forever. This type of iterator works well with `.zip()` to create something new, like this example which creates a `Vec<(i32, &str)>`:
+خب ما میدونیم که وقتی متود `.next()` یک `Iterator` مقدار `None` رو برگردونه، اون `Iterator` متوقف میشه.
+متود `.cycle()` این روند رو میشکونه و اگه یک `Iterator` به `None` برسه، کاری میکنه که `Iterator` دوباره از اول شروع کنه. پس یک حلقه‌ی بینهایت روی اون مجموعه میزنه.
 
+کد زیر مثال استفاده از `.cycle()` هست:
 ```rust
 fn main() {
     let even_odd = vec!["even", "odd"];
@@ -6898,14 +6936,15 @@ fn main() {
     println!("{:?}", even_odd_vec);
 }
 ```
+چون از `.cycle()` استفاده کردیم اون `Iterator` هیچوقت متوقف نمیشه، اما با این حال اون یکی `Iterator` بعد از شیش بار اجرا شدن متوقف میشه چون به `None` میرسه.
+با استفاده از متود `.zip()` هم میتونیم دوتا مجموعه رو با هم ترکیب کنیم، خروجی کد بالا رو ببینید میفهمید که `.zip()` چیکار میکنه.
 
-So even though `.cycle()` might never end, the other iterator only runs six times when zipping them together. That means that the iterator made by `.cycle()` doesn't get a `.next()` call again so it is done after six times. The output is:
-
+خروجی کد بالا:
 ```
 [(0, "even"), (1, "odd"), (2, "even"), (3, "odd"), (4, "even"), (5, "odd")]
 ```
 
-Something similar can be done with a range that doesn't have an ending. If you write `0..` then you create a range that never stops. You can use this very easily:
+همچنین اگه `0..` رو بنویسیم یک بازه‌ای درست میشه که هیچوقت تموم نمیشه:
 
 ```rust
 fn main() {
@@ -6917,15 +6956,18 @@ fn main() {
 }
 ```
 
-Both print ten characters, but the second one skipped 1300 places and prints ten letters in Armenian.
+هر دو متغییر ده کاراکتر رو در خودشون نگهداری میکنند اما دومی `1300` کاراکتر رو رد کرده و بعد ده کاراکتر رو گرفته که کاراکتر های ارمنی‌ای هستند.
+
+خروجی کد بالا:
 
 ```
 ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j']
 ['յ', 'ն', 'շ', 'ո', 'չ', 'պ', 'ջ', 'ռ', 'ս', 'վ']
 ```
 
-Another popular method is called `.fold()`. This method is used a lot to add together the items in an iterator, but you can also do a lot more. It is somewhat similar to `.for_each()`. In `.fold()`, you first add a starting value (if you are adding items together, then 0), then a comma, then the closure. The closure gives you two items: the total so far, and the next item. First here is a simple example showing `.fold()` to add items together.
+یک متود محبوب دیگه `.fold()` هست. این متود یک مقدار اولیه میگیره و هر بار اون مقدار و یک ایتم از مجموعه رو به `Closure` میفرسته. به این نکته توجه کنید که بعد از اینکه یک بار اجرا شد، دیگه هر بار خروجی `Closure` رو به عنوان مقدار اولیه میده.
 
+در کد زیر میتونیم یک مثال از نحوه‌ی استفاده از `.fold()` رو ببینیم:
 ```rust
 fn main() {
     let some_numbers = vec![9, 6, 9, 10, 11];
@@ -6937,15 +6979,15 @@ fn main() {
 }
 ```
 
-So:
+پس:
 
-- on step 1 it starts with 0 and adds the next number: 9.
-- Then it takes that 9 and adds the 6: 15.
-- Then it takes that 15, and adds the 9: 24.
-- Then it takes that 24, and adds the 10: 34.
-- Finally it takes that 34, and adds the 11: 45. So it prints `45`.
+- در قدم اول با مقدار اولیه `0` شروع کرد و بعد در `Closure` این مقدار رو با ایتمی که به عنوان ورودی اومده جمع کرد که نتیجش میده `9` و این مقدار به عنوان خروجی بیرون داده میشه
+- بعد مقدار اولیه میشه `9` و با ایتم بعدی که `6` هست جمع میشه که نتیجش میشه `15`
+- بعد مقدار اولیه میشه `15` و با ایتم بعدی که `9` هست جمع میشه که نتیجش میشه `24`
+- بعد مقدار اولیه میشه `24` و با ایتم که `10` هست،‌ جمع زده میشه که نتیجش میشه `34`
+- در اخر مقدار اولیه `34` میشه و با ایتم که `11` هست جمع زده میشه که نتیجش میشه `45` که خب چون دیگه ایتم دیگه وجود نداره `Iterator` متوقف میشه و مقدار `45` پرینت میشه
 
-But you don't just need to add things with it. Here is an example where we add a '-' to every character to make a `String`.
+اما کار های دیگه‌ای هم میشه باهاش کرد، برای مثال میشه کاراکتر `-` رو بین هر کاراکتر در یک `String` قرار داد:
 
 ```rust
 fn main() {
@@ -6963,27 +7005,26 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 -I- -d-o-n-'-t- -h-a-v-e- -a-n-y- -d-a-s-h-e-s- -i-n- -m-e-.-
 ```
 
-There are many other convenient methods like:
+متود های باحال دیگه هم وجود دارند، برای مثال:
+- `.take_while()` تا زمانی که شرط برقرار باشه از مجموعه ایتم رو میگیره (برای مثال `take while x > 5`)
+- `.cloned()` همه‌‌ی مقادیر یک `Iterator` رو کپی میکنه، برای مثال `&i32` رو میتونه به `i32` تبدیل کنه
+- `.by_ref()` که `Reference` یک `Iterator` رو میگیره که باعت میشه اون `Iterator` همچنان قابل استفاده بمونه
+- متود هایی که با `_while()` تموم میشند: `.skip_while()`، `map_while()` و...
+- `.sum()`: همه‌ی مقادیر رو با هم جمع میزنه
 
-- `.take_while()` which takes into an iterator as long as it gets `true` (`take while x > 5` for example)
-- `.cloned()` which makes a clone inside the iterator. This turns a reference into a value.
-- `.by_ref()` which makes an iterator take a reference. This is good to make sure that you can use a `Vec` or something similar after you use it to make an iterator.
-- Many other `_while` methods: `.skip_while()`, `.map_while()`, and so on
-- `.sum()`: just adds everything together.
+با استفاده از متود های `.chunks()` و `.windows()` میتونیم یک `Vec` رو به قسمت های کوچیک‌تر تقسیم کنیم، باید سایز رو هم به عنوان ورودی بهشون بدیم، برای مثال تصور کنید که ما یک `Vec` با `10` ایتم از `1` تا `10` داریم و از این متود ها استفاده میکنیم، سایز تقسیم رو هم `3` قرار میدیم، که ببینیم چیکار میکنند:
 
-`.chunks()` and `.windows()` are two ways of cutting up a vector into a size you want. You put the size you want into the brackets. Let's say you have a vector with 10 items, and you want a size of 3. It will work like this:
+- `.chunks()` به ما چهار `Slice` میده: `[0, 1, 2]` بعدش `[3, 4, 5]` بعدش `[6, 7, 8]` و در اخر `[9]`. پس تلاش میکنه هر بار یک `Slice` با سه ایتم بسازه، اما اگه ایتم ها کافی نباشند، `Panic` نمیکنه و هر چیزی که باقی مونده رو در `Slice` میده.
 
-- `.chunks()` will give you four slices: [0, 1, 2], then [3, 4, 5], then [6, 7, 8], and finally [9]. So it will try to make a slice of three items, but if it doesn't have three then it won't panic. It will just give you what is left.
+- `.windows()` اول یک `Slice` با مقادیر `[0, 1, 2]` میده. بعد ایتم اولی رو حدف میکنه و ایتم بعدی رو داخل `Slice` میاره، پس مقادیر بعدی میشن، `[1, 2, 3]`. این کار رو تا زمانی ادامه میده که اخرین ایتم جزو `Slice` باشه، و بعد متوقف میشه.
 
-- `.windows()` will first give you a slice of [0, 1, 2]. Then it will move over one and give you [1, 2, 3]. It will do that until it finally reaches the last slice of three and stop.
-
-So let's use them on a simple vector of numbers. It looks like this:
+خب بزارید ازشون روی یک `Vector` ساده استفاده کنیم:
 
 ```rust
 fn main() {
@@ -6999,7 +7040,7 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 [1, 2, 3]
@@ -7017,9 +7058,12 @@ This prints:
 [8, 9, 0]
 ```
 
-By the way, `.chunks()` will panic if you give it nothing. You can write `.chunks(1000)` for a vector with one item, but you can't write `.chunks()` with anything with a length of 0. You can see that right in the function if you click on [src] because it says `assert!(chunk_size != 0);`.
+در ضمن، متود `.chunks()`، اگه روی چیزی با طول `0` اجرا بشه `Panic` میکنه. ما میتونیم `.chunks(1000)` رو روی یک `Vec` با یک ایتم اجرا کنیم، اما نمیتونیم `.chunks()` رو روی یک چیزی با طول `0` اجرا کنیم.
 
-`.match_indices()` lets you pull out everything inside a `String` or `&str` that matches your input, and gives you the index too. It is similar to `.enumerate()` because it returns a tuple with two items.
+اگه کد این فانکشن رو بررسی کنیم متوجه این موضوع میشیم. به این دلیل که در فانکشن کد `;assert!(chunk_size != 0)` وجود داره.
+
+متود `.match_indices` توی یک `String` یا `&str` دنبال ورودی که بهش دادیم میگرده و اگه پیدا کرد،‌ هم خود اون رو برمیگردونه هم `Index` شروعش رو میده. شبیه به `.enumerate()` هست، چون یک `Tuple` میده که هم مقدار هست و هم `Index`.
+نحوه‌ی استفاده ازش رو میتونیم در کد زیر ببینیم:
 
 ```rust
 fn main() {
@@ -7029,13 +7073,15 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 [(0, "Rule"), (28, "Rule"), (62, "Rule")]
 ```
 
-`.peekable()` lets you make an iterator where you can see (peek at) the next item. It's like calling `.next()` (it gives an `Option`) except that the iterator doesn't move, so you can use it as many times as you want. You can actually think of peekable as "stoppable", because you can stop for as long as you want. Here is an example of us using `.peek()` three times for every item. We can use `.peek()` forever until we use `.next()` to move to the next item.
+متود `.peekable()`به ما اجازه میده که از یک `Iterator`، `Iterator`‌ای بسازیم که میتونیم تا زمانی که میخوایم روی یک ایتم بمونیم. یعنی میتونیم یک ایتم رو چندین بار با استفاده از `.peek()` بگیریم. بعد اگه خواستیم بریم روی ایتم بعدی میتونیم از `.next()` استفاده کنیم.
+
+در کد زیر مثالی از طرز استفاده از `.peekable()` رو میبینیم:
 
 ```rust
 fn main() {
@@ -7051,7 +7097,7 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی رو پرینت میکنه:
 
 ```text
 I love the number 1
@@ -7065,7 +7111,7 @@ I really love the number 100
 100 is such a nice number
 ```
 
-Here is another example where we use `.peek()` to match on an item. After we are done using it, we call `.next()`.
+کد زیر یک مثال دیگه هست:
 
 ```rust
 fn main() {
@@ -7089,7 +7135,7 @@ fn main() {
 }
 ```
 
-This prints:
+چیزی که پرینت میکنه:
 
 ```text
 Found a hamlet: Nevis with 25 people
@@ -7098,7 +7144,7 @@ Found a hamlet: Markerville with 45 people
 Found a town: Cardston with 3585 people
 ```
 
-Finally, here is an example where we also use `.match_indices()`. In this example we put names into a `struct` depending on the number of spaces in the `&str`.
+در این مثال ما از `match_indices()` استفاده میکنیم. ما اسم ها رو بر اساس تعداد `Space` درون `Struct` قرار میدیم:
 
 ```rust
 #[derive(Debug)]
@@ -7142,7 +7188,7 @@ fn main() {
 }
 ```
 
-This will print:
+چیزی که پرینت میکنه:
 
 ```text
 Names { one_word: ["Caesar", "Data"], two_words: ["Frodo Baggins", "Bilbo Baggins", "Jean-Luc Picard", "Rand Al\'Thor", "Paul Atreides"], three_words:
