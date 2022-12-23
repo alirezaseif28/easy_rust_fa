@@ -7195,9 +7195,9 @@ Names { one_word: ["Caesar", "Data"], two_words: ["Frodo Baggins", "Bilbo Baggin
 ["Barack Hussein Obama", "Bill Jefferson Clinton"] }
 ```
 
-## The dbg! macro and .inspect
+##  ماکروی "dbg!", ".inspect" | The dbg! macro and .inspect
 
-`dbg!` is a very useful macro that prints quick information. It is a good alternative to `println!` because it is faster to type and gives more information:
+ماکروی `dbg!` خیلی کاربردی هست برای پرینت کردن. همچنین یک جایگزین خوب برای `println!` هست، به این دلیل که سریع تایپ میشه و اطلاعات بیشتری رو هم میده:
 
 ```rust
 fn main() {
@@ -7206,9 +7206,9 @@ fn main() {
 }
 ```
 
-This prints `[src\main.rs:4] my_number = 8`.
+خروجیش: `[src\main.rs:4] my_number = 8`.
 
-But actually, you can put `dbg!` in many other places, and even wrap code in it. Look at this code for example:
+اما میتونیم از `dbg!` در موارد زیادی استفاده کنیم، و حتی درونش کد قرار بدیم، برای مثال به این کد توجه کنید:
 
 ```rust
 fn main() {
@@ -7220,8 +7220,13 @@ fn main() {
     let double_vec = new_vec.iter().map(|x| x * 2).collect::<Vec<i32>>();
 }
 ```
+این کد یک متغییر `Mutable` میسازه و تغییرش میده. بعد یک `Vec` درست میکنه و...
 
-This code creates a new mutable number and changes it. Then it creates a vec, and uses `iter` and `map` and `collect` to create a new vec. We can put `dbg!` almost everywhere in this code. `dbg!` asks the compiler: "What are you doing at this moment?" and tells you.
+ما میتونیم `dbg!` رو تقریبا هر جای این کد قرار بدیم.
+
+ماکروی `dbg!` یه جورایی از کامپایلر میپرسه که دقیقا در همین لحظه داری چیکار میکنی؟
+
+کد رو ببینیم:
 
 ```rust
 fn main() {
@@ -7236,19 +7241,18 @@ fn main() {
 }
 ```
 
-So this prints:
+خب این چنین چیزی پرینت میکنه:
 
 ```text
 [src\main.rs:3] 9 = 9
 ```
 
-and:
-
+و همچنین این:
 ```text
 [src\main.rs:4] my_number += 10 = ()
 ```
 
-and:
+و این:
 
 ```text
 [src\main.rs:6] vec![8, 9, 10] = [
@@ -7258,7 +7262,7 @@ and:
 ]
 ```
 
-and this one, which even shows you the value of the expression:
+و این یکی که مقدار های عبارات رو نشون میده:
 
 ```text
 [src\main.rs:8] new_vec.iter().map(|x| x * 2).collect::<Vec<i32>>() = [
@@ -7268,7 +7272,7 @@ and this one, which even shows you the value of the expression:
 ]
 ```
 
-and:
+و حتی این:
 
 ```text
 [src\main.rs:10] double_vec = [
@@ -7278,7 +7282,7 @@ and:
 ]
 ```
 
-`.inspect` is a bit similar to `dbg!` but you use it like `map` in an iterator. It gives you the iterator item and you can print it or do whatever you want. For example, let's look at our `double_vec` again.
+خب `.inspect` هم کمی شبیه به `dbg!` هست اما ازش مثل `map`، داخل یک `Iterator` استفاده میکنیم.
 
 ```rust
 fn main() {
@@ -7291,8 +7295,7 @@ fn main() {
 }
 ```
 
-We want to know more information about what the code is doing. So we add `inspect()` in two places:
-
+نحوه‌ی استفاده از `.inspect()`:
 ```rust
 fn main() {
     let new_vec = vec![8, 9, 10];
@@ -7306,7 +7309,7 @@ fn main() {
 }
 ```
 
-This prints:
+جیزی که پرینت میکنه:
 
 ```text
 The item is: 8
@@ -7316,8 +7319,7 @@ Then it is: 18
 The item is: 10
 Then it is: 20
 ```
-
-And because `.inspect` takes a closure, we can write as much as we want:
+به دلیل اینکه `.inspect()` یک `Closure` به عنوان ورودی میگیره، ما میتونیم هر چقدر که میخوایم کد بنویسیم:
 
 ```rust
 fn main() {
@@ -7338,7 +7340,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 The item is: 8
