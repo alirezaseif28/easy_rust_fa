@@ -7791,13 +7791,13 @@ Billy has 99980 hit points left!
 
 خب دیدیم که `Lifetime` ها رو مشخص میکنیم که کامپایلر اطمینان پیدا کنه که مشکلی رخ نخواهد داد. همچنین اونقدری باهوش هست که بتونه اکثر `Lifetime` ها رو خودش مشخص کنه اما بعضی ها رو هم نمیتونه که ما باید بهش کمک کنیم.
 
-## Interior mutability
+## تغییرپذیری داخلی | Interior mutability
 
-### Cell
+### "Cell" | Cell
 
-**Interior mutability** means having a little bit of mutability on the inside. Remember how in Rust you need to use `mut` to change a variable? There are also some ways to change them without the word `mut`. This is because Rust has some ways to let you safely change values inside of a struct that is immutable. Each one of them follows some rules that make sure that changing the values is still safe.
+اصطلاح `Interior Mutability` به معنای این هست که ما بتونیم بدون اسفتاده از `mut` یکسری متغییر هارو تغییر بدیم. یادمون هست که برای اینکه بتونیم چیزی رو در `Rust` تغییرپذیر کنیم باید از `mut` استفاده کنیم. اما همچنین راه هایی هم وجود داره که بتونیم بدون استفاده از `mut` متغییر های داخل یک `Struct`‌ای که `mut` نیست رو تغییر بدیم.
 
-First, let's look at a simple example where we would want this. Imagine a `struct` called `PhoneModel` with many fields:
+اول بزارید یکم کد ببینیم:
 
 ```rust
 struct PhoneModel {
@@ -7821,16 +7821,15 @@ fn main() {
 
 }
 ```
+خب برای اینکه بتونیم مقادیر `super_phone_3000` رو تغییر بدیم باید اون `mut` کنیم. اما خب ما نمیخوایم همه‌ی فیلد هاش رو قابل تغییر کنیم و لازم داریم که `on_sale` رو تغییر بدیم.
 
-It is better for the fields in `PhoneModel` to be immutable, because we don't want the data to change. The `date_issued` and `screen_size` never change, for example.
+پس ما نمیخوایم کد `let mut super_phone_3000` رو بنویسیم از طرفی هم میخوایم فیلد `on_sale`‌اش رو تغییر بدیم.
 
-But inside is one field called `on_sale`. A phone model will first be on sale (`true`), but later the company will stop selling it. Can we make just this one field mutable? Because we don't want to write `let mut super_phone_3000`. If we do, then every field will become mutable.
+زبان `Rust` چندین راه برای تغییر دادن یک چیزی که داخل یک چیز غیرقابل تغییر هست داره. یکی از اونها استفاده از `Cell` هست. اول از همه باید از `use std::cell::Cell` استفاده کنیم که هر بار `use std::cell::Cell` رو ننویسیم و به جاش `Cell` رو بنویسیم.
 
-Rust has many ways to allow some safe mutability inside of something that is immutable. The most simple way is called `Cell`. First we use `use std::cell::Cell` so that we can just write `Cell` instead of `std::cell::Cell` every time.
+بعد نووع `on_sale` رو به `Cell<bool>` تغییر میدیم.
 
-Then we change `on_sale: bool` to `on_sale: Cell<bool>`. Now it isn't a bool: it's a `Cell` that holds a `bool`.
-
-`Cell` has a method called `.set()` where you can change the value. We use `.set()` to change `on_sale: true` to `on_sale: Cell::new(true)`.
+و خب نوع `Cell` متودی به نام `.set()` داره که باهاش میتونیم مقدار `Cell` رو تغییر بدیم:
 
 ```rust
 use std::cell::Cell;
@@ -7858,16 +7857,17 @@ fn main() {
     super_phone_3000.on_sale.set(false);
 }
 ```
+نوع `Cell` برای همه‌ی نوع ها کار میکنه اما بهتره فقط ازش برای `Copy Type` ها استفاده کنیم به این دلیل که همیشه مقدار رو میده و یک `Reference` نمیده. برای مثال `Cell` یک متود به نام `get()` داره که فقط روی `Copy Type` ها کار میکنه.
 
-`Cell` works for all types, but works best for simple Copy types because it gives values, not references. `Cell` has a method called `get()` for example that only works on Copy types.
+روش دیگه استفاده از `RefCell` هست.
 
-Another type you can use is `RefCell`.
+### "RefCell" | RefCell
 
-### RefCell
+یک روش دیگه برای اینکه یک مقداری رو که درون یک `Struct` هست رو بدون اینکه از `mut` استفاده کنیم، تغییر بدیم، استفاده از `RefCell` هست.
 
-A `RefCell` is another way to change values without needing to declare `mut`. It means "reference cell", and is like a `Cell` but uses references instead of copies.
+نوع `RefCell` مثل `Cell` هست اما از `Reference` به جای اینکه هی مقدار رو کپی کنه از `Reference` استفاده میکنه.
 
-We will create a `User` struct. So far you can see that it is similar to `Cell`:
+ما یک ساختار به نام `User` میسازیم و از `RefCell` هم درش استفاده میکنیم:
 
 ```rust
 use std::cell::RefCell;
@@ -7893,23 +7893,22 @@ fn main() {
 }
 ```
 
-This prints `RefCell { value: true }`.
+خروجی کد بالا: `RefCell { value: true }`
 
-There are many methods for `RefCell`. Two of them are `.borrow()` and `.borrow_mut()`. With these methods, you can do the same thing you do with `&` and `&mut`. The rules are the same:
+نوع `RefCell` متود های زیادی داره. دوتا از اونها `.borrow()` و `borrow_mut()` هستند. با استفاده از اینها میتونیم کاری هایی که با `&` و `&mut` میکردیم رو انجام بدیم.
 
-- Many borrows is fine,
-- one mutable borrow is fine,
-- but mutable and immutable together is not fine.
+قوانین استفاده ازشون هم مثال همون ها هست:
+- داشتن چندین `.borrow()` مشکلی نداره
+- داشتن یک `.borrow_mut()` مشکلی نداره
+- اما استفاده همزمان از `.borrow()` و `borrow_mut()` **مشکل** داره و نباید این کار رو انجام بدیم
 
-So changing the value in a `RefCell` is very easy:
-
+پس تغییر مقدار `RefCell` اسون هست:
 ```rust
 // 🚧
 user_1.active.replace(false);
 println!("{:?}", user_1.active);
 ```
-
-And there are many other methods like `replace_with` that uses a closure:
+همچنین متود های دیگه‌ای مثل `replace_with` هم وجود داره که میتونیم درشون از `Closure` ها استفاده کنیم:
 
 ```rust
 // 🚧
@@ -7921,7 +7920,9 @@ user_1
 println!("{:?}", user_1.active);
 ```
 
-But you have to be careful with a `RefCell`, because it checks borrows at runtime, not compilation time. Runtime means when the program is actually running (after compilation). So this will compile, even though it is wrong:
+اما در هنگام استفاده از `RefCell` ها باید مراقب این نکته باشیم که قوانین `Borrow` ها در زمان اجرای برنامه چک میشن. پس امکان داره برنامه کامپایل بشه اما در هنگام اجرا `Panic` کنه، البته اگه قوانین رو رعایت نکرده باشیم.
+
+برای مثال کد زیر کامپایل میشه اما اجرا در هنگام اجرا به مشکل بر میخوره:
 
 ```rust
 use std::cell::RefCell;
@@ -7948,15 +7949,16 @@ fn main() {
 }
 ```
 
-But if you run it, it will immediately panic.
-
+کد بالا چنین `Panic`‌ای میکنه:
 ```text
 thread 'main' panicked at 'already borrowed: BorrowMutError', C:\Users\mithr\.rustup\toolchains\stable-x86_64-pc-windows-msvc\lib/rustlib/src/rust\src\libcore\cell.rs:877:9
 note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
 error: process didn't exit successfully: `target\debug\rust_book.exe` (exit code: 101)
 ```
 
-`already borrowed: BorrowMutError` is the important part. So when you use a `RefCell`, it is good to compile **and** run to check.
+بخش مهم پیام `Panic`، `already borrowed: BorrowMutError` هست.
+
+پس در هنگام استفاده از `RefCell` بهتره برنامه رو اجرا کنیم که درست کار کردن برنامه رو چک کنیم.
 
 ### Mutex
 
