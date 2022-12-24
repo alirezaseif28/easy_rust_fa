@@ -7960,11 +7960,11 @@ error: process didn't exit successfully: `target\debug\rust_book.exe` (exit code
 
 پس در هنگام استفاده از `RefCell` بهتره برنامه رو اجرا کنیم که درست کار کردن برنامه رو چک کنیم.
 
-### Mutex
+### موتکس | Mutex
 
-`Mutex` is another way to change values without declaring `mut`. Mutex means `mutual exclusion`, which means "only one at a time". This is why a `Mutex` is safe, because it only lets one process change it at a time. To do this, it uses `.lock()`. `Lock` is like locking a door from the inside. You go into a room, lock the door, and now you can change things inside the room. Nobody else can come in and stop you, because you locked the door.
+خب `Mutex` یک راه دیگه دیگه برای برای تغییر مقدار ها بدون `mut` هست. `Mutex` به معنای `Mutual Exclusion` هست. که یعنی در یک زمان فقط یک کار انجام میشه. به همین دلیل استفاده از `Mutex` امن هست. به این دلیل که فقط اجازه میده یک عملیات در یک زمان انجام بشه. برای اینکار از متود `.lock()` استفاده میکنه. `Lock` مثل این هست که یک در رو از داخل قفل میکنه و یه کاری انجام میده و کس دیگه هم اجازه نداره کاری انجام بده به این دلیل که در قفل هست.
 
-A `Mutex` is easier to understand through examples.
+بیاید کد ببینیم چون راحت میشه `Mutex` رو با کد درک کرد:
 
 ```rust
 use std::sync::Mutex;
@@ -7988,7 +7988,7 @@ fn main() {
 }
 ```
 
-But `mutex_changer` still has a lock after it is done. How do we stop it? A `Mutex` is unlocked when the `MutexGuard` goes out of scope. "Go out of scope" means the code block is finished. For example:
+اما `mutex_changer` همچنان قفل هست. خب کی قفلش باز میشه؟ زمانی که از بلوک کدی که درش تعریف شده تموم بشه،‌ برای مثال:
 
 ```rust
 use std::sync::Mutex;
@@ -8003,8 +8003,9 @@ fn main() {
     println!("{:?}", my_mutex); // Now it says: Mutex { data: 6 }
 }
 ```
+اگه نمیخوایم از بلوک های جدا استفاده کنیم، باید از `std::mem::drop(mutex_changer)` استفاده کنیم. با استفاده از `std::mem::drop` ما یک متغییر رو از بین میبریم.
 
-If you don't want to use a different `{}` code block, you can use `std::mem::drop(mutex_changer)`. `std::mem::drop` means "make this go out of scope".
+برای مثال:
 
 ```rust
 use std::sync::Mutex;
@@ -8019,8 +8020,7 @@ fn main() {
     println!("{:?}", my_mutex); // Now it says: Mutex { data: 6 }
 }
 ```
-
-You have to be careful with a `Mutex` because if another variable tries to `lock` it, it will wait:
+در هنگام استفاده از `Mutex` باید حواسمون جمع باشه چون اگه یک متغییر دیگه بخواد اون رو `lock` کنه، باید منتظر بمونه تا زمانی که قبلی از `lock` خارج بشه. برای مثال:
 
 ```rust
 use std::sync::Mutex;
@@ -8037,7 +8037,7 @@ fn main() {
 }
 ```
 
-One other method is `try_lock()`. Then it will try once, and if it doesn't get the lock it will give up. Don't do `try_lock().unwrap()`, because it will panic if it doesn't work. `if let` or `match` is better:
+یک متود دیگه `try_lock()` هست. این متود یک بار سعی میکنه که `Mutex` رو `lock` کنه، اگه همون یکبار نتونست دیگه صبر نمیکنه. از `try_lock().unwrap()` استفاده نمیکنیم چون اگه نتونه `lock` کنه، `Panic` میگیریم. پس از `if let` یا `match` استفاده میکنیم:
 
 ```rust
 use std::sync::Mutex;
@@ -8055,7 +8055,7 @@ fn main() {
 }
 ```
 
-Also, you don't need to make a variable to change the `Mutex`. You can just do this:
+همچنین حتما لازم نیست برای تغییر `Mutex` از یک متغییر استفاده کنیم، ما میتونیم اینکار رو کنیم:
 
 ```rust
 use std::sync::Mutex;
@@ -8068,8 +8068,7 @@ fn main() {
     println!("{:?}", my_mutex);
 }
 ```
-
-`*my_mutex.lock().unwrap() = 6;` means "unlock my_mutex and make it 6". There is no variable that holds it so you don't need to call `std::mem::drop`. You can do it 100 times if you want - it doesn't matter:
+کد `*my_mutex.lock().unwrap() = 6` به این معنا هست که، `Mutex` `lock` کن و بعد مقدارش رو برابر با `6` قرار بده. چون متغییری وجود نداره ما لازم نیست از `std::mem::drop` استفاده کنیم،‌ پس میتونیم هر چقدر که میخوایم این کار رو انجام بدیم:
 
 ```rust
 use std::sync::Mutex;
