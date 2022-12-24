@@ -7376,9 +7376,11 @@ fn main() {
 ```
 خب حالا `LifeTime` یا همون طول عمر چیه؟ در بخش بعدی میفهمیم.
 
-## Lifetimes
+## طول عمر | Lifetimes
 
-A lifetime means "how long the variable lives". You only need to think about lifetimes with references. This is because references can't live longer than the object they come from. For example, this function does not work:
+یک طول عمر مشخص میکنه که یک متغییر چقدر زنده بمونه، یعنی چقدر قابل استفاده باشه.
+
+فقط زمانی که با `Reference` ها کار میکنیم باید حواسمون به `Lifetime` ها باشه. این به دلیل این هست که یک `Reference` نمیتونه بیشتر از چیزی که بهش اشاره میکنه زنده باشه، برای مثال کد زیر کار نمیکنه:
 
 ```rust
 fn returns_reference() -> &str {
@@ -7389,9 +7391,10 @@ fn returns_reference() -> &str {
 fn main() {}
 ```
 
-The problem is that `my_string` only lives inside `returns_reference`. We try to return `&my_string`, but `&my_string` can't exist without `my_string`. So the compiler says no.
+مشکل اینجاست که `my_string` فقط داخل `returns_reference` زنده هست. و ما میخوایم `&my_string` رو بدیم بیرون، اما `&my_string` نمیتونه بدون `my_string` وجود داشته باشه.
+پس کامپایلر اجازه‌ی چنین کاری رو نمیده
 
-This code also doesn't work:
+این کد هم کار نمیکنه:
 
 ```rust
 fn returns_str() -> &str {
@@ -7405,7 +7408,7 @@ fn main() {
 }
 ```
 
-But it almost works. The compiler says:
+یعنی اگه مشکلش رو برطرف کنیم کار میکنه ولی الان کامپایلر چنین خطایی میده:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -7421,10 +7424,13 @@ help: consider using the `'static` lifetime
   |                     ^^^^^^^^
 ```
 
-`missing lifetime specifier` means that we need to add a `'` with the lifetime. Then it says that it `contains a borrowed value, but there is no value for it to be borrowed from`. That means that `I am a str` isn't borrowed from anything. It says `consider using the 'static lifetime` by writing `&'static str`. So it thinks we should try saying that this is a string literal.
+خطای `missing lifetime specifier` یعنی ما باید طول عمر رو مشخص کنیم، ما با استفاده از `'` میتونیم طول عمر مشخص کنیم.
 
-Now it works:
+بعدش میگه که `contains a borrowed value, but there is no value for it to be borrowed from`، که این یعنی مقدار `I am a str` از هیچ متغییری قرض گرفته نشده.
 
+بعدش هم میگه که `consider using the 'static lifetime`، که ما میتونیم با استفاده از `&'static str` اینکارو انجام بدیم.
+
+کد زیر الان کار میکنه:
 ```rust
 fn returns_str() -> &'static str {
     let my_string = String::from("I am a string");
@@ -7436,14 +7442,16 @@ fn main() {
     println!("{}", my_str);
 }
 ```
+به دلیل کار میکنه که ما یک `&str` با طول عمر `static` رو برگردوندیم.
 
-That's because we returned a `&str` with a lifetime of `static`. Meanwhile, `my_string` can only be returned as a `String`: we can't return a reference to it because it is going to die in the next line.
 
-So now `fn returns_str() -> &'static str` tells Rust: "don't worry, we will only return a string literal". String literals live for the whole program, so Rust is happy. You'll notice that this is similar to generics. When we tell the compiler something like `<T: Display>`, we promise that we will only use inputs with `Display`. Lifetimes are similar: we are not changing any variable lifetimes. We are just telling the compiler what the lifetimes of the inputs will be.
+پس کد `fn returns_str() -> &'static str` به کامپایلر میگه که: نگران نباش، ما فقط `String Literal` برمیگردونیم. که خب `String Literal` ها در طول برنامه وجود دارند و نابود نمیشند.
 
-But `'static` is not the only lifetime. Actually, every variable has a lifetime, but usually we don't have to write it. The compiler is pretty smart and can usually figure out for itself. We only have to write the lifetime when the compiler doesn't know.
+با استفاده از مشخص کردن `Lifetime` متیونیم طول عمر ورودی ها رو مشخص کنیم.
 
-Here is an example of another lifetime. Imagine we want to create a `City` struct and give it a `&str` for the name. We might want to do that because it gives faster performance than with `String`. So we write it like this, but it won't work yet:
+اما `'static` تنها `Lifetime` نیست. در حقیقت هر متغییری یک `Lifetime` داره، اما ما معمولا خودمون مشخص نمیکنیمش، به این دلیل که کامپایلر به اندازه‌ی کافی هوشمند هست که خودش بتونه مدیریت کنه. ما فقط `Lifetime` رو برای متغییر هایی مشخص میکنیم که کامپایلر نمیتونه براشون تصمیم بگیره.
+
+در زیر یک مثال دیگه از مشخص کردن `Lifetime` میبینیم. فکر کنید که میخوایم یک ساختاری به نام `City` بسازیم که نوع یک فیلدش `&str` هست. احتمالا میخوایم اینکار رو انجام بدیم به این دلیل که این نوع بهینه‌تر از `String` هست. پس ما کد رو اینطوری مینویسیم(البته هنوز کار نمیکنه):
 
 ```rust
 #[derive(Debug)]
@@ -7460,7 +7468,7 @@ fn main() {
 }
 ```
 
-The compiler says:
+خطایی که کامپایلر میده:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -7476,10 +7484,9 @@ help: consider introducing a named lifetime parameter
   |
 ```
 
-Rust needs a lifetime for `&str` because `&str` is a reference. What happens when the value that `name` points to is dropped? That would be unsafe.
+کامپایلر نیاز داره که `Lifetime` نوع `&str` مشخص بشه. به این دلیل که اون یک `Reference` هست. خب چرا نیاز داره؟ خب فکر کنید ما یک `Reference` به یک متغییر رو درش قرار دادیم، و بعد از مدتی اون متغییر از بین رفت. خب حالا اون `Reference` به چیزی اشاره میکنه که دیگه وجود نداره، و خب این امن نیست.
 
-What about `'static`, will that work? We used it before. Let's try:
-
+خب بزارید `Lifetime`، `'static` رو به اون فیلد بدیم:
 ```rust
 #[derive(Debug)]
 struct City {
@@ -7496,8 +7503,7 @@ fn main() {
     println!("{} was founded in {}", my_city.name, my_city.date_founded);
 }
 ```
-
-Okay, that works. And maybe this is what you wanted for the struct. However, note that we can only take "string literals", so not references to something else. So this will not work:
+خب الان کار میکنه، اما باید حواسمون باشه که نوع فیلد `name` الان یک `String Literal` هست که باید در کل برنامه وجود داشته باشه، پس کد زیر کامپایل نمیشه،‌ به این دلیل که عناصر `city_names` برای کل برنامه وجود ندارند و میتونند از بین برند:
 
 ```rust
 #[derive(Debug)]
@@ -7518,7 +7524,7 @@ fn main() {
 }
 ```
 
-The compiler says:
+کامپایلر چنین چیزی میگه:
 
 ```text
 error[E0597]: `city_names` does not live long enough
@@ -7534,9 +7540,9 @@ error[E0597]: `city_names` does not live long enough
    | - `city_names` dropped here while still borrowed
 ```
 
-This is important to understand, because the reference we gave it actually lives long enough. But we promised that we would only give it a `&'static str`, and that is the problem.
+در حقیقت `Reference`ای که ما بهش دادیم به اندازه کافی طول عمر داره، **اما** ما بهش قول دادیم که چیزی بهش میدیم که طول عمرش برابر با کل برنامه باشه، یعنی `&'static str`. و خب این یه مشکلی هست که باید حلش کنیم.
 
-So now we will try what the compiler suggested before. It said to try writing `struct City<'a>` and `name: &'a str`. This means that it will only take a reference for `name` if it lives as long as `City`.
+پس ما میایم به چیزی که کامپایلر قبلا گفته بود عمل میکنیم، گفته بود که از `struct City<'a>` و `name: &'a str` استفاده کنیم. و این به معنای این هست که فقط `Reference`ای رو برای `name` میگیره که به اندازه‌ی `City` طول عمر داشته باشه:
 
 ```rust
 #[derive(Debug)]
@@ -7556,8 +7562,7 @@ fn main() {
     println!("{} was founded in {}", my_city.name, my_city.date_founded);
 }
 ```
-
-Also remember that you can write anything instead of `'a` if you want. This is also similar to generics where we write `T` and `U` but can actually write anything.
+همچنین ما میتونیم هر اسم دیگه‌ای به جای `'a` بدیم، مثل اسم های نوع های `Generic` هست که ما میتونیم `T` یا هرچیز دیگه بدیم. پس میتونیم حتی چنین چیزی رو هم بنویسیم:
 
 ```rust
 #[derive(Debug)]
@@ -7569,9 +7574,9 @@ struct City<'city> { // The lifetime is now called 'city
 fn main() {}
 ```
 
-So usually you will write `'a, 'b, 'c` etc. because it is quick and the usual way to write. But you can always change it if you want. One good tip is that changing the lifetime to a "human-readable" name can help you read code if it is very complicated.
+اما خب ما معمولا از `'a` یا `'b`و... استفاده میکنیم. به این دلیل که راحت نوشته میشن. اما اگه کد پیچیده شد میتونیم از اسم هایی که مشخص‌تر هستنند استفاده کنیم که بعدا بتونیم راحت کد رو بخونیم.
 
-Let's look at the comparison to traits for generics again. For example:
+بیاید `Lifetime` ها رو با `Generic` ها مقایسه کنیم. برای مثال:
 
 ```rust
 use std::fmt::Display;
@@ -7583,10 +7588,11 @@ fn prints<T: Display>(input: T) {
 fn main() {}
 ```
 
-When you write `T: Display`, it means "please only take T if it has Display".
-It does not mean: "I am giving Display to T".
+در کد بالا `T: Display` به این معنی هست که "لطفا `T` رو فقط زمانی بگیر که `Display` رو پیاده‌سازی کرده باشه".
 
-The same is true for lifetimes. When you write 'a here:
+و به این معنا نیست که: "`Display` رو بده به `T`"
+
+در مورد `Lifetime` ها هم اوضاع همین هست، برای مثال وقتی که `'a` رو مینویسیم:
 
 ```rust
 #[derive(Debug)]
@@ -7598,10 +7604,13 @@ struct City<'a> {
 fn main() {}
 ```
 
-It means "please only take an input for `name` if it lives at least as long as `City`".
-It does not mean: "I will make the input for `name` live as long as `City`".
+به این معنا هست که: "فقط زمانی ورودی رو قبول کن که طول عمرش حداقل برابر با `City` باشه"
 
-Now we can learn about `<'_>` that we saw before. This is called the "anonymous lifetime" and is an indicator that references are being used. Rust will suggest it to you when you are implementing structs, for example. Here is one struct that almost works, but not yet:
+و به این معنا نیست که: "طول عمر ورودی برای `name` رو برابر با طول عمر `City` کن"
+
+خب الان میتونیم در مورد `<'_>` که قبلا دیدیم،‌ یاد بگیریم. به اینا میگن `Anonymous Lifetime`. کامپایلر زمانی که در حال ساخت `Method` ها برای یک `Struct`ای که درش از `Lifetime` استفاده کردیم، استفاده از این رو به ما پیشنهاد میکنه.
+
+برای مثال کد زیر کار نمیکنه:
 
 ```rust
     // ⚠️
@@ -7620,7 +7629,9 @@ impl Adventurer {
 fn main() {}
 ```
 
-So we did what we needed to do for the `struct`: first we said that `name` comes from a `&str`. That means we need a lifetime, so we gave it `<'a>`. Then we had to do the same for the `struct` to show that they are at least as long as this lifetime. But then Rust tells us to do this:
+در کد بالا ما چیزی که نیاز داشتیم رو نوشتیم: اول گفتیم که نوع `name` یک `&str` هست. و خب وقتی اینکار رو انجام میدیم باید بهش یک `Lifetime` هم بدیم، که برای همین بود که `<'a>` رو نوشتیم.
+
+اما کامپایلر به ما چنین خطایی رو نشون میده:
 
 ```text
 error[E0726]: implicit elided lifetime not allowed here
@@ -7630,7 +7641,7 @@ error[E0726]: implicit elided lifetime not allowed here
   |      ^^^^^^^^^^- help: indicate the anonymous lifetime: `<'_>`
 ```
 
-It wants us to add that anonymous lifetime to show that there is a reference being used. So if we write that, it will be happy:
+داره سعی میکنه به ما بگه که لازم داره که ما بهش بگیم که `Adventurer` از `Lifetime` استفاده کرده. خب ما که بهش گفتیم. اره درسته بهش گفتیم اما زمانی که داشتیم این `Struct` رو پیاده‌سازی میکردیم که بهش نگفتیم، پس باید بگیم:
 
 ```rust
 struct Adventurer<'a> {
@@ -7647,16 +7658,18 @@ impl Adventurer<'_> {
 
 fn main() {}
 ```
+خب `Anonymous Lifetime` ها ساخته شدند که ما هر بار نیایم وقت پیاده‌سازی دوباره `Lifetime` ها رو به طور کامل معرفی کنیم و فقط از `'_` استفاده کنیم به جای نوشتن دوباره‌ی `'a`. چون قبلا مشخص کردیم خودش میفهمه که `'_` یعنی چی.
 
-This lifetime was made so that you don't always have to write things like `impl<'a> Adventurer<'a>`, because the struct already shows the lifetime.
 
-Lifetimes can be difficult in Rust, but here are some tips to avoid getting too stressed about them:
+خب راستش `Lifetime` ها در `Rust` میتونند یادگیری سختی داشته باشند، اما بهتره نکات زیر رو بدونیم که استرس نگیریم:
 
-- You can stay with owned types, use clones etc. if you want to avoid them for the time being.
-- Much of the time, when the compiler wants a lifetime you will just end up writing <'a> here and there and then it will work. It's just a way of saying "don't worry, I won't give you anything that doesn't live long enough".
-- You can explore lifetimes just a bit at a time. Write some code with owned values, then make one a reference. The compiler will start to complain, but also give some suggestions. And if it gets too complicated, you can undo it and try again next time.
+- ما برای دوری از `Lifetime` ها میتونیم از `Owned Type` ها استفاده کنیم
+- اکثر وقت ها که کامپایلر میگه یک `Lifetime` میخوام میتونیم فقط با نوشتن `<'a>` کاری کنیم که راضی بشه. با اینکار یه جورایی به کامپایلر میگیم که نگران نباش چیزی که طول عمرش کافی نیست رو به عنوان ورودی نمیدم
+- باید با `Lifetime` ها سر و کله بزنیم و کامپایلر هی بهمون گیر بده تا یاد بگیریم چطوری باید ازشون استفاده کنیم
 
-Let's do this with our code and see what the compiler says. First we'll go back and take the lifetimes out, and also implement `Display`. `Display` will just print the `Adventurer`'s name.
+به این نکته توجه کنید که `Lifetime` ها خیلی قدرتمند هستند و ویژگی مهمی در `Rust` هستند و باید یادشون بگیریم. پس نادیده نگیریمشون بهتر هست.
+
+خب بیاید دوباره مرور کنیم، اما بزارید همه‌ی `Lifetime` ها رو برداریم و همچنین `Display` رو پیاده‌سازی کنیم:
 
 ```rust
 // ⚠️
@@ -7681,7 +7694,7 @@ impl std::fmt::Display for Adventurer {
 fn main() {}
 ```
 
-First complaint is this:
+خب اولین گیری که میده این هست:
 
 ```text
 error[E0106]: missing lifetime specifier
@@ -7697,7 +7710,7 @@ help: consider introducing a named lifetime parameter
   |
 ```
 
-It suggests what to do: `<'a>` after Adventurer, and `&'a str`. So we do that:
+پس ما `Lifetime` ها رو مشخص میکنیم:
 
 ```rust
 // ⚠️
@@ -7721,8 +7734,7 @@ impl std::fmt::Display for Adventurer {
 
 fn main() {}
 ```
-
-Now it's happy with those parts, but is wondering about the `impl` blocks. It wants us to mention that it's using references:
+گیر بعدی که میده این هست که `Lifetime` رو برای `impl` مشخص نکردیم، خب این هم انجام میدیم:
 
 ```text
 error[E0726]: implicit elided lifetime not allowed here
@@ -7738,7 +7750,7 @@ error[E0726]: implicit elided lifetime not allowed here
    |                            ^^^^^^^^^^- help: indicate the anonymous lifetime: `<'_>`
 ```
 
-Okay, so we will write those in...and now it works! Now we can make an `Adventurer` and do some things with it.
+خب الان همه کار میکنه:
 
 ```rust
 struct Adventurer<'a> {
@@ -7770,14 +7782,14 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Billy has 100000 hit points.
 Billy has 99980 hit points left!
 ```
 
-So you can see that lifetimes are often just the compiler wanting to make sure. And it is usually smart enough to almost guess at what lifetimes you want, and just needs you to tell it so it can be certain.
+خب دیدیم که `Lifetime` ها رو مشخص میکنیم که کامپایلر اطمینان پیدا کنه که مشکلی رخ نخواهد داد. همچنین اونقدری باهوش هست که بتونه اکثر `Lifetime` ها رو خودش مشخص کنه اما بعضی ها رو هم نمیتونه که ما باید بهش کمک کنیم.
 
 ## Interior mutability
 
