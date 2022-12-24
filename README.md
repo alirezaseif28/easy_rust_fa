@@ -8084,15 +8084,17 @@ fn main() {
 }
 ```
 
-### RwLock
+### "RwLock" | RwLock
 
-`RwLock` means "read write lock". It is like a `Mutex` but also like a `RefCell`. You use `.write().unwrap()` instead of `.lock().unwrap()` to change it. But you can also use `.read().unwrap()` to get read access. It is like `RefCell` because it follows the rules:
+نوع `RwLock` یعنی `Read/Write lock`. هم شبیه به `Mutex` هست و هم شبیه به `RefCell`. برای تغییرش میتونیم از `.write().unwrap()` به جای `.lock().unwrap()` استفاده کنیم.
 
-- many `.read()` variables is okay,
-- one `.write()` variable is okay,
-- but more than one `.write()` or `.read()` together with `.write()` is not okay.
+برای گرفتن مقدار هم میتونیم از `.read().unwrap()` استفاده کنیم. مثل `RefCell` هست به این دلیل که استفاده ازش چنین قوانینی داره:
 
-The program will run forever if you try to `.write()` when you can't get access:
+- چندین `.read()` مشکلی نداره
+- یک `.write()` مشکلی نداره
+- اما چندین `.write()` یا استفاده از `.read()` و `.write()` با هم مشکل ایجاد میکنه
+
+زمانی که دسترسی `write` نداریم از `.write()` استفاده کنیم برنامه تا ابد ادامه پیدا میکنه و منتظر میمونه که دسترسی بگیریم:
 
 ```rust
 use std::sync::RwLock;
@@ -8109,7 +8111,7 @@ fn main() {
 }
 ```
 
-So we use `std::mem::drop`, just like in a `Mutex`.
+پس میتونیم از `std::mem::drop` استفاده کنیم:
 
 ```rust
 use std::sync::RwLock;
@@ -8133,7 +8135,7 @@ fn main() {
 }
 ```
 
-And you can use `try_read()` and `try_write()` too.
+همچنین میتونیم از `try_read()` و `try_write()` هم استفاده کنیم:
 
 ```rust
 use std::sync::RwLock;
