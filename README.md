@@ -13838,17 +13838,17 @@ And for the rest of it it just calls `dbg!` on itself even if you put in an extr
 
 As you can see, macros are very complicated! Usually you only want a macro to automatically do something that a simple function can't do very well. The best way to learn about macros is to look at other macro examples. Not many people can quickly write macros without problems. So don't think that you need to know everything about macros to know how to write in Rust. But if you read other macros, and change them a little, you can easily borrow their power. Then you might start to get comfortable with writing your own.
 
-# Part 2 - Rust on your computer
+# بخش دوم - راست روی کامپیوتر
 
-You saw that we can learn almost anything in Rust just using the Playground. But if you learned everything so far, you will probably want Rust on your computer now. There are always things that you can't do with the Playground like using files or code in more than just one file. Some other things you need Rust on your computer for are input and flags. But most important is that with Rust on your computer you can use crates. We already learned about crates, but in the Playground you could only use the most popular ones. But with Rust on your computer you can use any crate in your program.
+خب دیدیم که میتونیم اکثر چیز‌ها در `Rust` رو در `Playground` یاد بگیریم، اما بعضی چیز ها رو هم نمیشه. اما خب اگه تا اینجا یاد گرفتین احتمالا `Rust` رو روی کامپیوتر خودتون نصب کردید. یه سری چیز ها هست که نمیشه در `Playground` یادشون گرفت، برای مثال کار با فایل ها یا نوشتن کد در چندین فایل یا گرفتن ورودی(`Flag`) از کاربر. اما وقتی `Rust` رو روی کامپیوتر نصب داشته باشیم، بهترین مزیتش این هست که میتونیم از هر `crate`‌ای که میخوایم استفاده کنیم. اما در `Playground` فقط میتونیم از محبوب‌ترین `crate` ها استفاده کنیم.
 
-## cargo
+## کارگو | cargo
 
-`rustc` means Rust compiler, and it's what does the actual compiling. A rust file ends with an `.rs`. But most people don't write something like `rustc main.rs` to compile. They use something called `cargo`, which is the main package manager for Rust.
+خب `rustc` به معنای `Rust Compiler` هست و از اسمش هم میشه حدس زد که کامپایلر هست. یک فایلی که کد `Rust` درش نوشته شده با `.rs` تموم میشه. اکثر برنامه‌نویس ها از `rustc main.rs` برای کامپایل کردن کد استفاده نمیکنند، و بلکه از چیزی به نام `cargo` استفاده میکنند. `cargo`، `Package Manager` زبان `Rust` هست.
 
-One note about the name: it's called `cargo` because when you put crates together, you get cargo. A crate is a wooden box that you see on ships or trucks, but you remember that every Rust project is also called a crate. Then when you put them together you get the whole cargo.
+یک نکته‌ی جالب در مورد اسم `cargo`: بهش میگیم `cargo` چون `crate` ها رو در کنار هم میزاره. و خب اگه ما `crate`(جعبه) ها رو کنار هم بزاریم یک `cargo`(محموله) میگیریم.
 
-You can see this when you use cargo to run a project. Let's try something simple with `rand`: we'll just randomly choose between eight letters.
+ما میتونیم این رو هنگامی که `cargo` یک پروژه رو اجرا میکنه ببینیم. بزارید برنامه‌ای با `crate`، `rand` بنویسیم:
 
 ```rust
 use rand::seq::SliceRandom; // Use this for .choose over slices
@@ -13863,8 +13863,11 @@ fn main() {
     }
 }
 ```
+خروجیش میشه: `b c g h e a`
 
-This will print something like `b c g h e a`. But we want to see what `cargo` does first. To use `cargo` and run our program, usually we type `cargo run`. This will build our program and run it for us. But when it starts compiling, it does something like this:
+اما خروجیش برامون مهم نیست میخواید ببینیم که `cargo` چطوری اجراش میکنه. برای اجرای برنامه با `cargo` از دستور `cargo run` استفاده میکنیم. این دستور برنامه رو `build` میکنه و `run` میکنه.
+
+در هنگام کامپایل چنین چیز هایی رو میبینیم:
 
 ```text
    Compiling getrandom v0.1.14
@@ -13879,9 +13882,9 @@ This will print something like `b c g h e a`. But we want to see what `cargo` do
 g f c f h b
 ```
 
-So it looks like it didn't just bring in `rand`, but some others too. That's because we need `rand` for our crate, but `rand` also has some code that needs other crates too. So `cargo` will find all the crates we need and put them together. In our case we only had seven, but on very big projects you may have 200 or more crates to bring in.
+خب پس فقط `crate`، `rand` رو نیاورد و چندین `crate` دیگه رو هم برای کامپایل این برنامه استفاده کرد. این به این دلیل هست که ما `rand` رو لازم داریم، اما خود `rand` به چندین `crate` دیگه هم لازم داره. پس `cargo` همه‌ی `crate` هایی که نیاز داریم تا برنامه کامپایل بشه رو پیدا میکنه و میزاره کنار هم. در این برنامه ما فقط به هفت `crate` نیاز داشتیم اما در برنامه های کاربردی واقعی ما به چند صد `crate` نیاز داریم.
 
-This is where you can see the tradeoff for Rust. Rust is extremely fast, because it compiles ahead of time. It does this by looking through the code and looking to see what the code you write actually does. For example, you might write this generic code:
+زبان `Rust` خیلی سریع اجرا میشه، اما در زمان کامپایل کمی کند هست، برای مثال کد زیر که از `Generic` درش استفاده رو ببینیم:
 
 ```rust
 use std::fmt::Display;
@@ -13897,23 +13900,31 @@ fn main() {
 }
 ```
 
-This function can take anything with `Display`, so we gave it a `&str` and next gave it a `f64` and that is no problem for us. But the compiler doesn't look at generics, because it doesn't want to do anything at runtime. It wants to put together a program that can run by itself as fast as possible. So when it looks at the first part with `"Windy"`, it doesn't see `fn print_and_return_thing<T: Display>(input: T) -> T`. It sees something like `fn print_and_return_thing(input: &str) -> &str`. And next it sees `fn print_and_return_thing(input: f64) -> f64`. All the checking about traits and so on is done during compile time. That's why generics take longer to compile, because it needs to figure them out, and make it concrete.
+این فانکشن هرچیزی که `Display` رو پیاده‌سازی کرده باشه میتونه به عنوان ورودی بگیره، اول ما بهش یک `&str` دادیم و بعد یک `f64` که خب برنامه هم بدون مشکل اجرا میشه.
 
-One more thing: Rust in 2020 is working hard on compile time, because this part takes the longest. Every version of Rust is a little bit faster at compiling, and there are some other plans to speed it up. But in the meantime, here's what you should know:
+اما کامپایلر نمیخواد در هنگام اجرا `Runtime` اینارو تبدیل به کد ماشین کنه. و میخواد یک برنامه رو کنار هم بزاره که بتونه خودش بدون نیاز به `Runtime` تا حد ممکن اجرا بشه.
 
-- `cargo build` will build your program so you can run it
-- `cargo run` will build your program and run it
-- `cargo build --release` and `cargo run --release` will do the same but in release mode. What's that? Release mode is for when your code is finally done. Then Rust will take even longer to compile, but it does this because it uses everything it knows to make it faster. Release mode is actually a *lot* faster than the regular mode, which is called debug mode. That's because it compiles quicker and has more debug information. The regular `cargo build` is called a "debug build" and `cargo build --release` is called a "release build".
-- `cargo check` is a way to check your code. It's like compiling except that it won't actually make your program. This is a good way to check your code a lot because it doesn't take as long as `build` or `run`.
+پس وقتی `"Windy"` رو میبینه چیزی شبیه به `fn print_and_return_thing<T: Display>(input: T) -> T` رو نمیبینه، بلکه چیزی شبیه به `fn print_and_return_thing(input: &str) -> &str` رو میبینه.
 
-By the way, the `--release` part of the command is called a `flag`. That means extra information in a command.
+بعدش که `9.0` رو  میبینه، `fn print_and_return_thing(input: f64) -> f64` رو میبینه. همه‌ی این اتفاق ها و عملیات ها که توضیح خاصی دربارش ندادم و خیلی ساده‌سازی کردمش در زمان کامپایل اتفاق میوفته.
 
-Some other things you need to know are:
+به همین دلیل هست که وقتی از `Generic` ها استفاده میکنیم،‌ زمان کامپایل طولانی میشه، به این دلیل که باید بتونه اون `Generic` ها رو تبدیل به `Concrete` کنه.
 
-- `cargo new`. You do this to create a new Rust project. After `new`, write the name of the project and `cargo` will make the folder and all the files you need.
-- `cargo clean`. When you add crates to `Cargo.toml`, the computer will download all the files it needs and they can take a lot of space. If you don't want them on your computer anymore, type `cargo clean`.
+یک نکته‌ی دیگه: زبان `Rust` در سال `2020` خیلی روی کامپایلر کار کرد که زمان کامپایل کاهش پیدا کنه. هر نسخه‌ای از `Rust` یکم در کامپایل کردن، سریع‌تر هست.
 
-One more thing about the compiler: it only takes the most time when you use `cargo build` or `cargo run` the first time. After that it will remember, and it will compile fast again. But if you use `cargo clean` and then run `cargo build`, it will have to compile slowly one more time.
+خب بیاید یکم دستورات `cargo` رو یاد بگیریم:
+
+- `cargo build`: برنامه رو `build` میکنه، یعنی کامپایل میکنه، و خروجیش چیزی هست که میتونه اچرا بشه
+- `cargo run`: برنامه رو `build` میکنه و اجراش میکنه
+- `cargo check`: کد رو چک میکنه و خطا ها و... رو میگه، زمانی که میگیره بسیار کمتر از `build` یا `run` هست چون فقط چک میکنه.
+- `cargo new`: یک پروژه‌ی جدید درست میکنه، بعد `new` باید اسم پروژه رو بدیم. با این کار یک `Directory/Folder` درست میشه و هر فایلی که یک پروژه `Rust` باید داشته باشه هم توش قرار میگیره.
+- `cargo clean`: وقتی `crate` به `Cargo.toml` اضاقه میکنیم، کامپایلر برای کامپایل باید اون `crate` رو دانلود کنه و خب فایل هاش روی کامپیوتر ذخیره میشند. اگه به اون فایل ها نیاز نداشتیم میتونیم از `cargo clean` استفاده کنیم که اون فایل ها پاک بشند.
+
+باید به یک نکته‌ی مهم دیگه هم اشاره کنم، اون هم این هست که دستور `cargo build` یک `Flag` مهم که `--release` هست رو داره، اگه ازش استفاده کنیم زمان کامپایل بیشتر مبشه، به این دلیل که کامپایلر سعی میکنه خروجی اجرایی که میده در بهینه‌ترین و سریع‌ترین حالت ممکن باشه.
+
+به `cargo build` میگیم، `Debug Build` و به `cargo build --release` میگیم، `Release Build`.
+
+یک نکته‌ی دیگه در مورد کامپایلر: اولین بار که `cargo bulild` یا `cargo run` رو اجرا میکنیم، زمان کامپایل خیلی طول میکشه اما دفعات بعد سریع‌تر از دفعه‌ی اول کامپایل میشه. اما اگه `cargo clean` استفاده کنیم، بعد اگه از `cargo build` یا `cargo run` استفاده کنیم دوباره چون اولش بارش هست طول میکشه :)
 
 ## Taking user input
 
