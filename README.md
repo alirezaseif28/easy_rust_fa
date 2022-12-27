@@ -11172,11 +11172,11 @@ fn main() {
 }
 ```
 
-## Testing
+## تست کردن |‌ Testing
 
-Testing is a good subject to learn now that we understand modules. Testing your code is very easy in Rust, because you can write tests right next to your code.
+تست کردن مبحث خوبی هست که در مورد `Module` ها هم یاد بگیریم. تست کردن کد در راست خیلی ساده هست.
 
-The easiest way to start testing is to add `#[test]` above a function. Here is a simple one:
+راحت ترین روش برای شروع کردن تست اضافه کردن `#[test]` بالای یک فانکشن هست:
 
 ```rust
 #[test]
@@ -11185,9 +11185,11 @@ fn two_is_two() {
 }
 ```
 
-But if you try to run it in the Playground, it gives an error: ``error[E0601]: `main` function not found in crate `playground``. That's because you don't use *Run* for tests, you use *Test*. Also, you don't use a `main()` function for tests - they go outside. To run this in the Playground, click on `···` next to *RUN* and change it to *Test*. Now if you click on it, it will run the test. (If you have Rust installed already, you will type `cargo test` to do this)
+اما اگه بخوایم کد بالا رو در `Playground` اجرا کنیم، خطای: ```error[E0601]: `main` function not found in crate `playground``` رو میگیریم. مشکل اینحاست که `Playground` فکر میکنه یک برنامه اجرایی رو میخوایم اجرا کنیم، و خب `main()` رو درش پیدا نمیکنه. برای اینکه تست ها رو در `Playground` اجرا کنیم، باید روی `...` کلیک کنیم و گزینه‌ی `Test` رو انتخاب کنیم. حالا میتونم این تست رو اجرا کنیم.
 
-Here is the output:
+اما اگر `Rust` رو نصب داریم، میتونیم به راحتی از `cargo test` برای انجام اینکار استفاده کنیم.
+
+خروجی تست:
 
 ```text
 running 1 test
@@ -11196,7 +11198,7 @@ test two_is_two ... ok
 test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-Let's change `assert_eq!(2, 2)` to `assert_eq!(2, 3)` and see what we get. When a test fails you get a lot more information:
+بزارید `assert_eq!(2, 2)` رو به `assert_eq!(2, 3)` تغییر بدیم و ببینیم که چه اتفاقی میوفته:
 
 ```text
 running 1 test
@@ -11217,9 +11219,19 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-`assert_eq!(left, right)` is the main way to test a function in Rust. If it doesn't work, it will show the different values: left has 2, but right has 3.
+وقتی که تست ناموفق میشه اطلاعات بیشتری دریافت میکنیم.
 
-What does `RUST_BACKTRACE=1` mean? This is a setting on your computer to give a lot more information about errors. Luckily the Playground has it too: click on `···` next to `STABLE` and set backtrace to `ENABLED`. If you do that, it will give you *a lot* of information:
+ماکروی `assert_eq!` تست میکنه که دو مقداری که بهش میدیم برابر باشند.
+
+استفاده از `` یک روش رایج برای تست دو مقدار هست، اگه مقادیر با هم برابر نباشند، برنامه `Panic` میکنه که این باعث میشه تست ناموفق بشه.
+
+همچنین میبینیم که مقادیر رو هم چاپ کرد که `left = 2` و `right = 3`. پس `left == right` ناموفق بود.
+
+خب توی `Panic`‌ای که گرفتیم در مورد `RUST_BACKTRACE=1` یه صحبتی شده، این چیه؟
+
+خب اگه مقدار متغییر سیستم `RUST_BACKTRACE` برابر `1` بشه ما در هنگام خطا ها اطلاعات بیشتری میگیریم.
+
+در `Playground` برای فعال کردن این قابلیت باید روی `...` کلیک کنیم بعد روی `STABLE` کلیک کنیم و در اخر گزینه‌ی `Backtrace` رو `Enable` کنیم. همونطور که گفتم اگه اینکار رو کنیم اطلاعات بسیار بیشتری میگیریم:
 
 ```text
 running 1 test
@@ -11285,7 +11297,7 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-You don't need to use a backtrace unless you really can't find where the problem is. But luckily you don't need to understand it all either.  If you keep reading, you will eventually see line 13 where it says `playground` - that's where it talks about your code. Everything else is about what Rust is doing in other libraries to run your program. But these two lines show you that it looked at line 2 and line 3 of playground, which is a hint to check there. Here's that part again:
+معمولا لازم نیست که از `BACKTRACE` استفاده کنیم مگه زمانی که واقعا نتونیم بفهمیم خطایی که کامپایلر داده چی هست. خوشبختابه نیازی نیست که همش رو بخونیم، اگه یه نگاهی بهش بندازیم در نهایت میبینیم که در خط `13` به `Playground` اشاره کرده، که این یعنی تازه داره در مورد کدی که ما نوشتیم صحبت میکنه. بقیه‌اش در مورد کار هایی هست که کامپایلر داشت انجام میداد. اما خط در خط `13` و `14` این خطا میتونیم ببینیم که میگه در فایل `two_is_two.rs` در خط های `2` و `3` یک مشکلی پیش اومده. در زیر اون بخشی که این اطلاعات رو میده رو میبینیم:
 
 ```text
   13: playground::two_is_two
@@ -11294,7 +11306,7 @@ You don't need to use a backtrace unless you really can't find where the problem
              at src/lib.rs:2
 ```
 
-Edit: Rust improved its backtrace messages in early 2021 to only show the most meaningful information. Now it's much easier to read:
+البته `Rust` پیام های `Backtrace` رو از اوایل سال `2021` سعی کرده که با معنا‌تر کنه و اطلاعات مفید رو نشون بده. یعنی در حال حاضر چنین چیزی رو میده:
 
 ```text
 failures:
@@ -11325,7 +11337,7 @@ failures:
 test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.02s
 ```
 
-Now let's turn backtrace off again and return to regular tests. Now we'll write some other functions, and use test functions to test them. Here are a few:
+خب حالا بیاید `Backtrace` رو غیرفعال کنیم و برگردیم سر تست کردن. ما چند فانکشن میسازیم و بعد تست‌شون میکنیم:
 
 ```rust
 fn return_two() -> i8 {
@@ -11345,8 +11357,7 @@ fn it_returns_six() {
 }
 ```
 
-Now it runs both:
-
+الان دو فانکشنی که قبلشون `#[test]` دارند رو اجرا میکنه که اونها هم دو فانکشن دیگه رو تست میکنند، خروجی تست:
 ```text
 running 2 tests
 test it_returns_two ... ok
@@ -11355,9 +11366,11 @@ test it_returns_six ... ok
 test result: ok. 2 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-That's not too hard.
+خب زیاد سخت نبود.
 
-Usually you will want to put your tests in their own module. To do this, use the same `mod` keyword and add `#[cfg(test)]` above it (remember: `cfg` means "configure). You also want to continue to write `#[test]` above each test. This is because later on when you install Rust, you can do more complicated testing. You will be able to run one test, or all of them, or run a few. Also don't forget to write `use super::*;` because the test module needs to use the functions above it. Now it will look like this:
+معمولا ما کد های تست رو در یک `Module` جدا قرار میدیم. برای اینکار، از کلمه‌کلیدی `mod` استفاده میکنیم و `#[cfg(test)]` رو هم بالاش میزاریم. همچنین `#[test]` رو هم قبل هر تست میزاریم. این بخاطر این هست که وقتی که `Rust` رو نصب کنیم میتونیم تست های پیچیده‌تری هم انچام بدیم. برای مثال میتونیم یک تست، چند تست یا همه‌ی تست ها رو اجرا کنیم یا حتی اونها رو `Debug` کنیم. همچنین فراموش نمیکنیم که از `super::*;` استفاده کنیم، این باعث میشه که بتونیم به فانکشن ها و... هایی که بیرون ماژول `tests` هستند، دسترسی داشته باشیم.
+
+کد چنین چیزی میشه:
 
 ```rust
 fn return_two() -> i8 {
