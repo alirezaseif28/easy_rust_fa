@@ -13928,6 +13928,7 @@ fn main() {
 
 ## Taking user input
 
+یک روش ساده برای گرفتن ورودی از کاربر استفاده از `std::io::stdin` هست. `stdin` به معنای `Standard Input` هست، که خب میتونه کیبورد کاربر باشه. با `stdin()` ما میتونیم از کاربر ورودی بگیریم، ورودی‌ای که گرفتیم رو باید داخل یک `&mut String` با اسفتاده از `.read_line()` ذخیره کنیم،‌ کد زیر یک مثالی از گرفتن ورودی از کاربر هست که کار میکنه، اما نه اونطوری که ما میخوایم
 One easy way to take input from the user is with `std::io::stdin`. This means "standard in", which is the input from the keyboard. With `stdin()` you can get user input, but then you will want to put it in a `&mut String` with `.read_line()`. Here is a simple example of that, but it both works and doesn't work:
 
 ```rust
@@ -13946,7 +13947,7 @@ fn main() {
 }
 ```
 
-Here is what an output looks like:
+این خروجیش هست:
 
 ```text
 Please type something, or x to escape:
@@ -13965,8 +13966,9 @@ You wrote x
 x
 You wrote x
 ```
+برنامه ورودی هارو میگیره و چاپ میکنه، و قرار بود اگه `x` رو گرفت برنامه رو متوقف کنه، اما خب نمیکنه. ما میتونیم با استفاده از `CTRL + ` برنامه رو متوقف کنیم.
 
-It takes our input and gives it back, and it even knows that we typed `x`. But it doesn't exit the program. The only way to get out is to close the window, or type ctrl and c. Let's change the `{}` to `{:?}` in `println!` to get more information (or you could use `dbg!(&input_string)` if you like that macro). Now it says:
+بزارید `{}` رو به `{:?}` تغییر بدیم که اطلاعات بیشتری بگیریم(میتونیم از `dbg!` هم استفاده کنیم)، اگه این کار رو کنیم خروجی برنامه میشه:
 
 ```text
 Please type something, or x to escape:
@@ -13979,8 +13981,9 @@ You wrote "x\r\n"
 x
 You wrote "x\r\n"
 ```
+به این دلیل اینطوری هست که ما در حقیقت فقط `something` رو ننوشتیم، بلکه نوشتیم `something` و بعد یک `Enter` زدیم.
 
-This is because the keyboard input is actually not just `something`, it is `something` and the `Enter` key. There is an easy method to fix this called `.trim()`, which removes all the whitespace. Whitespace, by the way, is all [these characters](https://doc.rust-lang.org/reference/whitespace.html):
+برای حل این مشکل میتونیم از متود `.trim()` که همه‌ی `Whitespace` ها رو حذف میکنه استفاده کنیم، در ضمن `Whitespace` ها این ها هستند: [https://doc.rust-lang.org/reference/whitespace.html](https://doc.rust-lang.org/reference/whitespace.html):
 
 ```text
 U+0009 (horizontal tab, '\t')
@@ -13996,8 +13999,9 @@ U+2028 (line separator)
 U+2029 (paragraph separator)
 ```
 
-So that will turn `x\r\n` into just `x`. Now it works:
+پس ما با استفاده از `.trim()` میتونیم برای مثال `x\r\n` رو به `x` تبدیل کنیم.
 
+حالا برنامه رو تغییر میدیم:
 ```rust
 use std::io;
 
@@ -14014,7 +14018,7 @@ fn main() {
 }
 ```
 
-Now it will print:
+چیزی که پرینت میکنه:
 
 ```text
 Please type something, or x to escape:
@@ -14030,7 +14034,7 @@ You wrote x
 See you later!
 ```
 
-There is another kind of user input called `std::env::Args` (env means environment). `Args` is what the user types when starting the program. There is actually always at least one `Arg` in a program. Let's write a program that only prints them using `std::env::args()` to see what they are.
+یک نوع دیگه‌ای از ورودی هایی که کاربر میده هست که بهشون میگیم `Program Argument`، که با استفاده از `std::env::Args` میتونیم ازشون استفاده کنیم. `Args` چیزی هست که کاربر هنگام اجرای برنامه وارد کرده، همیشه حداقل یک `Arg` وجود داره. یک برنامه مینویسیم که با استفاده از `std::end::args()` تمام `Argument` هایی که برنامه فرستاده شده رو چاپ کنه:
 
 ```rust
 fn main() {
@@ -14038,19 +14042,19 @@ fn main() {
 }
 ```
 
-If we write `cargo run` then it prints something like this:
+اگه با استفاده از `cargo run` برنامه رو اجرا کنیم، چنین خروجی‌ای میگیریم:
 
 ```text
 Args { inner: ["target\\debug\\rust_book.exe"] }
 ```
 
-Let's give it more input and see what it does. We'll type `cargo run but with some extra words`. It gives us:
+بزارید بهش `Argument` بدیم. برای اینکار `cargo run but with some extra words`  رو مینویسیم. خروجی‌ای که میده:
 
 ```text
 Args { inner: ["target\\debug\\rust_book.exe", "but", "with", "some", "extra", "words"] }
 ```
 
-Interesting. And when we look at [the page for Args](https://doc.rust-lang.org/std/env/struct.Args.html), we see that it implements `IntoIterator`. That means we can do all the things we know about iterators to read and change it. Let's try this:
+خب جالب بود، وقتی که به [صفحه‌ی مستندات `Args`]() نگاه میکنیم،‌ میتونیم ببینیم که `IntoIterator` رو پیاده‌سازی کرده. این به این معنی هست که میتونیم ازش به عنوان `Iterator` استفاده کنیم:
 
 ```rust
 use std::env::args;
@@ -14064,7 +14068,7 @@ fn main() {
 }
 ```
 
-Now it says:
+خروجیش:
 
 ```text
 You entered: target\debug\rust_book.exe
@@ -14075,7 +14079,7 @@ You entered: extra
 You entered: words
 ```
 
-You can see that the first argument is always the program name, so you will often want to skip it, like this:
+میتونیم ببینیم که همیشه اولین `Argument` مسیر هست، پس معمولا اولین `Arg` رو رد میکنیم:
 
 ```rust
 use std::env::args;
@@ -14089,7 +14093,7 @@ fn main() {
 }
 ```
 
-That will print:
+خروجی:
 
 ```text
 You wrote but, which in capital letters is BUT
@@ -14099,7 +14103,9 @@ You wrote extra, which in capital letters is EXTRA
 You wrote words, which in capital letters is WORDS
 ```
 
-One common use for `Args` is for user settings. You can make sure that the user writes the input you need, and only run the program if it's right. Here's a small program that either makes letters big (capital) or small (lowercase):
+یکی از رایج‌ترین استفاده از `Args`، تنظیم تنظیمات برنامه هست.
+
+ما میتونیم کاری کنیم که اگه کاربر `Arg` مدنظر رو نده، برنامه اجرا نشه، در زیر یک برنامه‌ای نوشتیم که حروف رو به `Capital` یا `Lowecase` تبدیل کنه:
 
 ```rust
 use std::env::args;
@@ -14133,21 +14139,21 @@ fn main() {
 }
 ```
 
-Here are some examples of what it gives:
+چندین مثال از اجرای برنامه:
 
-Input: `cargo run please make capitals`:
+ورودی: `cargo run please make capitals`:
 
 ```text
 make capitals
 ```
 
-Input: `cargo run capital`:
+ورودی: `cargo run capital`:
 
 ```text
 // Nothing here...
 ```
 
-Input: `cargo run capital I think I understand now`:
+ورودی: `cargo run capital I think I understand now`:
 
 ```text
 I
@@ -14157,7 +14163,7 @@ UNDERSTAND
 NOW
 ```
 
-Input: `cargo run lowercase Does this work too?`
+ورودی: `cargo run lowercase Does this work too?`
 
 ```text
 does
@@ -14166,7 +14172,7 @@ work
 too?
 ```
 
-Besides `Args` given by the user, available in `std::env::args()`, there are also `Vars` which are the system variables. Those are the basic settings for the program that the user didn't type in. You can use `std::env::vars()` to see them all as a `(String, String)`. There are very many. For example:
+در کنار `Args` که ورودی های کاربر هست. چیزی به نام `Vars` هم وجود داره که متغییر های سیستم هست که میتونیم با استفاده از `std::env::vars()` بهشون دسترسی داشته باشیم. برای مثال:
 
 ```rust
 fn main() {
@@ -14176,7 +14182,7 @@ fn main() {
 }
 ```
 
-Just doing this shows you all the information about your user session. It will show information like this:
+خروجیش:
 
 ```text
 ("CARGO", "/playground/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/cargo")
@@ -14210,9 +14216,9 @@ Just doing this shows you all the information about your user session. It will s
 ("_", "/usr/bin/timeout")
 ```
 
-So if you need this information, `Vars` is what you want.
+پس اگه به متغییر های سیستم نیاز داشتیم از `Vars` استفاده میکنیم.
 
-The easiest way to get a single `Var` is by using the `env!` macro. You just give it the name of the variable, and it will give you a `&str` with the value. It won't work if the variable is spelled wrong or does not exist, so if you aren't sure then use `option_env!` instead. If we write this on the Playground:
+همچنین با استفاده از ماکروی `env!` میتونیم به یک `Var` دسترسی داشته باشیم. بهش اسم متغییر رو میدیم و مقدارش رو برمیگردونه. زمانی که اطمینان نداریم که متغییر وجود داره یا نه میتونیم از `option_env!` استفاده کنیم که خروجیش یک `Option` هست:
 
 ```rust
 fn main() {
@@ -14222,7 +14228,7 @@ fn main() {
 }
 ```
 
-then we get the output:
+خروجیش:
 
 ```text
 playground
@@ -14230,13 +14236,17 @@ Can't find ROOT
 /playground/.rustup/toolchains/stable-x86_64-unknown-linux-gnu/bin/cargo
 ```
 
-So `option_env!` is always going to be the safer macro. `env!` is better if you actually want the program to crash when you can't find the environment variable.
+پس `option_env!` از `env!` امن‌تر هست. `env!` زمانی خوب هست که میخواید اگه متغییر وجود نداشت برنامه `Crash` کنه.
 
 ## Using files
 
-Now that we are using Rust on the computer, we can start working with files. You will notice that now we will start to see more and more `Result`s in our code. That is because once you start working with files and similar things, many things can go wrong. A file might not be there, or maybe the computer can't read it.
+خب حالا که `Rust` رو روی کامپیوتر نصب کردیم میتونیم با فایل ها کار کنیم، در بخش قرار هست که مقدار زیادی `Result` ببینیم. این به دلیل این هست که در هنگام کار با فایل ها امکان داره خیلی چیز ها درست پیش نره، برای مثال فایل میتونه وجود نداشته باشه یا ما دسترسی خوندن بهش رو نداشته باشیم و...
 
-You might remember that if you want to use the `?` operator, it has to return a `Result` in the function it is in. If you can't remember the error type, you can just give it nothing and let the compiler tell you. Let's try that with a function that tries to make a number with `.parse()`.
+خب احتمالا اپراتور `?` رو یادتون هست. اگه جلوی فانکشنی که `Result` میده از `?` استفاده کنیم، کامپایلر به خروجی `Result` نگاه میکنه، اگه مقدار `Ok` بود که مقدار رو برمیگردونه. اگه مقدار `Err` بود اون `Err` رو برمیگردونه.
+
+در ضمن ما باید از `?` در فانکشنی استفاده کنیم که یک `Result` برمیگردونه و نوع `Err` هم باید همون نوعی باشه که فانکشنی که `Result` میده و ما داریم اون رو کنترل میکنیم، استفاده کرده.
+
+اگه اون نوع رو نمیدونیم میتونیم مقدار `Err` رو `()` بزاریم و کامپایلر بعدش بهمون میگه که نوع باید چی باشه:
 
 ```rust
 // ⚠️
@@ -14250,7 +14260,7 @@ fn main() {
 }
 ```
 
-The compiler tells us exactly what to do:
+کمکی که کامپایلر میکنه:
 
 ```text
 error[E0308]: mismatched types
@@ -14264,8 +14274,8 @@ error[E0308]: mismatched types
   = note: expected enum `std::result::Result<_, ()>`
              found enum `std::result::Result<_, std::num::ParseIntError>`
 ```
+خب عالیه، پس الان همون چیزی که کامپایلر گفت رو به عنوان نوع `Err` در نظر میگیریم:
 
-Great! So we just change the return to what the compiler says:
 
 ```rust
 use std::num::ParseIntError;
@@ -14280,15 +14290,13 @@ fn main() {
 }
 ```
 
-Now the program works!
-
+الان برنامه کار میکنه:
 ```text
 Ok(88)
 Ok(5)
 ```
 
-So now we want to use `?` to just give us the value if it works, and the error if it doesn't. But how to do this in `fn main()`? If we try to use `?` in main, it won't work.
-
+خب حالا `main()` که چیزی برنمیگردونه، پس چطوری از `?` در `main()` استفاده کنیم؟
 ```rust
 // ⚠️
 use std::num::ParseIntError;
@@ -14303,7 +14311,7 @@ fn main() {
 }
 ```
 
-It says:
+خطایی که میده:
 
 ```text
 error[E0277]: the `?` operator can only be used in a function that returns `Result` or `Option` (or another type that implements `std::ops::Try`)
@@ -14317,8 +14325,11 @@ error[E0277]: the `?` operator can only be used in a function that returns `Resu
    | |_- this function should return `Result` or `Option` to accept `?`
 ```
 
-But actually `main()` can return a `Result`, just like any other function. If our function works, we don't want to return anything (main() isn't giving anything to anything else). And if it doesn't work, we will return the same error. So we can write it like this:
+خب `main()` هم میتونه یک `Result` برگردونه، دقیقا مثل هر فانکشن دیگه‌ای...
 
+
+
+در کد زیر اگه برنامه بدون `Err`‌ای اچرا شد، ما مقدار `()` رو برمیگردونیم، اما اگه به خطایی برخورد برنامه `ParseIntError` رو برمیگردونه:
 ```rust
 use std::num::ParseIntError;
 
@@ -14333,28 +14344,43 @@ fn main() -> Result<(), ParseIntError> {
 }
 ```
 
-Don't forget the `Ok(())` at the end: this is very common in Rust. It means `Ok`, inside of which is `()`, which is our return value. Now it prints:
+کد `Ok(())` رو فراموش نکنیم...
+
+خروجیش:
 
 ```text
 88
 5
 ```
 
-This wasn't very useful when just using `.parse()`, but it will be with files. That's because `?` also changes error types for us. Here's what [the page for the ? operator](https://doc.rust-lang.org/std/macro.try.html) says in simple English:
+اما خب در مورد `.parse()` همچین نیازی به این کار نبود، اما وقتی که با فایل ها کار میکنیم خیلی بدردبخور میشه.
+
+خب حالا به یک نکته‌ی مهم میرسیم، اپراتور `?` میتونه نوع یک `Err` رو هم عوض کنه.
+
+در [صفحه‌ی اپراتور `?`](https://doc.rust-lang.org/std/macro.try.html) میتونیم ببینیم که چنین چیزی میگه
 
 ```text
 If you get an `Err`, it will get the inner error. Then `?` does a conversion using `From`. With that it can change specialized errors to more general ones. The error it gets is then returned.
+به فارسی
+اگه مقدار `Err` بگیریم، این اپراتور مقدار `Err` رو میگیره. بعد `?` با استفاده از `From` سعی میکنه `Err` رو به چیز دیگه‌ای تبدیل کنه. با استفاده از این قابلیت ما میتونیم خطا های خاص رو به خطا های کلی‌تر تبدیل کنیم. در نهایت مقدار نهایی برگردونده میشه.
 ```
 
-Also, Rust has a convenient `Result` type when using `File`s and similar things. It's called `std::io::Result`, and this is what you usually see in `main()` when you are using `?` to open and do things to files. It's actually a type alias. It looks like this:
+همچنین، `Rust` یک نوع `Result` برای کار با قایل ها داره. که `std::io::Result` هست. و این چیزی هست که معمولا به عنوان خروجی `main()` در هنگام کار با قایل ها ازش استفاده میکنیم.
 
+نوع `std::io::Result` در حقیقت یک `Type Alias` هست:
 ```text
 type Result<T> = Result<T, Error>;
 ```
 
-So it is a `Result<T, Error>`, but we only need to write the `Result<T>` part.
+پس این نوع در حقیقت `Result<T, Error>` هست اما ما فقط لازم هست که `Result<T>` رو بنویسیم.
 
-Now let's try working with files for the first time. `std::fs` is where the methods are for working with files, and with `std::io::Write` you can write in them. With that we can use `.write_all()` to write into the file.
+خب حالا بیاید با فایل ها کار کنیم
+
+در `std::fs` متود هایی برای کار با فایل ها وجود داره.
+
+دقت کنید که ما قبل از محتویاتی که میخوایم بهش بدیم یک `b` قرار میدیم که تبدیل به `byte` بشند.
+
+با استفاده از `std::io::Write` میتونیم در فایل ها چیز بنویسیم. با استفاده از این میتونیم از `.write_all()` استفاده کنیم که توی فایل چیز بنویسیم:
 
 ```rust
 use std::fs;
@@ -14369,10 +14395,9 @@ fn main() -> std::io::Result<()> {
 }
 ```
 
-Then if you click on the new file `myfilename.txt`, it will say `Let's put this in the file`.
+اگه کد بالا رو اچرا کنیم یک فایل ایجاد میکنه که توش `Let's put this in the file` نوشته شده.
 
-We don't need to do this on two lines though, because we have the `?` operator. It will pass on the result we want if it works, kind of like when you use lots of methods on an iterator. This is when `?` becomes very convenient.
-
+با تشکر از `?`، میتونیم کد بالا رو حتی توی یک خط هم بنویسیم:
 ```rust
 use std::fs;
 use std::io::Write;
@@ -14383,18 +14408,21 @@ fn main() -> std::io::Result<()> {
 }
 ```
 
-So this is saying "Please try to create a file and check if it worked. If it did, then use `.write_all()` and then check if that worked."
+کد بالا رو میتونیم اینطوری تفسیر کنیم: "لطفا سعی کن یک فایل درست کنی، اگه مشکلی پیش نیومد، از `.write_all()` استفاده کن که چیز توش بنویسی و چک کن که مشکلی پیش اومد یا نه. (اگه هر جا مشکلی پیش بیاد برنامه تموم میشه)"
 
-And in fact, there is also a function that does both of these things together. It's called `std::fs::write`. Inside it you give it the file name you want, and the content you want to put inside. Again, careful! It will delete everything in that file if it already exists. Also, it lets you write a `&str` without `b` in front, because of this:
+البته یک فانکشن هم هست که این دو کار رو خودش انجام میده، و اون `std::fs::write` هست. به عنوان ورودی بهش اسم فایل و محتوایی که میخوایم درش بنویسیم رو میدیم.
+
+بهتره مراقب باشید چون اگه فایل از قبل وجود داشته باشه، محتویاتی که درش هست پاک میشه و چیزی که ما گفتیم توش نوشته میشه.
+
+همچنین در هنگام استفاده از این فانکشن نیازی نداریم که از `b` استفاده کنیم، دلیلش این هست:
 
 ```rust
 pub fn write<P: AsRef<Path>, C: AsRef<[u8]>>(path: P, contents: C) -> Result<()>
 ```
 
-`AsRef<[u8]>` is why you can give it either one.
+کد `AsRef<[u8]>` دلیلی هست که اجازه میده قابلیت ای رو داشته باشه که به `u8` تبدیل بشه رو بهش بدیم.
 
-It's very simple:
-
+مثالی از استفاده از فانکشن `std::fs::write`:
 ```rust
 use std::fs;
 
@@ -14409,10 +14437,9 @@ Dad: Yep. The world didn't turn color until sometimes in the 1930s...")?;
 }
 ```
 
-So that's the file we will use. It's a conversation with a comic book character named Calvin and his dad, who is not serious about his question. With this we can create a file to use every time.
+باز کردن یک فایل به اسونی ساختنش هست، میتونیم به جای `create()` از `open()` استفاده کنیم، بعد اگه فایل پیدا شد، میتونیم از متود هایی مثل `read_to_string()` اسفتاده کنیم.
 
-Opening a file is just as easy as creating one. You just use `open()` instead of `create()`. After that (if it finds your file), you can do things like `read_to_string()`. To do that you can create a mutable `String` and read the file into there. It looks like this:
-
+متود `read_to_string()` به یک `String` نیاز داره که محتویات فایل رو داخلش بریزه:
 ```rust
 use std::fs;
 use std::fs::File;
@@ -14436,14 +14463,15 @@ Dad: Yep. The world didn't turn color until sometimes in the 1930s...")?;
 }
 ```
 
-That will print:
+خروجیش:
 
 ```rust
 CALVIN: DAD, HOW COME OLD PHOTOGRAPHS ARE ALWAYS BLACK AND WHITE? DIDN'T THEY HAVE COLOR FILM BACK THEN? DAD: SURE THEY DID. IN 
 FACT, THOSE PHOTOGRAPHS *ARE* IN COLOR. IT'S JUST THE *WORLD* WAS BLACK AND WHITE THEN. CALVIN: REALLY? DAD: YEP. THE WORLD DIDN'T TURN COLOR UNTIL SOMETIMES IN THE 1930S...
 ```
+خب اگه بخوایم یک فایل بسازیم ولی اگه از قبل وجود داشت، حذفش نکنیم چی؟
 
-Okay, what if we want to create a file but not do it if there is already another file with the same name? Maybe you don't want to delete the other file if it's already there just to make a new one. To do this, there is a struct called `OpenOptions`. Actually, we've been using `OpenOptions` all this time and didn't know it. Take a look at the source for `File::open`:
+برای انجام اینکار میتونیم از `OpenOptions` استفاده کنیم، در حقیقت تا الان هم داشتیم از اون استفاده میکردیم و نمیدونستیم، برای مثال بیاید به کد `File::open` نگاه کنیم:
 
 ```rust
 pub fn open<P: AsRef<Path>>(path: P) -> io::Result<File> {
@@ -14451,7 +14479,7 @@ pub fn open<P: AsRef<Path>>(path: P) -> io::Result<File> {
     }
 ```
 
-Interesting, that looks like the builder pattern that we learned. It's the same for `File::create`:
+خب جالب شد، برای `File::create` هم اوضاع همین هست:
 
 ```rust
 pub fn create<P: AsRef<Path>>(path: P) -> io::Result<File> {
@@ -14459,16 +14487,16 @@ pub fn create<P: AsRef<Path>>(path: P) -> io::Result<File> {
     }
 ```
 
-If you go to [the page for OpenOptions](https://doc.rust-lang.org/std/fs/struct.OpenOptions.html), you can see all the methods that you can choose from. Most take a `bool`:
+اگه به [صفحه‌ی مستندات `OpenOptions`]() بریم، میتونیم متود هایی که داره رو ببینیم،‌ اکثر اونها یک `bool` به عنوان ورودی میگیرند:
 
-- `append()`: This means "add to the content that's already there instead of deleting".
-- `create()`: This lets `OpenOptions` create a file.
-- `create_new()`: This means it will only create a file if it's not there already.
-- `read()`: Set this to `true` if you want it to be able to read a file.
-- `truncate()`: Set this to true if you want to cut the file content to 0 (delete the contents) when you open it.
-- `write()`: This lets it write to a file.
+- `append()`: اگه فایل وجود داشت چیز هایی که ما میخوایم رو به مجتویاتی که قبلا وجود داشته اضافه میکنه
+- `create()`: با استفاده از این میتونیم اجازه‌ی ساختن فایل رو بدیم
+- `create_new()`: اگه از این استفاده کنیم به شرطی که قبلا فایل وجود نداشته باشه،‌ فایل رو میسازه
+- `read()`: اگه میخوایم قابلیت خوندن رو داشته باشیم از این استفاده میکنیم
+- `truncate()`: اگه از این استفاده کنیم وقتی که فایل رو باز میکنیم، محتویاتش رو هم حذف میکنیم
+- `write()`: این اجازه‌ی نوشتن روی فایل رو میده
 
-Then at the end you use `.open()` with the file name, and that will give you a `Result`. Let's look at one example:
+و در اخر از `.open()` استفاده میکنیم و خب مسیر فایل رو هم بهش میدیم، این به ما یک `Result` میده، برای مثال:
 
 ```rust
 // ⚠️
@@ -14488,15 +14516,17 @@ Dad: Yep. The world didn't turn color until sometimes in the 1930s...")?;
 }
 ```
 
-First we made an `OpenOptions` with `new` (always start with `new`). Then we gave it the ability to `write`. After that we set `create_new()` to `true`, and tried to open the file we made. It won't work, which is what we want:
+اول از همه ما یک `OpenOptions` با استفاده از `new` درست کردیم. بعد قابلیت `write` رو بهش دادیم، بعد قابلیت `create_new` رو فعال کردیم و در نهایت سعی کردیم که فایل رو باز کنیم، چون فایل از قبل وجود داره، `Err` میگیریم:
 
 ```text
 Error: Os { code: 80, kind: AlreadyExists, message: "The file exists." }
 ```
 
-Let's try using `.append()` so we can write to a file. To write to the file we can use `.write_all()`, which is a method that tries to write in everything you give it.
+خب حالا بزارید از `.append()` استفاده کنیم که اجازه میده به انتهای فایل چیز بنویسیم.
 
-Also, we will use the `write!` macro to do the same thing. You will remember this macro from when we did `impl Display` for our structs. This time we are using it on a file though instead of a buffer.
+متود `.write_all()` سعی میکنه که هر چیزی که بهش میدیم رو داخل فایل بنویسه.
+
+همچنین `write!` هم همین کار رو میکنه. قبلا از `write!` برای نوشتن داخل یک `Buffer` استفاده کردیم(توی پیاده‌سازی `Display`)، اینبار ازش برای نوشتن داخل یک فایل استفاده میکنیم.
 
 ```rust
 use std::fs;
@@ -14524,7 +14554,7 @@ Dad: Yep. The world didn't turn color until sometimes in the 1930s...")?;
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Calvin: Dad, how come old photographs are always black and white? Didn't they have color film back then?
@@ -14535,11 +14565,15 @@ That's really weird.
 Well, truth is stranger than fiction.
 ```
 
-## cargo doc
+## دستور `cargo doc` | cargo doc
 
-You might have noticed that Rust documentation always looks almost the same. On the left side you can see `struct`s and `trait`s, code examples are on the right, etc. This is because you can automatically make documentation just by typing `cargo doc`.
+حتما متوجه شدید که مستندات `Rust` شبیه به هم هستند. در سمت چپ ما `Struct` ها و `Trait` ها رو میبینیم، مثال های کد ها رو در سمت راست میبینیم و غیره...
 
-Even making a project with nothing can help you learn about traits in Rust. For example, here are two structs that do almost nothing, and a `fn main()` that also does nothing.
+این به این دلیل هست که مستندات به طور خودکار تولید میشوند. با استفاده از `cargo doc` میتونیم مستند رو بسازیم.
+
+حتی یک پروژه‌ی خالی هم مستندات خوبی داره!
+
+کد زیر رو در نظر بگیرید:
 
 ```rust
 struct DoesNothing {}
@@ -14554,7 +14588,7 @@ impl PrintThing {
 fn main() {}
 ```
 
-But if you type `cargo doc --open`, you can see a lot more information than you expected. First it shows you this:
+اگه دستور `cargo doc --open` رو اجرا کنیم، اطلاعات زیادی میتونیم ببینیم، اول چنین چیزی رو نشون میده:
 
 ```text
 Crate rust_book
@@ -14566,8 +14600,7 @@ PrintThing
 Functions
 main
 ```
-
-But if you click on one of the structs, it will show you a lot of traits that you didn't think were there:
+اما اگه روی یکی از `Struct` ها کلیک کنیم، اطلاعات زیادی حتی در مورد `Trait` ها هم میده که ما نمیدونستیم وجود دارند:
 
 ```text
 Struct rust_book::DoesNothing
@@ -14612,9 +14645,9 @@ where
     U: TryFrom<T>,
 ```
 
-This is because of all the traits that Rust automatically makes for every type.
+این به دلیل این هست که `Rust` یکسری `Trait` ها رو برای `Struct` ها به صورت پیشفرض پیاده‌سازی میکنه.
 
-Then if we add some documentation comments you can see them when you type `cargo doc`.
+با استفاده از `Comment` ها میتونیم برای کدمون مستند بنویسیم:
 
 ```rust
 /// This is a struct that does nothing
@@ -14631,7 +14664,7 @@ impl PrintThing {
 fn main() {}
 ```
 
-Now it will print:
+خروجیش:
 
 ```text
 Crate rust_book
@@ -14642,8 +14675,14 @@ Functions
 main
 ```
 
-`cargo doc` is very nice when you use a lot of other people's crates. Because these crates are all on different websites, it can take some time to search them all. But if you use `cargo doc`, you will have them all in the same place on your hard drive.
+## تموم شد؟ | The end?
 
-## The end?
+خب این اخر `Easy Rust in Persian` بود، اما من در دسترس هستم، اگه سوالی داشتید میتونید از طریق `pouria.khakpour9909@gmail.com` با من تماس بگیرید.
 
-This is the end of Rust in Easy English. But I am still here, and you can let me know if you have any questions. Feel free to [contact me on Twitter](https://twitter.com/mithridates) or add a pull request, issue, etc. You can also tell me if some parts weren't easy to understand. Rust in Easy English needs to be very easy to understand, so please let me know where the English is too difficult. Of course, Rust itself can be difficult to understand, but we can at least make sure that the English is easy.
+اگه فکر میکنید که بخشی درست توضیح داده نشده یا فکر میکنید که روش بهتری برای توضیج داره یا هر چیز دیگه‌ای! میتونید یک `issue` باز کنید. یا حتی بهتر یک `PR` بدید.
+
+هدف این پروژه این هست که مباحث `Rust` رو به زبان ساده توضیح بدیم. البته `Rust` خودش میتونه یکم سخت باشه، اما ما سعی میکنیم...
+
+## اعتبارات | Credits
+
+این پروژه فقط یک ترجمه‌ی فارسی از پروژه‌ی [`Easy Rust`](https://github.com/Dhghomon/easy_rust) هست.
