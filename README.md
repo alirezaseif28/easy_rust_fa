@@ -126,7 +126,6 @@
   - [Cargo doc](#cargo-doc)
   - [The end?](#the-end?)
 
-</div>
 
 # بخش ۱ - راست در مرورگر
 
@@ -9767,13 +9766,13 @@ Interesting! Now you can see that a String is a kind of `Vec`. And actually a `S
 
 The important part of the documentation for a trait is "Required Methods" on the left. If you see Required Methods, it probably means that you have to write the method yourself. For example, for `Iterator` you need to write the `.next()` method. And for `From` you need to write the `.from()` method. But some traits can be implemented with just an **attribute**, like we see in `#[derive(Debug)]`. `Debug` needs the `.fmt()` method, but usually you just use `#[derive(Debug)]` unless you want to do it yourself. That's why the page on `std::fmt::Debug` says that "Generally speaking, you should just derive a Debug implementation."
 
-## Attributes
+## صفت/ویژگی ها | Attributes
 
-You have seen code like `#[derive(Debug)]` before: this type of code is called an *attribute*. These attributes are small pieces of code that give information to the compiler. They are not easy to create, but they are very easy to use. If you write an attribute with just `#` then it will affect the code on the next line. But if you write it with `#!` then it will affect everything in its own space.
+قبلا کد هایی مثل `#[derive(Debug)]` رو دیدیم، به این نوع کد ها میگن `Attribute`. این ها کد های کوچیکی هستند که به کامپایلر اطلاعاتی میدند، ساختنشون همچین اسون نیست، اما استفاده ازشون اسون هست.  اگه با استفاده از `#` یک `Attribute` بنویسیم روی خط بعدی اثر میزاره. اما اگه با استفاده از `#![derive(Debug)]` یک `Attribute` بنویسیم، روی همه‌ی کد های حوزه‌ی خودش اثر میزاره.
 
-Here are some attributes you will see a lot:
+چندتا `Attribute` که خیلی اونهارو میبینیم:
 
-`#[allow(dead_code)]` and `#[allow(unused_variables)]`. If you write code that you don't use, Rust will still compile but it will let you know. For example, here is a struct with nothing in it and one variable. We don't use either of them.
+خب `#[allow(dead_code)]` و `#[allow(unused_variables)]``. اگه کدی بنویسیم که استفاده نشه،‌ برنامه کامپایل میشه اما بهمون میگه که این هارو نوشتی اما استفاده نکردی، برای مثال در کد زیر `JustAStruct` استفاده‌ای نشده، پس `Rust` یه اخطاری میده:
 
 ```rust
 struct JustAStruct {}
@@ -9782,8 +9781,8 @@ fn main() {
     let some_char = 'ん';
 }
 ```
-
-If you write this, Rust will remind you that you didn't use them:
+-
+اخطاری که در زمان کامپایل میگیریم:
 
 ```text
 warning: unused variable: `some_char`
@@ -9803,7 +9802,7 @@ warning: struct is never constructed: `JustAStruct`
   = note: `#[warn(dead_code)]` on by default
 ```
 
-We know that you can write a `_` before the name to make the compiler be quiet:
+میدونیم که میتونیم از `_` استفاده کنیم که کامپایلر در مورد استفاده نشدن این ها گیر نده:
 
 ```rust
 struct _JustAStruct {}
@@ -9813,7 +9812,8 @@ fn main() {
 }
 ```
 
-but you can also use attributes. You'll notice in the message that it uses `#[warn(unused_variables)]` and `#[warn(dead_code)]`. In our code, `JustAStruct` is dead code, and `some_char` is an unused variable. The opposite of `warn` is `allow`, so we can write this and it will not say anything:
+
+اما همچنین میتونیم از `Attribute` ها هم استفاده کنیم. برای مثال در کد زیر از `` و `` استفاده کردیم که کامپایل در مورد استفاده نشدن گیری نده:
 
 ```rust
 #![allow(dead_code)]
@@ -9833,9 +9833,10 @@ fn main() {
 }
 ```
 
-Of course, dealing with dead code and unused variables is important. But sometimes you want the compiler to be quiet for a while. Or you might need to show some code or teach people Rust and don't want to confuse them with compiler messages.
+البته، توجه به متغییر یا هر چیزی که تعریف شده اما استفاده نشده مهم هست. اما گاهی وقت ها میخوایم که کامپایلر در این باره سکوت کنه.
 
-`#[derive(TraitName)]` lets you derive some traits for structs and enums that you create. This works with many common traits that can be automatically derived. Some like `Display` can't be automatically derived, because for `Display` you have to choose how to display:
+
+کد `#[derive(TraitName)]` به ما اجازه میده که `Trait` ها رو برای یک `Struct` به طور خودکار پیاده‌سازی کنیم. این برای `Trait` های رایج کار میکنه اما بعضی `Trait` ها رو باید خودمون پیاده‌سازی کنیم، برای مثال `Display` یکی از اونهایی هست که ما باید پیاده‌سازیش کنیم، چون کامپایلر نمیدونه که میخوایم چطوری نمایش بدیم:
 
 ```rust
 // ⚠️
@@ -9851,7 +9852,7 @@ fn main() {
 }
 ```
 
-The error message will tell you that.
+خطایی که میگیریم:
 
 ```text
 error: cannot find derive macro `Display` in this scope
@@ -9861,7 +9862,7 @@ error: cannot find derive macro `Display` in this scope
   |
 ```
 
-But for traits that you can automatically derive, you can put in as many as you like. Let's give `HoldsAString` seven traits in a single line, just for fun, even though it only needs one.
+اما خب در کد زیر میتونیم ببینیم که `HoldsAString` چندین `Trait` رو به صورت خودکار پیاده‌سازی کرده:
 
 ```rust
 #[derive(Debug, PartialEq, Eq, Ord, PartialOrd, Hash, Clone)]
@@ -9877,7 +9878,7 @@ fn main() {
 }
 ```
 
-Also, you can make a struct `Copy` if (and only if) its fields are all `Copy`. `HoldsAString` has `String` which is not `Copy` so you can't use `#[derive(Copy)]` for it. But for this struct you can:
+همچنین اگه تمام `Field` های یک `Struct` قابل `Copy` باشند، میتونیم از `Copy` هم استفاده کنیم. `HoldsAString` یک `Field` از نوع `String` داشت که خب `Copy` نیست. پس ما نمیتونستیم از `#[derive(Copy)` براش استفاده کنیم، اما برای `Struct` زیر میتونیم:
 
 ```rust
 #[derive(Clone, Copy)] // You also need Clone to use Copy
@@ -9901,13 +9902,15 @@ fn main() {
 }
 ```
 
-`#[cfg()]` means configuration and tells the compiler whether to run code or not. You see it usually like this: `#[cfg(test)]`. You use that when writing test functions so that it knows not to run them unless you are testing. Then you can have tests next to your code but the compiler won't run them unless you tell it to.
+کد `#[cfg()]` به طور کلی برای تنظیمات هست، برای مثال میتونه به کامپایلر بگه که یک کد اجرا بشه یا نشه. معمولا اینطوری میبینیمش: `#[cfg(test)]`.
 
-One other example using `cfg` is `#[cfg(target_os = "windows")]`. With that you can tell the compiler to only run the code on Windows, or Linux, or anything else.
+استفاده از `#[cfg(test)]` باعث میشه که وقتی فانکشن های تست مینویسیم، اونها هیچوقت اجرا نشند مگر اینکه بخوایم خودمون تست کنیم.
 
-`#![no_std]` is an interesting attribute that tells Rust not to bring in the standard library. That means you don't have `Vec`, `String`, and anything else in the standard library. You will see this in code for small devices that don't have much memory or space.
+یک مثال دیگه از `cfg`، کد `#[cfg(target_os = "windows")]` هست. که میتونیم بگیم فقط زمانی کد رو اجرا کن که سیستم عامل `Windows` باشه.
 
-You can see many more attributes [here](https://doc.rust-lang.org/reference/attributes.html).
+کد `#![no_std]` هم جالب هست. این به کامپایلر میگه که به طور پیشفرض `Standard Library` رو استفاده نکن. این به این معنا هست هست که ما نمیتونیم از `Vec`، `String` یا هر چیز دیگه‌ای که داخل `Standard Library` هست، استفاده کنیم. کاربردش جایی هست که داریم برای دستگاهی برنامه مینویسیم که توان پردازشی یا حافظه‌ی کمی داره.
+
+بقیه‌ی `Attribute` ها رو میتونیم در [اینجا](https://doc.rust-lang.org/reference/attributes.html) ببینیم.
 
 ## Box
 
@@ -14686,3 +14689,5 @@ main
 ## اعتبارات | Credits
 
 این پروژه فقط یک ترجمه‌ی فارسی از پروژه‌ی [`Easy Rust`](https://github.com/Dhghomon/easy_rust) هست.
+
+</div>
