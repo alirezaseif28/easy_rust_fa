@@ -11933,20 +11933,21 @@ mod tests {
 
 خب این احتمالا به اندازه‌ی کافی خوب هست.
 
-## External crates
+## `crate` های خارجی | External crates
 
-An external crate means "someone else's crate".
+اصطلاح `External Crate` به معنای `crate`‌ای هست که کس دیگه نوشته.
 
-For this section you *almost* need to install Rust, but we can still use just the Playground. Now we are going to learn how to import crates that other people have written. This is important in Rust because of two reasons:
+برای این بخش تقریبا نیاز داریم که `Rust` رو نصب کنیم. اما همچنان میتونیم از `Playground` هم استفاده کنیم. در این بخش یاد میگیریم که `crate` های مهم چه چیز هایی هستند و چطوری باید ازشون استفاده کنیم، این نکته‌‌ی مهمی در راست هست، به این دلایل:
+- استفاده از `crate` ها خیلی راحت هست
+- خب `Standard Library`، `Rust` خیلی کوچیک هست
 
-- It is very easy to import other crates, and
-- The Rust standard library is quite small.
+این به این معنا هست که به طور عادی ما از `crate` کار زیادی استفاده میکنیم حتی برای کار های پایه‌ای هم زیاد از `crate` ها استفاده میکنیم.
 
-That means that it is normal in Rust to bring in an external crate for a lot of basic functions. The idea is that if it is easy to use external crates, then you can choose the best one. Maybe one person will make a crate for one function, and then someone else will make a better one.
+ایده این هست که بدلیل اینکه استفاده از `crate` ها اسون هست، پس ما میتونیم بهترین رو بین `crate` ها استفاده کنیم. شاید یکی `crate` بهتری نسبت به اینی که فعلا داریم استفاده میکنیم نوشت، پس ما خیلی راحت میتونیم از اون بهتر استفاده کنیم.
 
-In this book we will only look at the most popular crates, the crates that everyone who uses Rust knows.
+ما در این بخش فقط `crate` های مهم رو معرفی میکنیم، `crate` هایی که معمولا همه استفاده میکنند.
 
-To begin learning external crates, we will start with the most common one: `rand`.
+از `rand` شروع میکنیم.
 
 ### rand
 
