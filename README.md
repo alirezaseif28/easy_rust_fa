@@ -11395,13 +11395,13 @@ mod tests {
 }
 ```
 
-### Test-driven development
+### توسعه‌ی تست محور | Test-driven development
 
-You might see the words "test-driven development" when reading about Rust or another language. It's one way to write programs, and some people like it while others prefer something else. "Test-driven development" means "writing tests first, then writing the code". When you do this, you will have a lot of tests for everything you want your code to do. Then you start writing the code, and run the tests to see if you did it right. Then the tests are always there to show you if something goes wrong when you add to and rewrite your code. This is pretty easy in Rust because the compiler gives a lot of information about what to fix. Let's write a small example of test-driven development and see what it looks like.
+خب احتمال داره اصطلاح `Test-Driven Development` رو دیده باشید. این یک روش برای نوشتن برنامه هست، که بعضی ها به بقیه‌ی روش ها ترجیحش میدند. در روش `Test-Driven Development` ما اول تست های برنامه رو مینویسیم و بعد کد رو مینویسیم. خب وقتی این کار رو انجام میدیم برای هرکاری که برنامه باید انجام بده تست داریم. خب این هم یعنی احتمال اینکه باگی در نسخه‌ی رسمی پیدا بشه کم میشه، چون برای اگه جایی برنامه طبق خواسته‌ی ما پیش نره، تست `Failed` میشه و میفهمیم که برنامه درست کار نکرده. و خب اگه تستی ناموفق باشه کامپایلر هم کمک میکنه که چطوری درستش کنیم. بزارید یک برنامه با روش `TDD` بنویسیم.
 
-Let's imagine a calculator that takes user input. It can add (+) and it can subtract (-). If the user writes "5 + 6" it should return 11, if the user writes "5 + 6 - 7" it should return 4, and so on. So we'll start with test functions. You can also see that function names in tests are usually quite long. That is because you might run a lot of tests, and you want to understand which tests have failed.
+بزارید تصور کنیم که میخوایم یک ماشین‌حساب بنویسیم. این برنامه میتونیم با کاراکتر `+` اعداد رو جمع کنه. با کاراکتر `-` اعداد رو از هم تفریق کنه. اگه کاربر `5 + 6` رو وارد کنه، برنامه باید نتیجه‌ی `11` رو برگردونه. یا اگه `5 + 6 - 7` رو وارد کنه، برنامه باید `4` رو به عنوان نتیجه نشون بده. خب پس ما شروع میکنیم تست رو بنویسیم. معمولا اسم فانکشن های تست طولانی هست، به این دلیل که خب ما باید بفهمیم درست چی رو تست کردیم.
 
-We'll imagine that a single function called `math()` will do everything. It will return an `i32` (we won't use floats). Because it needs to return something, we'll just return `6` every time. Then we will write three test functions. They will all fail, of course. Now the code looks like this:
+خب ما یک فانکشن به نام `math()` درست میکنیم که قرار هست همه‌ی کار ها رو انجام بده. این فانکشن یک `i32` برمیگردونه. به این دلیل که برای کامپایل شدن برنامه، این فانکشن باید چیزی رو برگردونه ما فعلا فقط `6` رو برمیگردونیم. بعد سه تست فانکشن مینویسیم. البته که الان همشون `Fail` میشند، به این دلیل که ما هنوز `math()` رو کامل نکردیم. اما خب بزارید کد رو ببینیم:
 
 ```rust
 fn math(input: &str) -> i32 {
@@ -11427,7 +11427,7 @@ mod tests {
 }
 ```
 
-It gives us this information:
+چنین اطلاعاتی رو میده:
 
 ```text
 running 3 tests
@@ -11435,14 +11435,13 @@ test tests::one_minus_minus_one_is_two ... FAILED
 test tests::one_minus_two_is_minus_one ... FAILED
 test tests::one_plus_one_is_two ... FAILED
 ```
+و خب اطلاعاتی در مورد ``thread 'tests::one_plus_one_is_two' panicked at 'assertion failed: `(left == right)` `` هم میده که لازم نیست اینجا بنویسیم.
 
-and all the information about ``thread 'tests::one_plus_one_is_two' panicked at 'assertion failed: `(left == right)` ``. We don't need to print it all here.
+خب حالا بیاید فانشکن `math()` رو بنویسیم. ما به عنوان ورودی فقط اعداد، نماد های `+` و `-` و اسپیس رو قبول میکنیم. پس بزارید کاراکتر هایی که مورد قبول هستند رو درون یک متغییر `const` قرار بدیم. بعد هم ورودی چک میکنیم که فقط کاراکتر های مورد قبول درش باشند.
 
-Now to think about how to make the calculator. We will accept any number, and the symbols `+-`. We will allow spaces, but nothing else. So let's start with a `const` that contains all the values. Then we will use `.chars()` to iterate by character, and `.all()` to make sure they are all inside.
+بعد یک فانکشن تست مینویسیم که اگه `Panic` کنه، تست `Succeed` میشه. ما با استفاده از `#[should_panic]` این کار رو انجام میدیم.
 
-Then we will add a test that should panic. To do that, add `#[should_panic]` attribute: now if it panics the test will succeed.
-
-Now the code looks like this:
+خب کد رو ببینیم:
 
 ```rust
 const OKAY_CHARACTERS: &str = "1234567890+- "; // Don't forget the space at the end
@@ -11479,7 +11478,7 @@ mod tests {
 }
 ```
 
-Now when we run the tests we get this result:
+الان اگه تست ها رو اجرا کنیم چنین خروجی‌ای میگیریم:
 
 ```text
 running 4 tests
@@ -11489,18 +11488,26 @@ test tests::panics_when_characters_not_right ... ok
 test tests::one_plus_one_is_two ... FAILED
 ```
 
-One succeeded! Our `math()` function will only accept good input now.
+خب یکی `Succeed` شد که اون هم `panics_when_characters_not_right()` هست. پس فانشکن `math()` فقط کاراکتر هایی که مشخص کردیم رو قبول میکنه.
 
-The next step is to write the actual calculator. This is the interesting part about having tests first: the actual code starts much later. First we will put the logic together for the calculator. We want the following:
+قدم بعدی نوشتن جدی عملیات ماشین‌حساب هست، ما چنین کاری رو انجام میدیم:
 
-- All empty spaces should be removed. This is easy with `.filter()`
-- The input should turn into a `Vec` with all the inputs. `+` doesn't need to be an input, but when the program sees `+` it should know that the number is done. For example, the input `11+1` should do something like this: 1) See `1`, push it into an empty string. 2) See another 1, push it into the string (it is now "11"). 3) See a `+`, know the number has ended. It will push the string into the vec, then clear the string.
-- The program must count the number of `-`. An odd number (1, 3, 5...) will mean subtract, an even number (2, 4, 6...) will mean add. So "1--9" should give 10, not -8.
-- The program should remove anything after the last number. `5+5+++++----` is made out of all the characters in `OKAY_CHARACTERS`, but it should turn to `5+5`. This is easy with `.trim_end_matches()`, where you remove anything that matches at the end of a `&str`.
+- همه‌ی `Space` ها باید حذف بشند. که خب با `.filter()` اینکار رو انجام میدیم.
 
-(By the way, `.trim_end_matches()` and `.trim_start_matches()` used to be `trim_right_matches()` and `trim_left_matches()`. But then people noticed that some languages go from right to left (Persian, Hebrew, etc.) so right and left were wrong. You might still see the older names in some code but they are the same thing.)
+- ورودی باید به یک `Vec` تبدیل بشه. نماد های `+` و `-` عملوند(اعداد) ها رو مشخص میکنند و خب اینکه چه عملیاتی باید روی این عملوند ها انجام بشند رو هم مشخص میکنند. برای مثال اگه ورودی `11+1` باشه، چنین چیزی رخ میده: اول `1` رو میبینه و اون رو به یک `String` اضافه میکنه. بعد یک `1` دیگه میبینه و اون رو هم به `String` اضافه میکنه. بعد `+` رو میبینه که میفهمه عملوند تموم شده. پس `String` رو به `Vec` اضافه میکنه و بعد `String` رو خالی میکنه برای ذخیره کردن عملوند بعدی.
 
-First we just want to pass all the tests. After we pass the tests, we can "refactor". Refactor means to make code better, usually through things like structs and enums and methods. Here is our code to make the tests pass:
+- برنامه باید تعداد `-` رو داشته باشه. اگه تعدادشون یک عدد ‍**فرد** باشه، باید عمل تفریق رو انجام بدیم. و اگه تعداد نماد های `-` **زوج** باشه باید عملیات جمع رو انجام بدیم. برای مثال `1--9` باید نتیجش `10` باشه و `8` نباشه.
+
+- برنامه باید هرچیزی که بعد از اخرین عملوند هست رو پاک کنه. برای مثال `5+5+++++----` باید تبدیل به `5+5` بشه. خب ما با استفاده از `.trim_end_matches()` میتونیم این کار رو انجام بدیم.
+
+(در ضمن، `.trim_end_matches()` و `.trim_start_matches()` قبلا اسم هاشون `` و `` بود. اما خب بعضی زبان ها مثل **فارسی** و **عبری** و... راست به چپ هستند. پس `right` و `left` اشتباه بودند. اما امکان داره در بعضی کد ها اون ها رو هم ببینید)
+
+
+
+
+اول ما میخوایم که همه‌ی تست ها رو `Pass` کنیم. بعد از اینکه ما تست ها رو `Pass` کردیم. میتونیم کدمون رو `Refactor` کنیم. اصطلاح `Refactoring` به معنای بهتر کردن کد هست.
+
+خب بزارید ببینیم تست ها `Pass` میشند:
 
 ```rust
 const OKAY_CHARACTERS: &str = "1234567890+- ";
@@ -11603,7 +11610,7 @@ mod tests {
 }
 ```
 
-And now the tests pass!
+الان همه‌ی تست ها `Pass` میشند:
 
 ```text
 running 6 tests
@@ -11617,18 +11624,24 @@ test tests::panics_when_characters_not_right ... ok
 test result: ok. 6 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 ```
 
-You can see that there is a back and forth process in test-driven development. It's something like this:
+میبینیم که فرایند `TDD` یک چیزی شبیه این هست:
 
-- First you write all the tests you can think of.
-- Then you start writing the code.
-- As you write the code, you get ideas for other tests.
-- You add the tests, and your tests grow as you go. The more tests you have, the more times your code gets checked.
+- اول ما برای هر چیزی که میتونیم فکر کنیم تست مینویسیم
 
-Of course, tests don't check everything and it is wrong to think that "passing all tests = the code is perfect". But tests are great for when you change your code. If you change your code later on and run the tests, if one of them doesn't work you will know what to fix.
+- بعد شروع به نوشتن کد میکنیم
 
-Now we can rewrite (refactor) the code a bit. One good way to start is with clippy. If you installed Rust then you can type `cargo clippy`, and if you're using the Playground then click on `TOOLS` and select Clippy. Clippy will look at your code and give you tips to make it simpler. Our code doesn't have any mistakes, but it could be better.
+- در حالی که کد مینویسیم ایده برای تست کردن چیز جدید میاد و اون رو هم مینویسیم
 
-Clippy tells us two things:
+
+این کار باعث میشه احتمال اینکه کد باگ داشته باشه کاهش پیدا کنه.
+
+البته این به معنای این نیست که تست نوشتن یعنی بهترین کد رو قراره بنویسیم. اما تست نوشتن خیلی کارایی داره بخصوص زمانی که کدمون رو تغییر میدیم. در اون زمان میتونیم تست رو اجرا کنیم که بفهمیم کدمون باز هم درست کار میکنه یا اینکه خیر، اگه درست کار نکرد خب باید کد رو درست کنیم.
+
+خب الان میخوایم کد رو `Refactor` کنیم. اینکه از `‌Clippy` استفاده کنیم ایده‌ی خوبی هست. اگه `Rust` رو نصب کردیم میتونیم از دستور `cargo clippy` استفاده کنیم. در `Playground` هم میتونیم از طریق‍ `TOOLS` گزینه‌ی `Clippy` رو انتخاب کنیم.
+
+خب `Clippy` کدمون رو یه نگاهی میندازه و میگه که چطوری میشه بهتر نوشتش.
+
+خب `Clippy` دو نکته بهمون میگه:
 
 ```text
 warning: this loop could be written as a `for` loop
@@ -11649,10 +11662,10 @@ warning: equality checks against true are unnecessary
    = note: `#[warn(clippy::bool_comparison)]` on by default
    = help: for further information visit https://rust-lang.github.io/rust-clippy/master/index.html#bool_comparison
 ```
+خب میبینم که داره درست میگه، استفاده از `for entry in math_iter` بهتر از `while let Some(entry) = math_iter.next()` هست، به این دلیل که ساده تر هست.
 
-This is true: `for entry in math_iter` is much simpler than `while let Some(entry) = math_iter.next()`. And a `for` loop is actually an iterator so we don't have any reason to write `.iter()`. Thanks, clippy! And also we didn't need to make `math_iter`: we can just write `for entry in result_vec`.
 
-Now we'll start some real refactoring. Instead of separate variables, we will create a `Calculator` struct. This will have all the variables we used together. We will change two names to make it more clear. `result_vec` will become `results`, and `push_string` will become `current_input` (current means "now"). And so far it only has one method: new.
+خب الان میریم به طور جدی کد رو `Refactor` کنیم. ما یک `Calculator` میسازیم. این ساختار همه‌ی متغییر ها  رو در خودش نگهداری میکنه. ما اسم `result_vec` رو هم به `results` تغییر میدیم، و همچنین `push_string` هم میشه `current_input`. و براش فقط یک متود به نام `new` میسازیم:
 
 ```rust
 // 🚧
@@ -11676,7 +11689,7 @@ impl Calculator {
 }
 ```
 
-Now our code is actually a bit longer, but easier to read. For example, `if adds` is now `if calculator.adds`, which is exactly like reading English. It looks like this:
+الان کدمون یکم طولانی شد اما خب راحت‌تر خونده میشه. برای مثال `if add` شده `if calcualtor.adds` که خب راحت‌تر خونده میشه:
 
 ```rust
 #[derive(Clone)]
@@ -11793,7 +11806,7 @@ mod tests {
 }
 ```
 
-Finally we add two new methods. One is called `.clear()` and clears the `current_input()`. The other one is called `push_char()` and pushes the input onto `current_input()`. Here is our refactored code:
+در نهایت ما دو متود جدید هم درست میکنیم. اولی `.clear()` هست که `current_input` رو خالی میکنه. دومی `push_char()` هست که ورودی رو به `current_input` اضافه میکنه.
 
 ```rust
 #[derive(Clone)]
@@ -11918,7 +11931,7 @@ mod tests {
 }
 ```
 
-This is probably good enough for now. We could write more methods but lines like `calculator.results.push(calculator.current_input.clone());` are already very clear. Refactoring is best when you can still easily read the code after you are done. You don't want to just refactor to make the code short: `clc.clr()` is much worse than `calculator.clear()`, for example.
+خب این احتمالا به اندازه‌ی کافی خوب هست.
 
 ## External crates
 
