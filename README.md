@@ -12648,7 +12648,7 @@ fn main() {
 
 ### String
 
-You will remember that a `String` is kind of like a `Vec`. It is so like a `Vec` that you can do a lot of the same methods. For example, you can start one with `String::with_capacity()`. You want that if you are always going to be pushing a `char` with `.push()` or pushing a `&str` with `.push_str()`. Here's an example of a `String` that has too many allocations.
+یادمون هست که یک `String` یک جورایی شبیه به `Vec` هست. پس اکثر متود های نوع `Vec` رو داره. برای مثال میتونیم با `String::with_capacity()` شروع کنیم. در کد زیر میبینیم که یک `String` بار های زیادی `Allocation` انجام میده:
 
 ```rust
 fn main() {
@@ -12664,7 +12664,7 @@ fn main() {
 }
 ```
 
-This prints:
+چیزی که پرینت میکنه:
 
 ```text
 35
@@ -12687,7 +12687,7 @@ This prints:
 4587520
 ```
 
-We had to reallocate (copy everything over) 18 times. But now we know the final capacity. So we'll give it the capacity right away, and we don't need to reallocate: just one `String` capacity is enough.
+ما `18` بار `Reacllocation` کردیم. اما خب الان ما میدونیم که مقدار `Capacity` نهایی برابر با `4587520` میشه. پس ما میتونیم `String` رو از اول با همین `Capacity` بسازیم:
 
 ```rust
 fn main() {
@@ -12703,9 +12703,10 @@ fn main() {
 }
 ```
 
-And this prints `4587520`. Perfect! We never had to allocate again.
+خروجی کد بالا میشه: `4587520`
+خب عالی شد دیگه الکی `Allocate` نکردیم.
 
-Of course, the actual length is certainly smaller than this. If you try 100,001 times, 101,000 times, etc., it'll still say `4587520`. That's because each time the capacity is two times what it was before. We can shrink it though with `.shrink_to_fit()` (same as for a `Vec`). Our `String` is very large and we don't want to add anything more to it, so we can make it a bit smaller. But only do this if you are sure. Here is why:
+البته که طول واقعی کمتر از `4587520` هست. این به دلیل این هست که در هر بار `Reallocation` دو برابر فضایی که قبلا اشغال شده بود اشغال میشه. ما میتونیم با استفاده از `.shrink_to_fit()` فضای اضافی‌ای که گرفته شده رو ازاد کنیم. `String`ما خیلی بزرگ هست و ما دیگه نمیخوایم چیزی بهش اضافه کنیم پس بهتره که فضایی که لازم نداره رو ازاد کنیم، اما فقط زمانی که نیاز هست باید این کار رو انجام بدیم، دلیلش رو در زیر میبینیم:
 
 ```rust
 fn main() {
@@ -12736,9 +12737,9 @@ This prints:
 3500001
 ```
 
-So first we had a size of `4587520`, but we weren't using it all. We used `.shrink_to_fit()` and got the size down to `3500000`. But then we forget that we needed to push an `a` on. When we did that, Rust saw that we needed more space and gave us double: now it's `7000000`. Whoops! So we did `.shrink_to_fit()` again and now it's back down to `3500001`.
+خب ما اول `4587520` فضا اشغال کرده بودیم، و خب بهش نیاز نداشتیم، پس فضایی که نیاز نداشتیم رو ازاد کردیم و بعد مقدار فضای اشغال شده برابر با `3500000` شد. اما بعد ما `a` رو بهش اضافه کردیم، که خب فضایی برای این نداشتیم، پس نیاز شد که `Reallocation` انجام بشه و به همین دلیل فضایی که `String` اشغال میکرد حالا شد `7000000` یعنی دقیقا دو برابر قبلی. در نهایت ما از `.shring_to_fit()` استفاده کردیم که دوباره شد `3500001`.
 
-`.pop()` works for a `String`, just like for a `Vec`.
+متود `.pop()` دقیقا همینوطوری که برای `Vec` ها کار میکنه برای `String` ها هم کار میکنه:
 
 ```rust
 fn main() {
@@ -12753,9 +12754,11 @@ fn main() {
 }
 ```
 
-This prints `This string is a little bit hard to read.` because it starts from the last character.
+خروجی کد بالا میشه: `This string is a little bit hard to read.`
 
-`.retain()` is a method that uses a closure, which is rare for `String`. It's just like `.filter()` for an iterator.
+به این دلیل که از اخرین کاراکتر شروع کرد
+
+متود `.retain()` در `String` شبیه متود `.filter()` هست در `Iterator`:
 
 ```rust
 fn main() {
@@ -12765,7 +12768,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 [src\main.rs:4] my_string = "Age  Height  Weight "
