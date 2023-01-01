@@ -12341,9 +12341,9 @@ fn main() {
 
 ### Integers
 
-There are a lot of math methods for these types, plus some others. Here are some of the most useful ones.
+برای نوع های `Integer` متود های ریاضی زیادی وجود داره، به علاوه‌ی همه‌ی اونها متود های زیر هم وجود دارند:
 
-`.checked_add()`, `.checked_sub()`, `.checked_mul()`, `.checked_div()`. These are good methods if you think you might get a number that won't fit into a type. They return an `Option` so you can safely check that your math works without making the program panic.
+خب متود های `.checked_add()`، `.checked_sub()`، `checked_mul()`، `.checked_div()` هم وجود دارند که سعی میکنند عملیات جمع، تفریق، ضرب و تقسیم رو رو انجام بدند، چیزی که برمیگردونند یک `Option` هست. پس میتونیم چک کنیم که ایا عملیاتی که میخواستیم انجام شده یا خیر. اینطوری اگه عملیات انجام نشه برنامه `Panic` نمیکنه:
 
 ```rust
 fn main() {
@@ -12355,16 +12355,15 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 None
 Some(201)
 ```
+اگه به مستندات این نوع ها رفتید و به اصطلاح `rhs` برخوردید، نترسید. اصطلاح `rhs` به معنای `right hand side` هست، که در حقیقت به معنای راست ترین عملوندی هست که در یک عبارت ریاضی مینویسیم. برای مثال در `5 + 7`، عدد `5` در سمت چپ هست و `7` در سمت راست(`rhs`) هست. اصطلاح `rhs` یک کلمه‌کلیدی نیست اما خب زیاد میبینیمش، و الان ما میدونیم این چی هست.
 
-You'll notice that on the page for integers it says `rhs` a lot. This means "right hand side", which is the right hand side when you do some math. For example, in `5 + 6`, `5` is on the left and `6` is on the right, so it's the `rhs`. This is not a keyword, but you will see it a lot so it's good to know.
-
-While we are on the subject, let's learn how to implement `Add`. After you implement `Add`, you can use `+` on a type that you create. You need to implement `Add` yourself because add can mean a lot of things. Here's the example in the standard library page:
+حالا که تا اینجا اومدیم بزارید در مورد `Trait`، `Add` هم یاد بگیریم. بعد از اینکه `Add` رو برای یک نوع پیاده‌سازی کردیم میتونیم از `+` روی اون نوع استفاده کنیم. ما باید `Add` رو به صورت دستی پیاده‌سازی کنیم، به این دلیل که میتونه کار های زیادی انجام بده، در زیر یک مثال از `STD` میبینیم:
 
 ```rust
 use std::ops::Add; // first bring in Add
@@ -12388,7 +12387,7 @@ impl Add for Point {
 }
 ```
 
-Now let's implement `Add` for our own type. Let's imagine that we want to add two countries together so we can compare their economies. It looks like this:
+خب الان بزارید `Add` رو برای یک `Struct`‌ای که خودمون ساختیم پیاده‌سازی کنیم:
 
 ```rust
 use std::fmt;
@@ -12446,7 +12445,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 In Nauru are 10670 people and a GDP of $160000000
@@ -12454,9 +12453,9 @@ In Nauru and Vanuatu are 318485 people and a GDP of $980000000
 In Nauru and Vanuatu and Micronesia are 422953 people and a GDP of $1347000000
 ```
 
-Later on in this code we could change `.fmt()` to display a number that is easier to read.
+همچنین `Trait` های `Sub`، `Mul` و `Div` هم وجود دارند که به ترتیب برای پیاده‌سازی علمیات تفریق، ضرب و تقسیم هستند.
 
-The three others are called `Sub`, `Mul`, and `Div`, and they are basically the same to implement. For `+=`, `-=`, `*=` and `/=`, just add `Assign`: `AddAssign`, `SubAssign`, `MulAssign`, and `DivAssign`. You can see the full list [here](https://doc.rust-lang.org/std/ops/index.html#structs), because there are many more. `%` for example is called `Rem`, `-` is called `Neg`, and so on.
+میتونیم لیست کامل `Trait` هایی که میتونیم ازشون برای پیاده‌سازی اپراتور ها برای نوع های خودمون استفاده کنیم رو در [اینجا](https://doc.rust-lang.org/std/ops/index.html#structs) ببینیم.
 
 ### Floats
 
