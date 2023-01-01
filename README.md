@@ -12215,9 +12215,9 @@ struct Point {
 
 تا الان ما خیلی از `Rust` رو یاد گرفتیم، پس باید بتونیم اکثر چیز هایی که در `Standard Library` هستند رو بفهمیم. کدی که درش هست همچین ترسناک هم نیست. بزارید یک نگاهی بهش بندازیم. این این بخش به بخش های مهم `STD` یه سری میزنیم.
 
-### Arrays
+### ارایه ها | Arrays
 
-In the past (before Rust 1.53), arrays didn't implement `Iterator` and you needed to use methods like `.iter()` on them in for `loops`. (People also used `&` to get a slice in `for` loops). So this didn't work in the past:
+در گذشته (قبل از نسخه‌ی `1.53`)، نوع `Array`، `Iterator` رو پیاده‌سازی نکرده بود و برای اینکه ازش در یک `loop` استفاده میکردیم باید از `.iter()` استفاده میکردیم. همچنین معمولا از `&` استفاده میکردیم که یک `Slice` در `loop` بگیریم. پس کد زیر در گذشته کار نمیکرد:
 
 ```rust
 fn main() {
@@ -12229,7 +12229,7 @@ fn main() {
 }
 ```
 
-The compiler used to give this message:
+کامپایلر قبلا جنین خطایی میداد:
 
 ```text
 error[E0277]: `[&str; 3]` is not an iterator
@@ -12238,7 +12238,7 @@ error[E0277]: `[&str; 3]` is not an iterator
   |                 ^^^^^^^^^ borrow the array with `&` or call `.iter()` on it to iterate over it
 ```
 
-Luckily, that isn't a problem anymore! So all three of these work:
+خوشبختانه الان چنین مشکلی نداریم پس کد زیر کار خواهد کرد:
 
 ```rust
 fn main() {
@@ -12256,7 +12256,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 Beirut
@@ -12269,8 +12269,7 @@ Beirut
 Tel Aviv
 Nicosia
 ```
-
-If you want to get variables from an array, you can put their names inside `[]` to destructure it. This is the same as using a tuple in `match` statements or to get variables from a struct.
+اگه میخوایم یک `Array` رو در چند متغییر `Destructure` کنیم باید از الگوی زیر استفاده کنیم:
 
 ```rust
 fn main() {
@@ -12280,7 +12279,7 @@ fn main() {
 }
 ```
 
-This prints `Beirut`.
+خروجیش میشه: `Beirut`
 
 ### char
 
