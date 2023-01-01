@@ -11951,7 +11951,7 @@ mod tests {
 
 ### rand
 
-Did you notice that we didn't use any random numbers yet? That's because random numbers aren't in the standard library. But there are a lot of crates that are "almost standard library" because everybody uses them. In any case, it's very easy to bring in a crate. If you have Rust on your computer, there is a file called `Cargo.toml` that has this information. A `Cargo.toml` file looks like this when you start:
+به این نکته توجه کردید که تا حالا از اعداد تصادفی استفاده نکردیم؟ این به این دلیل هست که بدون استفاده از `External crate` نمیتونیم اینکارو انجام بدیم، چون در `Standard Library` چنین قابلیتی وجود نداره. اما `crate` های زیادی هستند که تقریبا جزو `Standard Library` حساب میشند، به این دلیل که همیشه داریم ازشون استفاده میکنیم. خب حالا چطوری میتونیم از `crate` استفاده کنیم؟ اگه `Rust` رو نصب کرده باشیم میتونیم در پوشه‌ی پروژه، فایل `Cargo.toml` رو تغییر بدیم. فایل `Cargo.toml` در ابتدا چیزی شبیه به این هست:
 
 ```text
 [package]
@@ -11964,8 +11964,7 @@ edition = "2018"
 
 [dependencies]
 ```
-
-Now if you want to add the `rand` crate, search for it on `crates.io`, which is where all the crates go. That takes you to `https://crates.io/crates/rand`. And when you click on that, you can see a screen that says `Cargo.toml   rand = "0.7.3"`. All you do is add that under [dependencies] like this:
+خب الان ما برای اینکه از `crate`، `rand` استفاده کنیم، میریم در سایت `crates.io` دنبالش جستجو میکنیم. که خب به صفحه‌ی `https:://crates.io/crates/rand` میرسیم. در این صفحه میتونیم ببینیم که میگه اگه میخوایم از `rand` استفاده کنیم. باید `rand = 0.7.3` رو به فایل `Cargo.toml` اضافه کنیم. البته زیر `dependencies`، که خب در نهایت باید فایل `Cargo.toml` چنین چیزی بشه:
 
 ```text
 [package]
@@ -11980,9 +11979,11 @@ edition = "2018"
 rand = "0.7.3"
 ```
 
-And then Cargo will do the rest for you. Then you can start writing code like [this example code](https://docs.rs/rand/0.7.3/rand/) on the `rand` document website. To get to the documents you can click on the `docs` button in [the page on crates.io](https://crates.io/crates/rand).
+بعد `cargo` خودش بقیه کار ها رو انجام میده. بعد میتونیم با استفاده از `rand` هم کد بنویسیم. برای مثال میتونیم به [صفحه‌ی مستندات](https://docs.rs/rand/0.7.3/rand/) نگاهی بندازیم.
 
-So that's enough about Cargo: we are still using just the Playground. Luckily, the Playground already has the top 100 crates installed. So you don't need to write in `Cargo.toml` yet. On the Playground you can imagine that it has a long list like this with 100 crates:
+برای رفتن به صفحه‌ی مستندات یک `crate` میتونیم در سایت `crates.io` روی `docs` کلیک کنیم.
+
+خب این در مورد `cargo` بود اما در `Playground` ما `100` تا `crate` محبوب رو میتونیم استفاده کنیم. پس لازم نیست جایی اونها رو معرفی کنیم. میتونیم تصور کنیم که توی `Playground` ما یک لیستی از `100` تا `crate` محبوب رو در `Cargo.toml` وارد کردیم:
 
 ```text
 [dependencies]
@@ -11991,7 +11992,7 @@ some_other_crate = "0.1.0"
 another_nice_crate = "1.7"
 ```
 
-That means that to use `rand`, you can just do this.
+این به این معنا هست که میتونیم از `rand` هم استفاده کنیم:
 
 ```rust
 use rand; // This means the whole crate rand
@@ -12006,11 +12007,12 @@ fn main() {
 }
 ```
 
-It will print a different `u16` number every time, like `42266 52873 56528 46927 6867`.
+برنامه بالا هربار یک `u16` متفاوت رو پرینت میکنه، برای مثال: `42266 52873 56528 46927 6867`
 
-The main functions in `rand` are `random` and `thread_rng` (rng means "random number generator"). And actually if you look at `random` it says: "This is simply a shortcut for `thread_rng().gen()`". So it's actually just `thread_rng` that does almost everything.
+فانکشن های اصلی در `rand`، `random` و `thread_rng` هستند. `rng` به معنای `random number generator` هست. و اگه در حقیقت به `random` نگاهی بندازید میبینید که به سادگی فقط یک `Shortcut` برای `thread_rng().gen()` هست. پس این `thread_rng` هست که تقریبا همه‌ی کار ها رو انجام میده.
 
-Here is a simple example of numbers from 1 to 10. To get those numbers, we use `.gen_range()` between 1 and 11.
+
+در زیر یک کدی رو میبینید که به صورت پنج عدد تصادفی بین `1` تا `10` رو پرینت میکنه. برای اینکار ما از `.gen_range()` استفاده کردیم:
 
 ```rust
 use rand::{thread_rng, Rng}; // Or just use rand::*; if we are lazy
@@ -12023,13 +12025,15 @@ fn main() {
 }
 ```
 
-This will print something like `7 2 4 8 6`.
+چنین چیزی رو پرینت میکنه: `7 2 4 8 6`
 
-With random numbers we can do fun things like make characters for a game. We will use `rand` and some other things we know to make them. In this game our characters have six stats, and you use a d6 for them. A d6 is a cube that gives 1, 2, 3, 4, 5, or 6 when you throw it. Each character rolls a d6 three times, so each stat is between 3 and 18.
+با استفاده از اعداد تصادفی میتونیم کار های جالبی انجام بدیم، برای مثال ساخت شخصیت برای یک بازی. ما از `rand` و چندین چیز دیگر در ساخت این بازی استفاده میکنیم.
 
-But sometimes it can be unfair if your character has something low like a 3 or 4. If your strength is 3 you can't carry anything, for example. So there is one more method that uses a d6 four times. You roll it four times, and throw away the lowest number. So if you roll 3, 3, 1, 6 then you keep 3, 3, 6 = 12. We will make this method too so the owner of the game can decide.
+در این بازی هر شخصیت شش ویژگی داره، و ما از یک `d6` براشون استفاده میکنیم. یک `d6` یک مکعب هست که به طور تصادفی اعدادی بین `1` تا `6` رو هر باری که پرتابش میکنیم میده(منظورم وقتی هست که ازش استفاده میکنیم).
 
-Here is our simple character creator. We created a `Character` struct for the stats, and even implemented `Display` to print it the way we want.
+اما اگه شخصیت شانس نداشته باشه چیزی مثل `3` یا `4` میگیره که خب منصفانه نیست. اگه قدرت شخصیت `3` باشه خب نمیتونه چیزی رو حمل کنه. پس یک متود دیگه هم درست میکنیم که چهار بار `d6` رو پرتاب کنیم و کمترین عددی که داده رو حذف میکنیم. پس اگه ما `3, 3, 1, 6` رو بگیریم. ما از `3, 3, 6` استفاده میکنیم که نتیجش میشه `12`.
+
+در کد زیر یک شخصیت رو میسازیم. ما از `Character` برای نگهداری ویژگی ها استفاده میکنیم. و `Display` رو هم براش پیاده‌سازی میکنیم:
 
 ```rust
 use rand::{thread_rng, Rng}; // Or just use rand::*; if we are lazy
@@ -12128,7 +12132,7 @@ fn main() {
 }
 ```
 
-It will print something like this:
+چنین چیزی رو پرینت میکنه:
 
 ```rust
 Your character has these stats:
@@ -12148,7 +12152,7 @@ wisdom: 16
 charisma: 10
 ```
 
-The character with four dice is usually a bit better at most things.
+میبینیم که شخصیتی که با چهار بار تاس انداختن ساخته شده کمی بهتر از اون یکی هست.
 
 ### rayon
 
