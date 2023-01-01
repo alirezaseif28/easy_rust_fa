@@ -12203,13 +12203,13 @@ struct Point {
 
 ### regex
 
-خب `regex` اجازه میده توی یک متن سرچ کنیم و همچنین کار های پیچیده‌ی دیگه‌ای رو هم میتونیم باهاش انجام بدیم. این `crate` به ما اجازه‌ی استفاده از [`Regular Expression`](https://en.wikipedia.org/wiki/Regular_expression) ها رو میده. `Regex` کلا یه مبحث جدا از زبان `Rust` هست که باید یادش گرفت.
+خب [`regex`](https://crates.io/crates/regex) اجازه میده توی یک متن سرچ کنیم و همچنین کار های پیچیده‌ی دیگه‌ای رو هم میتونیم باهاش انجام بدیم. این `crate` به ما اجازه‌ی استفاده از [`Regular Expression`](https://en.wikipedia.org/wiki/Regular_expression) ها رو میده. `Regex` کلا یه مبحث جدا از زبان `Rust` هست که باید یادش گرفت.
 
 در این [لینک](https://github.com/ziishaned/learn-regex) میتونیم `Regex` رو یاد بگیریم.
 
 ### chrono
 
-[chrono](https://crates.io/crates/chrono) is the main crate for people who need more functionality for time. We will look at the standard library now which has functions for time, but if you need more then this is a good crate to use.
+خب [`chrono`](https://crates.io/crates/chrono) اصلی‌ترین `crate` برای کار با `time` هست. در `Standard Library` زبان `Rust` ما میتونیم با زمان کار کنیم اما اگه نیاز به قابلیت های بیشتری داشتیم میتونیم از `chrono` هم استفاده کنیم.
 
 ## A tour of the standard library
 
