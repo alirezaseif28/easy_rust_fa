@@ -12728,7 +12728,7 @@ fn main() {
 }
 ```
 
-This prints:
+چیزی که پرینت میکنه:
 
 ```text
 4587520
@@ -12776,24 +12776,24 @@ fn main() {
 
 ### OsString and CString
 
-`std::ffi` is the part of `std` that helps you use Rust with other languages or operating systems. It has types like `OsString` and `CString`, which are like `String` for the operating system or `String` for the language C. They each have their own `&str` type too: `OsStr` and `CStr`. `ffi` means "foreign function interface".
+ماژول `std::ffi` یک بخشی از `std` هست که اجازه میده ما در `Rust` زبان های برنامه‌نویسی دیگه یا سیستم‌عامل های مختلف کار کنیم. نوع هایی مثل `OsString` و `CString` داره که میتونیم حدس بزنیم چی هستند. `OsString`، `String`‌ای هست که سیستم‌عامل استفاده میکنه. `CString` هم `String`‌ای هست که زبان `C` ازش استفاده میکنه. هر کدومشون یک نوع `&str` هم دارند، برای مثال `OsStr` و `CStr`.
 
-You can use `OsString` when you have to work with an operating system that doesn't have Unicode. All Rust strings are unicode, but not every operating system has it. Here is the simple English explanation from the standard library on why we have `OsString`:
+کلمه‌ی `ffi` به معنای `Foreign Function Interface` هست.
 
-- A string on Unix (Linux, etc.) might be lots of bytes together that don't have zeros. And sometimes you read them as Unicode UTF-8.
-- A string on Windows might be made of random 16-bit values that don't have zeros. And sometimes you read them as Unicode UTF-16.
-- In Rust, strings are always valid UTF-8, which may contain zeros.
+زمانی که با یک سیستم‌عاملی کار میکنیم که از `Unicode` پشتیبانی نمیکنه میتونیم از `OsString` استفاده کنیم. همه‌‌ی `String` ها `Rsut` به فرمت `Unicode` هستند. اما خب همه‌ی سیستم‌عامل ها از `Unicode` پشتیبانی نمیکنند.
 
-So an `OsString` is made to be read by all of them.
+در زیر میتونیم به طور ساده متوحه بشیم که `OsString` چی هست:
+- یک `String` در `Unix` (`Linux`و...) میتونه بایت هایی کنار هم باشه که `0` ندارند. و گاهی اوقات میتونیم اونها رو به عنوان `UTF-8` بخونیم.
+- یک `String` در `Windows` میتونه از مقدار های تصادفی `16` بیتی باشه که `0` بینشون نیست. گاهی اوقات میتونیم اونها رو به عنوان `UTF-8` بخونیم.
+- در `Rust` همه‌ی `String` ها یک `UTF-8` معتبر هستند که میتونند `0` هم داشته باشند.
 
-You can do all the regular things with an `OsString` like `OsString::from("Write something here")`. It also has an interesting method called `.into_string()` that tries to make it into a regular `String`. It returns a `Result`, but the `Err` part is just the original `OsString`:
 
+ما میتونیم همه‌ی کار ها رو با `OsString` هم انجام بدیم،‌ برای مثال `OsString::from("Write something here")`. همچنین میتونیم از متود `.into_string()` هم استفاده کنیم که تلاش میکنه مقدار رو به یک `String` معمولی تبدیل کنه. یک `Result` برمیگردونه، اما مقدار `Err` همون `OsString` هست:
 ```rust
 // 🚧
 pub fn into_string(self) -> Result<String, OsString>
 ```
-
-So if it doesn't work then you just get it back. You can't call `.unwrap()` because it will panic, but you can use `match` to get the `OsString` back. Let's test it out by calling methods that don't exist.
+پس اگه تبدیل ناموفق باشه همون مقدار رو میگیریم. ما نباید از `.unwrap()` استفاده کنیم چون در این صورت `Panic` میکنه اما میتونیم از `match` استفاده کنیم که اگه خطایی هم رخ داد بتونیم مقدار `OsString` رو دوباره بگیریم. بزارید با متود هایی که وجود ندارند تستش کنیم:
 
 ```rust
 use std::ffi::OsString;
@@ -12808,7 +12808,7 @@ fn main() {
 }
 ```
 
-Then the compiler tells us exactly what we want to know:
+کامپایلر چیز های خوبی میگه:
 
 ```text
 error[E0599]: no method named `thth` found for struct `std::string::String` in the current scope
@@ -12824,7 +12824,7 @@ error[E0599]: no method named `occg` found for struct `std::ffi::OsString` in th
   |                                     ^^^^ method not found in `std::ffi::OsString`
 ```
 
-We can see that the type of `valid` is `String` and the type of `not_valid` is `OsString`.
+میتونیم ببینیم که نوع متغییر `valid` یک `String` هست و نوع متغییر `not_valid` یک `OsString` هست.
 
 ### mem
 
