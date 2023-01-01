@@ -12156,14 +12156,16 @@ charisma: 10
 
 ### rayon
 
-`rayon` is a popular crate that lets you speed up your Rust code. It's popular because it creates threads without needing things like `thread::spawn`. In other words, it is popular because it is effective but easy to write. For example:
+خب `rayon` یکی از `crate` های محبوب هست که اجازه میده کدی بنویسیم که سرعت بالایی داشته باشه. همچنین `Thread` میسازه اما بدون نیاز به نوشتن `thread::spawn`. در معنای دیگه، اون به این دلیل محبوب هست که اجازه میده به راحتی کدی بنویسیم که بهینه و پرسرعت هست.
 
-- `.iter()`, `.iter_mut()`, `into_iter()` in rayon is written like this:
-- `.par_iter()`, `.par_iter_mut()`, `par_into_iter()`. So you just add `par_` and your code becomes much faster. (par means "parallel")
+متود های `.iter()`، `iter_mut()`، `into_iter()` در `rayon` به چنین شکلی نوشته میشند: `par_iter()`، `par_iter_mut()`، `par_into_iter()`.
 
-Other methods are the same: `.chars()` is `.par_chars()`, and so on.
+پس فقط لازم هست که `par_` رو به اول این متود ها اضافه کنیم که سریع‌تر بشند.
+در ضمن `par` به معنای `Parallel` هست که اون هم یعنی موازی.
 
-Here is an example of a simple piece of code that is making the computer do a lot of work:
+بقیه‌ی متود های هم از همین الگو پیروی میکنند: `chars()` میشه‌ `.par_chars()` و همینطوری بگیر برو تا اخر...
+
+کدی که در زیر میبینید باعث میشه که کامپیوتر کار زیادی انجام بده و فشاری زیادی روش میاد:
 
 ```rust
 fn main() {
@@ -12172,8 +12174,8 @@ fn main() {
     println!("{:?}", &my_vec[5000..5005]);
 }
 ```
-
-It creates a vector with 200,000 items: each one is 0. Then it calls `.enumerate()` to get the index for each number, and changes the 0 to the index number. It's too long to print so we only print items 5000 to 5004. This is still very fast in Rust, but if you want you can make it faster with Rayon. The code is almost the same:
+کد بالا یک `Vec` با `200000` ایتم میسازه. مقدار هر ایتم `0` هست. بعد از `enumerate()` استفاده میکنه که `index` رو بگیره و مقدار `0` رو به مقدار `index` تغییر میده.
+اگه پرینتش کنیم یک خروجی بلندی میده، پس ما فقط `5000` تا `5004` رو پرینت میکنیم. این همچنان در `Rust` سریع هست. اما با استفاده از `rayon` میتونیم سریع‌ترش هم بکنیم:
 
 ```rust
 use rayon::prelude::*; // Import rayon
@@ -12184,8 +12186,7 @@ fn main() {
     println!("{:?}", &my_vec[5000..5005]);
 }
 ```
-
-And that's it. `rayon` has many other methods to customize what you want to do, but at its most simple it is just "add `_par` to make your program faster".
+خب `rayon` متود های دیگه‌ای هم داره اما ساده ترینش `par_` بود که دیدیم.
 
 ### serde
 
