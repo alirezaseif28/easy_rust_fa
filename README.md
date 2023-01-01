@@ -12283,7 +12283,7 @@ fn main() {
 
 ### char
 
-You can use the `.escape_unicode()` method to get the Unicode number for a `char`:
+ما میتونیم از `.escape_unicode()` برای گرفتن کد `Unicode` یک کاراکتر(`char`) استفاده کنیم:
 
 ```rust
 fn main() {
@@ -12294,9 +12294,11 @@ fn main() {
 }
 ```
 
-This prints `\u{ccad} \u{cd98} \u{c608} \u{cc2c}`.
+خروجیش میشه: `\u{ccad} \u{cd98} \u{c608} \u{cc2c}`
 
-You can get a char from `u8` using the `From` trait, but for a `u32` you use `TryFrom` because it might not work. There are many more numbers in `u32` than characters in Unicode. We can see this with a simple demonstration.
+ما میتونیم با استفاده از `From` یک `u8` رو به `char` تبدیل کنیم. اما برای `u32` ما باید از `TryFrom` استفاده کنیم، به این دلیل که اعدادی که نوع `u32` میتونه در خودش ذخیره کنه بیشتر از `Unicode` هست، پس امکان داره که معادل `Unicode` یک `u32` وجود نداشته باشه.
+
+برای مثال کد زیر این مسئله رو نشون میده:
 
 ```rust
 use std::convert::TryFrom; // You need to bring TryFrom in to use it
@@ -12315,8 +12317,7 @@ fn main() {
     }
 }
 ```
-
-Almost every time it will generate a `-`. This is part of the sort of output you will see:
+خروجی‌ای که میده:
 
 ```text
 ------------------------------------------------------------------------𤒰---------------------
@@ -12334,9 +12335,9 @@ Almost every time it will generate a `-`. This is part of the sort of output you
 ------------򇍜----------------------------------------------------
 ```
 
-So it's a good thing you need to use `TryFrom`.
+پس استفاده از `TryFrom` ایده‌ی خوبی هست.
 
-Also, as of late August 2020 you can now get a `String` from a `char`. (`String` implements `From<char>`) Just write `String::from()` and put a `char` inside.
+همچنین از اواخر اگوست `2020` ما میتونیم `char` رو به `String` تبدیل کنیم.
 
 ### Integers
 
