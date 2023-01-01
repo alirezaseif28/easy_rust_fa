@@ -12203,7 +12203,9 @@ struct Point {
 
 ### regex
 
-The [regex](https://crates.io/crates/regex) crate lets you search through text using [regular expressions](https://en.wikipedia.org/wiki/Regular_expression). With that you can get matches for something like `colour`, `color`, `colours` and `colors` through a single search. Regular expressions are a whole other language have to learn that too if you want to use them.
+خب `regex` اجازه میده توی یک متن سرچ کنیم و همچنین کار های پیچیده‌ی دیگه‌ای رو هم میتونیم باهاش انجام بدیم. این `crate` به ما اجازه‌ی استفاده از [`Regular Expression`](https://en.wikipedia.org/wiki/Regular_expression) ها رو میده. `Regex` کلا یه مبحث جدا از زبان `Rust` هست که باید یادش گرفت.
+
+در این [لینک](https://github.com/ziishaned/learn-regex) میتونیم `Regex` رو یاد بگیریم.
 
 ### chrono
 
