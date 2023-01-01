@@ -12211,9 +12211,9 @@ struct Point {
 
 خب [`chrono`](https://crates.io/crates/chrono) اصلی‌ترین `crate` برای کار با `time` هست. در `Standard Library` زبان `Rust` ما میتونیم با زمان کار کنیم اما اگه نیاز به قابلیت های بیشتری داشتیم میتونیم از `chrono` هم استفاده کنیم.
 
-## A tour of the standard library
+## یک تور در `Standard Library` | A tour of the standard library
 
-Now that you know a lot of Rust, you will be able to understand most things inside the standard library. The code inside it isn't so scary anymore. Let's take a look at some of the parts in it that we haven't learned yet. This tour will go over most parts of the standard library that you don't need to install Rust for. We will revisit a lot of items we already know so we can learn them with greater understanding.
+تا الان ما خیلی از `Rust` رو یاد گرفتیم، پس باید بتونیم اکثر چیز هایی که در `Standard Library` هستند رو بفهمیم. کدی که درش هست همچین ترسناک هم نیست. بزارید یک نگاهی بهش بندازیم. این این بخش به بخش های مهم `STD` یه سری میزنیم.
 
 ### Arrays
 
