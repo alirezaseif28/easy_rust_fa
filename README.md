@@ -12532,7 +12532,7 @@ fn main() {
 
 ### bool
 
-In Rust you can turn a `bool` into an integer if you want, because it's safe to do that. But you can't do it the other way around. As you can see, `true` turns to 1 and `false` turns to 0.
+در راست اگه بخوایم میتونیم یک `bool` رو به یک `Integer` تبدیل کنیم، به این دلیل که اینکار امن هست. در کد زیر میتونیم ببینیم که `true` به `1` تبدیل میشه و `false` به `0` تبدیل میشه:
 
 ```rust
 fn main() {
@@ -12540,8 +12540,9 @@ fn main() {
     println!("{} {}", true_false.0 as u8, true_false.1 as i32);
 }
 ```
+چنین چیزی رو پرینت میکنه: `1 0`
 
-This prints `1 0`. Or you can use `.into()` if you tell the compiler the type:
+همچنین میتونیم از `.into()` استفاده کنیم، البته باید نوع ها رو مشخص کنیم:
 
 ```rust
 fn main() {
@@ -12550,9 +12551,9 @@ fn main() {
 }
 ```
 
-This prints the same thing.
+این کد هم همون خروجی رو میده.
 
-As of Rust 1.50 (released in February 2021), there is now a method called `then()`, which turns a `bool` into an `Option`. With `then()` you write a closure, and the closure is called if the item is `true`. Also, whatever is returned from the closure goes inside the `Option`. Here's a small example:
+وقتی نسخه‌‌ی `1.50`، `Rust` اومد، یک متودی به نام `then()` بهش اضافه شد، که یک `bool` رو میتونه به `Option` تبدیل کنه. با استفاده از `then()` ما میتونیم `Closure` هم بنویسیم و زمانی که ایتم `true` بود `Closure` اجرا میشه. همچنین هر چیزی که از `Closure` برگردونده بشه، میره داخل `Option`، بزارید کد ببینیم:
 
 ```rust
 fn main() {
@@ -12562,9 +12563,9 @@ fn main() {
 }
 ```
 
-This just prints `Some(8), None`.
+خروجیش میشه: `Some(8), None`
 
-And now a bit larger example:
+حالا یک مثال بزرگ‌تر ببینیم:
 
 ```rust
 fn main() {
@@ -12590,7 +12591,7 @@ fn main() {
 }
 ```
 
-And here's what this prints:
+چیزی که پرینت میکنه:
 
 ```text
 Got a true!
