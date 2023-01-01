@@ -12459,14 +12459,13 @@ In Nauru and Vanuatu and Micronesia are 422953 people and a GDP of $1347000000
 
 ### Floats
 
-`f32` and `f64` have a very large number of methods that you use when doing math. We won't look at those, but here are some methods that you might use. They are: `.floor()`, `.ceil()`, `.round()`, and `.trunc()`. All of these return an `f32` or `f64` that is like an integer, with only `0` after the period. They do this:
+نوع ها `f32` و `f64` میتونیم اعداد بزرگی رو در خودشون نگهداری کنند و همچنین متود های ریاضی زیادی هم دارند. برای مثال:
+- متود `.floor()`: بزرگ‌ترین عدد صحیحی که کوچک‌تر یا مساوی خود `float` هست رو میده. برای مثال `3.5` میشه `3.0`
+- متود `.ceil()`: کوچیک‌ترین عدد صحیحی که بزرگ‌تر یا مساوی با خود `float` هست رو میده. برای مثال `3.5` میشه `4.0`
+- متود `.round()`: نزدیک‌ترین عدد صحیح به خود `float` رو میده. برای مثال `3.5` میشه `4.0`
+- متود `.trunc()`: اعداد بعد از `.` رو حذف میکنه، یعنی عدد صحیح خود `float` رو میده که عدد بعد `.` برابر با `0` هست. برای مثال `3.5` میشه `3.0`
 
-- `.floor()`: gives you the next lowest integer.
-- `.ceil()`: gives you the next highest integer.
-- `.round()`: gives you a higher number if 0.5 or more, or the same number if less than 0.5. This is called rounding because it gives you a "round" number (a number that has a short, simple form).
-- `.trunc()`: just cuts off the part after the period. Truncate means "to cut off".
-
-Here is a simple function to print them.
+برای مثال در کد زیر میتونیم استفاده از این متود ها رو ببینیم:
 
 ```rust
 fn four_operations(input: f64) {
@@ -12492,7 +12491,7 @@ fn main() {
 }
 ```
 
-This prints:
+چیزی که پرینت میکنه:
 
 ```text
 For the number 9.1:
@@ -12520,7 +12519,7 @@ rounded: -20
 truncated: -19
 ```
 
-`f32` and `f64` have a method called `.max()` and `.min()` that gives you the higher or the lower of two numbers. (For other types you can just use `std::cmp::max` and `std::cmp::min`.) Here is a way to use this with `.fold()` to get the highest or lowest number. You can see again that `.fold()` isn't just for adding numbers.
+نوع های `f32` و `f64` متودی به نام `.max()` و `.min()` دارند که بزرگ‌ترین و کوچیک‌ترین عددی که ما میدیم رو میدند. برای نوع های دیگه میتونیم از `std::cmp::max` و `std::cmp::min` استفاده کنیم. در کد زیر نحوه‌ی استفاده از اونها همراه با `.fold()` رو میبینیم. همچنین میتونیم ببینیم که `.fold()` فقط برای جمع زدن اعداد استفاده نمیشه:
 
 ```rust
 fn main() {
