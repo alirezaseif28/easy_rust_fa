@@ -12190,7 +12190,7 @@ fn main() {
 
 ### serde
 
-`serde` is a popular crate that lets you convert to and from formats like JSON, YAML, etc. The most common way to use it is by creating a `struct` with two attributes on top. [It looks like this](https://serde.rs/):
+خب برسیم به بعدی، `serde` یک `crate` هست که به ما اجازه میده از `Fromat` هایی مثل `JSON`، `YAML` و... استفاده کنیم. بهترین روش استفاده ازش این هست که یک `Struct` بسازیم که فیلد هایی که در اون فرمت هست رو در خودش داشته باشه و همچنین باید `Serialize` و `Deserialize` رو پیاده‌سازی کنیم که خوشبختانه میتونیم به طور خودکار با استفاده از `derive` اون هارو پیاده‌سازی کنیم:
 
 ```rust
 #[derive(Serialize, Deserialize, Debug)]
@@ -12199,8 +12199,7 @@ struct Point {
     y: i32,
 }
 ```
-
-The `Serialize` and `Deserialize` traits are what make the conversion easy. (That's also where the name `serde` comes from) If you have them on your struct, then you can just call a method to turn it into and from JSON or anything else.
+میتونیم در این [سایت](https://serde.rs) بیشتر در موردش بخونیم.
 
 ### regex
 
