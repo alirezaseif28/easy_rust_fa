@@ -12602,7 +12602,9 @@ And without the Nones: ["It\'s true, you know", "It\'s true, you know"]
 
 ### Vec
 
-Vec has a lot of methods that we haven't looked at yet. Let's start with `.sort()`. `.sort()` is not surprising at all. It uses a `&mut self` to sort a vector.
+نوع `Vec` متود های زیادی داره که ما هنوز بهش نگاهی ننداختیم. بزارید با `.sort()` شروع کنیم.
+
+متود `.sort()` یک `&mut self` میگیره و یک `Vec` رو مرتب میکنه:
 
 ```rust
 fn main() {
@@ -12612,9 +12614,13 @@ fn main() {
 }
 ```
 
-This prints `[0, 0, 0, 0, 0, 80, 90, 100]`. But there is one more interesting way to sort called `.sort_unstable()`, and it is usually faster. It can be faster because it doesn't care about the order of numbers if they are the same number. In regular `.sort()`, you know that the last `0, 0, 0, 0, 0` will be in the same order after `.sort()`. But `.sort_unstable()` might move the last zero to index 0, then the third last zero to index 2, etc.
+چیزی که کد بالا پرینت میکنه: `[0, 0, 0, 0, 0, 80, 90, 100]`
 
-`.dedup()` means "de-duplicate". It will remove items that are the same in a vector, but only if they are next to each other. This next code will not just print `"sun", "moon"`:
+اما یک روش دیگه برای مرتب کردن هم هست که اسمش `.sort_unstable()` هست. معمولا سریع‌تر هست، به این دلیل سریع هست که اهمیتی به ترتیب اعداد تکراری نمیده.
+
+متود `.dedup()` به معنای `de-duplicate` هست. این متود ایتم های تکراری رو در یک `Vec` در صورتی که کنار هم باشند حذف میکنه.
+
+برای مثال خروجی کد زیر `"sun", "moon"` نمیشه:
 
 ```rust
 fn main() {
@@ -12623,10 +12629,11 @@ fn main() {
     println!("{:?}", my_vec);
 }
 ```
+خروجیش میشه: `["sun", "moon", "sun", "moon"]`
 
-It only gets rid of "sun" next to the other "sun", then "moon" next to one "moon", and again with "moon" next to another "moon". The result is: `["sun", "moon", "sun", "moon"]`.
+متود `.dedup()` در بالا فقط `"sun"` که بعد `"sun"` هست رو حذف میکنهَِ، همچنین `"moon"`‌ای که بعد `"moon"` هست رو هم حذف میکنه، در نهایت اونیکی `"moon"` که بعد `"moon"` هست رو هم حذف میکنه. که خب خروجیش میشه: `["sun", "moon", "sun", "moon"]`
 
-If you want to remove every duplicate, just `.sort()` first:
+اگه میخوایم همه‌ی ایتم های تکراری رو حذف کنیم باید اول `.sort()` کنیم:
 
 ```rust
 fn main() {
@@ -12637,7 +12644,7 @@ fn main() {
 }
 ```
 
-Result: `["moon", "sun"]`.
+خروجیش:`["moon", "sun"]`.
 
 ### String
 
