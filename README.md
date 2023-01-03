@@ -13077,24 +13077,25 @@ You can see that there is always $50 at the desk.
 
 ### prelude
 
-The standard library has a prelude too, which is why you don't have to write things like `use std::vec::Vec` to create a `Vec`. You can see all the items [here](https://doc.rust-lang.org/std/prelude/index.html#prelude-contents), and will already know almost all of them:
+در راست، `Standard Library` هم `Prelude` داره، به همین دلیل هست که لازم نیست از `use std::vec::Vec` استفاده کنیم، و براحتی میتونیم از `Vec` استفاده کنیم.
 
-- `std::marker::{Copy, Send, Sized, Sync, Unpin}`. You haven't seen `Unpin` before, because it is used for almost every type (like `Sized`, which is also very common). To "pin" means to not let something move. In this case a `Pin` means that it can't move in memory, but most items have `Unpin` so you can. That's why functions like `std::mem::replace` work, because they aren't pinned.
-- `std::ops::{Drop, Fn, FnMut, FnOnce}`.
+همه‌ی `Prelude` ها رو میتونیم در این [لینک](https://doc.rust-lang.org/std/prelude/index.html#prelude-contents) ببینیم. بعضی هاشون رو تاحالا دیدیم:
+- `std::ops::{Drop, Fn, FnMut, FnOnce}`
 - `std::mem::drop`
-- `std::boxed::Box`.
-- `std::borrow::ToOwned`. You saw this before a bit with `Cow`, which can take borrowed content and make it owned. It uses `.to_owned()` to do this. You can also use `.to_owned()` on a `&str` to get a `String`, and the same for other borrowed values.
+- `std::boxed::Box`
 - `std::clone::Clone`
-- `std::cmp::{PartialEq, PartialOrd, Eq, Ord}`.
-- `std::convert::{AsRef, AsMut, Into, From}`.
-- `std::default::Default`.
-- `std::iter::{Iterator, Extend, IntoIterator, DoubleEndedIterator, ExactSizeIterator}`. We used `.rev()` for an iterator before: this actually makes a `DoubleEndedIterator`. An `ExactSizeIterator` is just something like `0..10`: it already knows that it has a `.len()` of 10. Other iterators don't know their length for sure.
-- `std::option::Option::{self, Some, None}`.
-- `std::result::Result::{self, Ok, Err}`.
-- `std::string::{String, ToString}`.
-- `std::vec::Vec`.
+- `std::cmp::{PartialEq, PartialOrd, Eq, Ord}`
+- `std::convert::{AsRef, AsMut, Into, From}`
+- `std::default::Default`
+- `std::option::Option::{self, Some, None}`
+- `std::result::Result::{self, Ok, Err}`
+- `std::string::{String, ToString}`
+- `std::vec::Vec`
+- `std::marker::{Copy, Send, Sized, Sync, Unpin}`: ما `Unpin` رو ندیدیم، اکثر نوع ها از `Unpin` استفاده کردند، درست مثل ‌`Sized`. ‍`Pin` به معنای این هست که مقدار نمیتونه در حافظه جا‌به‌جا بشه. اما خب همونطور که گفتم اکثر نوع ها `Unpin` هستند، پس میتونند در حافظه جا‌به‌جا بشند. فانکشن هایی مثل `std::mem::replace` روی نوع های `Unpin` کار میکنند
+- `std::borrow::ToOwned`: این رو قبلا در بخش `Cow` دیدیم، این میتونه یک مقدار `Borrowed` رو بگیره و اون `Owned` کنه. برای این کار از `.to_owned()` استفاده میکنه، میتونیم از `.to_owned()` روی یک `&str` هم استفاده کنیم که `String` ازش بگیریم. همینطور روی بقیه مقدار های `Borrowed` هم کار میکنه
+- `std::iter::{Iterator, Extend, IntoIterator, DoubleEndedIterator, ExactSizeIterator}`: ما از `.rev()` روی `Iterator` استفاده کردیم، این در حقیقت یک `DoubleEndedIterator` میسازه. نوع `ExcatSizeIterator` هم چیزی شبیه به `0..10` هست، به این دلیل که سایز مشخصی داره. بقیه‌ی `Iterator` ها سایز مشخصی ندارند، یا اگه دارند قابل تغییر هستند
 
-What if you don't want the prelude for some reason? Just add the attribute `#![no_implicit_prelude]`. Let's give it a try and watch the compiler complain:
+اگه نخوایم از `Prelude` ها استفاده کنیم میتونیم از `#![no_implicit_prelude]` استفاده کنیم:
 
 ```rust
 // ⚠️
@@ -13106,7 +13107,7 @@ fn main() {
 }
 ```
 
-Now Rust has no idea what you are trying to do:
+کامپایلر میگه داری از چیز هایی استفاده میکنی که نمیشناسمشون:
 
 ```text
 error: cannot find macro `println` in this scope
@@ -13130,7 +13131,7 @@ error[E0433]: failed to resolve: use of undeclared type or module `String`
 error: aborting due to 3 previous errors
 ```
 
-So for this simple code you need to tell Rust to use the `extern` (external) crate called `std`, and then the items you want. Here is everything we have to do just to create a Vec and a String and print it:
+پس با این مثال فهمیدیم که راست به صورت پیشفرض از `std` استفاده میکنه. بزارید خودمون به طور دستی به راست بفهمونیم که چه چیز هایی میخوایم:
 
 ```rust
 #![no_implicit_prelude]
@@ -13147,20 +13148,25 @@ fn main() {
     println!("{:?}, {}", my_vec, my_string);
 }
 ```
+خب الان کار میکنه و خروجی ``[8, 9, 10], This won't work`` رو میده.
 
-And now it finally works, printing `[8, 9, 10], This won't work`. So you can see why Rust uses the prelude. But if you want, you don't need to use it. And you can even use `#![no_std]` (we saw this once) for when you can't even use something like stack memory. But most of the time you don't have to think about not using the prelude or `std` at all.
+اگه به `STD` هم نیاز نداشتیم میتونیم از `#![no_std]` استفاده کنیم که با این کار راست به طور خودکار از `STD` استفاده نمیکنه. اما خب اکثر وقت ها ما به `STD` نیاز داریم.
 
-So why didn't we see the `extern` keyword before? It's because you don't need it that much anymore. Before, when bringing in an external crate you had to use it. So to use `rand` in the past, you had to write:
+خب ما چرا تا الان کلمه‌‌کلیدی `extern` رو ندیده بودیم؟ این به دلیل این هست که دیگه بهش نیازی نداریم، قبلا برای اینکه از `External Crate` ها استفاده کنیم باید ازش استفاده میکردیم، یعنی قبلا برای اینکه از `rand` استفاده کنیم باید چنین چیزی مینوشتیم:
 
 ```rust
 extern crate rand;
 ```
 
-and then `use` statements for the mods, traits, etc. that you wanted to use. But the Rust compiler now doesn't need this help anymore - you can just use `use` and it knows where to find it. So you almost never need `extern crate` anymore, but in other people's Rust code you might still see it on the top.
+و بعدش از `use` برای معرفی ماژول هاو... استفاده میکردیم. اما الان دیگه کامپایلر نیازی به مشخص کردن اینها نداره.
+
+ما فقط `use` رو مینویسیم و خودش بقیه کار ها رو انجام میده. پس دیگه تقریبا هیچوقت نیازی نداریم که از `extern crate` استفاده کنیم. اما خب در کد های قدیمی میتونیم هنوز این کلمه‌کلیدی رو ببینیم.
 
 ### time
 
-`std::time` is where you can get functions for time. (If you want even more functions, a crate like `chrono` can work.) The simplest function is just getting the system time with `Instant::now()`.
+در ماژول `std::time` میتونیم فانکشن هایی برای کار با زمان پیدا کنیم. همچنین اگه به فانکشن های بیشتری نیاز داشتیم میتونیم از `crate` هایی مثل `chrono` استفاده کنیم.
+
+با استفاده از `Instant::now()` میتونیم زمان سیستم رو بگیریم:
 
 ```rust
 use std::time::Instant;
@@ -13170,10 +13176,11 @@ fn main() {
     println!("{:?}", time);
 }
 ```
+اگه این برنامه رو اجرا کنیم چیزی شبیه به `` میگیریم.
 
-If you print it, you'll get something like this: `Instant { tv_sec: 2738771, tv_nsec: 685628140 }`. That's talking about seconds and nanoseconds, but it's not very useful. If you look at 2738771 seconds for example (written in August), it is 31.70 days. That doesn't have anything to do with the month or the day of the year. But the page on `Instant` tells us that it isn't supposed to be useful on its own. It says that it is "opaque and useful only with Duration." Opaque means "you can't figure it out", and duration means "how much time passed". So it's only useful when doing things like comparing times.
+این به ما ثانیه و میکروثانیه رو میده که خب کاربردی نیست. این زمانی که میخوایم دو زمان رو با هم مقایسه کنیم کاربرد داره.
 
-If you look at the traits on the left, one of them is `Sub<Instant>`. That means we can use `-` to subtract one from another. And when we click on [src] to see what it does, it says:
+اگه به صفحه‌ی مستندات این نوع بریم میتونیم در قسمت چپ ببینیم که `Sub<Instant>` رو پیاده‌سازی کرده. یعنی اینکه ما میتونیم از `-` روی این نوع استفاده کنیم، اگه کد رو بخوایم ببینیم، چنین چیزی رو بهمون نشون میده:
 
 ```rust
 impl Sub<Instant> for Instant {
@@ -13185,7 +13192,9 @@ impl Sub<Instant> for Instant {
 }
 ```
 
-So it takes an `Instant` and uses `.duration_since()` to give a `Duration`. Let's try printing that. We'll make two `Instant::now()`s right next to each other, then we'll make the program busy for a while. Then we'll make one more `Instant::now()`. Finally, we'll see how long it took.
+پس یک `Instant` میگیره و از `.duration_since()` استفاده میکنه و یک `Duration` به ما میده.
+
+در کد زیر ما اول دو بار از `Instant::now()` استفاده میکنیم که زمان رو بگیریم، بعد برنامه رو مشفول یه کاری میکنیم. در نهایت دوباره زمان رو میگیریم و فواصل بین این زمان ها رو پرینت میکنیم:
 
 ```rust
 use std::time::Instant;
@@ -13207,16 +13216,14 @@ fn main() {
 }
 ```
 
-This will print something like this:
+خروجیش:
 
 ```text
 1.025µs
 683.378µs
 ```
 
-So that's just over 1 microsecond vs. 683 microseconds. We can see that Rust did take some time to do it.
-
-There is one fun thing we can do with just a single `Instant` though. We can turn it into a `String` with `format!("{:?}", Instant::now());`. It looks like this:
+خب ما میتونیم `Instant` رو با استفاده از `format!` به `String` تبدیل کنیم:
 
 ```rust
 use std::time::Instant;
@@ -13226,8 +13233,9 @@ fn main() {
     println!("{}", time1);
 }
 ```
+چیزی شبیه به `` پرینت میکنه.
 
-That prints something like `Instant { tv_sec: 2740773, tv_nsec: 632821036 }`. That's not useful, but if we use `.iter()` and `.rev()` and `.skip(2)`, we can skip the `}` and `` at the end. We can use it to make a random number generator.
+اگه از `.iter()` و `.rev()` و `.skip()` استفاده کنیم میتونیم یک عدد تقریبا تصادفی بدست بیاریم. البته باید یادمون باشه که هیچوقت برای ساخت عدد تصادفی از این روش استفاده نکنیم.
 
 ```rust
 use std::time::Instant;
@@ -13256,7 +13264,7 @@ fn main() {
 }
 ```
 
-This will print something like:
+چیزی که پرینت میکنه:
 
 ```text
 6
@@ -13265,9 +13273,13 @@ This will print something like:
 180
 ```
 
-The function is called `bad_random_number` because it's not a very good random number generator. Rust has better crates that make random numbers with less code than `rand` like `fastrand`. But it's a good example of how you can use your imagination to do something with `Instant`.
+ما اسم فانکشن رو `bad_random_number` گذاشتیم به این دلیل که ساخت عدد تصادفی با این روش مشکلاتی داره. و در عین حال راست `crate` های خوبی برای ساخت عدد تصادفی مثل `rand` و `fastrand` داره.
 
-When you have a thread, you can use `std::thread::sleep` to make it stop for a while. When you do this, you have to give it a duration. You don't have to make more than one thread to do this because every program is on at least one thread. `sleep` needs a `Duration` though, so it can know how long to sleep. You can pick the unit like this: `Duration::from_millis()`, `Duration::from_secs`, etc. Here's one example:
+وقتی داریم با `Thread` ها کار میکنیم میتونیم از `std::thread::sleep` استفاده کنیم که اون `Thread` برای مدتی متوقف بشه.
+
+این رو باید یادمون باشه که برنامه اصلی هم خودش یک `Thread` هست. پس برای تست این فانکشن لازم نیست یک `Thread` درست کنیم.
+
+فانکشن `sleep` به یک `Duration` نیاز داره که بدونه چه مدت زمانی باید `Thread` رو متوقف کنه. میتونیم از `Duration::from_millis()` یا `Duration::from_secs` برای ساخت یک `Duration` استفاده کنیم:
 
 ```rust
 use std::time::Duration;
@@ -13281,14 +13293,14 @@ fn main() {
 }
 ```
 
-This will just print
+خروجیش:
 
 ```text
 I must sleep now.
 Did I miss anything?
 ```
 
-but the thread will do nothing for three seconds. You usually use `.sleep()` when you have many threads that need to try something a lot, like connecting. You don't want the thread to use your processor to try 100,000 times in a second when you just want it to check sometimes. So then you can set a `Duration`, and it will try to do its task every time it wakes up.
+اگه کد بالا رو اجرا کنیم برنامه برای `3` ثانیه متوقف میشه.
 
 ### Other macros
 
