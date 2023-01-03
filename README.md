@@ -8318,9 +8318,10 @@ struct File(String);
 ```
 
 پس الان اگه از `File` استفاده کنیم میتونیم `Clone` کنیمش یا حتی `Debug Print` کنیمش. اما نمیتونیم روش از `Trait` های `String` استفاده کنیم چون این یک نوع دیگه هست.
+
 ### Importing and renaming inside a function
 
-Usually you write `use` at the top of the program, like this:
+معمولا ما `use` رو در اول برنامه مینویسیم:
 
 ```rust
 use std::cell::{Cell, RefCell};
@@ -8328,7 +8329,9 @@ use std::cell::{Cell, RefCell};
 fn main() {}
 ```
 
-But we saw that you can do this anywhere, especially in functions with enums that have long names. Here is an example.
+اما دیدیم که میتونیم هر جایی بنویسیم، برای مثال قبلا در فانکشن هایی که از `Enum` هایی که حالت های مختلف و طولانی داشتند استفاده کردیم.
+
+در کد زیر از `use` در فانکشن استفاده نمیکنیم:
 
 ```rust
 enum MapDirection {
@@ -8354,7 +8357,7 @@ fn give_direction(direction: &MapDirection) {
 }
 ```
 
-So now we will import MapDirection inside the function. That means that inside the function you can just write `North` and so on.
+در کد زیر از `use` استفاده کردیم که راحت‌تر با `Enum` کار کنیم:
 
 ```rust
 enum MapDirection {
@@ -8383,9 +8386,13 @@ fn give_direction(direction: &MapDirection) {
 }
 ```
 
-We've seen that `::*` means "import everything after the ::". In our case, that means `North`, `NorthEast`...and all the way to `NorthWest`. When you import other people's code you can do that too, but if the code is very large you might have problems. What if it has some items that are the same as your code? So it's usually best to not use `::*` all the time unless you're sure. A lot of times you see  a section called `prelude` in other people's code with all the main items you probably need. So then you will usually use it like this: `name::prelude::*`. We will talk about this more in the sections for `modules` and `crates`.
+عبارت `::*` به این معنا هست که هر چیزی که در چیزی که قبل `::` معرفی کردیم رو `Import` کن. در مثال بالا میشه `North`، `NorthEast` و...
 
-You can also use `as` to change the name. For example, maybe you are using someone else's code and you can't change the names in an enum:
+وقتی از کد های بقیه افراد استفاده میکنیم هم میتونیم از این روش استفاده کنیم. اما اگه کد خیلی زیاد باشه امکان داره به مشکل بخوریم، برای مثال اگه نوعی درش باشه که ما هم همون نوع رو داشته باشیم، کامپایلر نمیفهمه باید از کدوم استفاده کنه. پس بهتره که از `::*` استفاده نکنیم، به غیر از زمانی که اطمینان داریم که مشکلی پیش نمیاد.
+
+اکثر وقت ها ما بخشی به نام `prelude` رو درون کد های دیگران میبینیم که کد هایی چیز هایی که احتمالا ما بهشون نیاز خواهیم داشت رو `Import` کردند. پس احتمالا بهتره که از `crate::prelude::*` استفاده کنیم. در این مورد در بخش `modules` و `crates` بیشتر یاد میگیریم.
+
+همچنین میتونیم از کلمه‌کلیدی `as` استفاده کنیم برای تغییر نام یک ایتم. برای مثال امکان داره که در حال استفاده از کد کس دیگه‌ای هستیم و نمیتونیم ایتم های یک `Enum` رو تغییر بدیم:
 
 ```rust
 enum FileState {
@@ -8398,7 +8405,7 @@ enum FileState {
 fn main() {}
 ```
 
-So then you can 1) import everything and 2) change the names:
+در این شرایط ما میتونیم اول `Enum` رو `Import` کنیم و بعد اسم ایتم هارو تغییر بدیم:
 
 ```rust
 enum FileState {
@@ -8426,7 +8433,7 @@ fn give_filestate(input: &FileState) {
 fn main() {}
 ```
 
-So now you can write `OtherDirectory` instead of `FileState::SimilarFileNameInNextDirectory`.
+پس الان میتونیم به جای `FileState::SimilarFileNameInNextDirectory`، `OtherDirectory` رو بنویسیم.
 
 ## The todo! macro
 
@@ -14745,3 +14752,4 @@ main
 این پروژه فقط یک ترجمه‌ی فارسی از پروژه‌ی [`Easy Rust`](https://github.com/Dhghomon/easy_rust) هست.
 
 </div>
+
