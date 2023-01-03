@@ -8220,18 +8220,17 @@ This prints:
 
 ## Type aliases
 
-A type alias means "giving a new name to another type". Type aliases are very easy. Usually you use them when you have a very long type and don't want to write it every time. It is also good when you want to give a type a better name that is easy to remember. Here are two examples of type aliases.
+اصطلاح `Type Alias` به معنای دادن یک نام جدید به یک نوع هست.
 
-Here is a type that is not difficult, but you want to make your code easier to understand for other people (or for you):
 
+برای مثال:
 ```rust
 type CharacterVec = Vec<char>;
 
 fn main() {}
 ```
 
-Here's a type that is very difficult to read:
-
+در زیر یک نوع رو میبینیم که طولانی هست:
 ```rust
 // this return type is extremely long
 fn returns<'a>(input: &'a Vec<char>) -> std::iter::Take<std::iter::Skip<std::slice::Iter<'a, char>>> {
@@ -8241,8 +8240,7 @@ fn returns<'a>(input: &'a Vec<char>) -> std::iter::Take<std::iter::Skip<std::sli
 fn main() {}
 ```
 
-So you can change it to this:
-
+پس میتونیم یک `Alias` براش درست کنیم:
 ```rust
 type SkipFourTakeFive<'a> = std::iter::Take<std::iter::Skip<std::slice::Iter<'a, char>>>;
 
@@ -8253,8 +8251,7 @@ fn returns<'a>(input: &'a Vec<char>) -> SkipFourTakeFive {
 fn main() {}
 ```
 
-Of course, you can also import items to make the type shorter:
-
+البته میتونیم ماژول های رو هم `Import` کنیم که راحت‌تر بتونیم از نوع ها استفاده کنیم:
 ```rust
 use std::iter::{Take, Skip};
 use std::slice::Iter;
@@ -8266,9 +8263,9 @@ fn returns<'a>(input: &'a Vec<char>) -> Take<Skip<Iter<'a, char>>> {
 fn main() {}
 ```
 
-So you can decide what looks best in your code depending on what you like.
+پس میتونیم تصمیم بگیریم که از `Alias` ها استفاده کنیم یا اینکه ماژول رو `Import` کنیم.
 
-Note that this doesn't create an actual new type. It's just a name to use instead of an existing type. So if you write `type File = String;`, the compiler just sees a `String`. So this will print `true`:
+به این نکته توجه کنید که با این کار ما یک نوع جدید نمیسازیم و فقط یک اسم به یک نوعی که وجود داره میدیم، پس اگه `type File = String` رو بنویسیم، کامپایلر نوع رو `String` تشخیص میده، در کد زیر `true` رو پرینت میکنه:
 
 ```rust
 type File = String;
@@ -8280,9 +8277,8 @@ fn main() {
 }
 ```
 
-So what if you want an actual new type?
-
-If you want a new file type that the compiler sees as a `File`, you can put it in a struct. (This is actually called the `newtype` idiom)
+پس اگه یک نوع جدید میخواستیم چیکار کنیم؟
+میتونیم یک `Tuple Struct` بسازیم:
 
 ```rust
 struct File(String); // File is a wrapper around String
@@ -8293,8 +8289,7 @@ fn main() {
 }
 ```
 
-Now this will not work, because they are two different types:
-
+الان خروحی کد زیر `false` میشه:
 ```rust
 struct File(String); // File is a wrapper around String
 
@@ -8305,8 +8300,7 @@ fn main() {
 }
 ```
 
-If you want to compare the String inside, you can use my_file.0:
-
+اگه بخوایم دوتا `String` رو مقایسه کنیم باید از `my_file.0` استفاده کنیم:
 ```rust
 struct File(String);
 
@@ -8317,15 +8311,13 @@ fn main() {
 }
 ```
 
-And now this type doesn't have any traits, so you can implement them yourself. This is not too surprising:
-
+خب این یک نوع جدید هست دیگه، پس هر کاری که قبلا با نوع ها میکردیم رو میتونیم روی این هم اجرا کنیم، برای مثال پیاده‌سازی `Trait` ها:
 ```rust
 #[derive(Clone, Debug)]
 struct File(String);
 ```
 
-So when you use the `File` type here you can clone it and Debug print it, but it doesn't have the traits of String unless you use `.0` to get to the String inside it. But in other people's code you can only use `.0` if it's marked `pub` for public. And that's why these sorts of types use the `Deref` trait a lot. We will learn about both `pub` and `Deref` later.
-
+پس الان اگه از `File` استفاده کنیم میتونیم `Clone` کنیمش یا حتی `Debug Print` کنیمش. اما نمیتونیم روش از `Trait` های `String` استفاده کنیم چون این یک نوع دیگه هست.
 ### Importing and renaming inside a function
 
 Usually you write `use` at the top of the program, like this:
