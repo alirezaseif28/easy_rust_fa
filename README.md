@@ -12828,7 +12828,7 @@ error[E0599]: no method named `occg` found for struct `std::ffi::OsString` in th
 
 ### mem
 
-`std::mem` has some pretty interesting methods. We saw some of them already, such as `.size_of()`, `.size_of_val()` and `.drop()`:
+ماژول `std::mem` متود های جالبی داره. ما چند تا ازشون رو مثل `.size_of()`، `.size_of_val()` و `.drop()` رو دیدیم:
 
 ```rust
 use std::mem;
@@ -12843,18 +12843,18 @@ fn main() {
 }
 ```
 
-This prints:
+چنین چیزی پرینت میکنه:
 
 ```text
 4
 200
 ```
 
-Here are some other methods in `mem`:
+همچنین متود های دیگه‌ای هم در ماژول `mem` وجود دارند:
 
-`swap()`: with this you can change the values between two variables. You use a mutable reference for each to do it. This is helpful when you have two things you want to switch and Rust doesn't let you because of borrowing rules. Or just when you want to quickly switch two things.
+متود `swap()`: با این متود میتونیم مقدار های دو متغییر رو جا‌به‌جا کنیم. باید از هر دو متغییر یک `Mutable Reference` داشته باشیم. این متود میتونه خیلی کاربردی باشه وقتی `Rust` به دلیل قوانین `Borrowing` اجازه‌ی این کار رو به ما نمیده. یا حتی وقتی میخوایم خیلی سریع دو رو تا مقدار رو جا‌به‌جا کنیم هم کاربردی هست:
 
-Here's one example:
+برای مثال:
 
 ```rust
 use std::{mem, fmt};
@@ -12889,14 +12889,14 @@ fn main() {
 }
 ```
 
-This will print:
+چیزی که پرینت میکنه:
 
 ```text
 Frodo has the ring, Gollum used to have it, and Sauron wants it
 Gollum has the ring, Frodo used to have it, and Sauron wants it
 ```
 
-`replace()`: this is like swap, and actually uses swap inside it, as you can see:
+متود `replace()`: این متود مثل `swap()` هست و در حقیقت از اون هم استفاده میکنه، بزارید کدش رو ببینیم:
 
 ```rust
 pub fn replace<T>(dest: &mut T, mut src: T) -> T {
@@ -12904,8 +12904,7 @@ pub fn replace<T>(dest: &mut T, mut src: T) -> T {
     src
 }
 ```
-
-So it just does a swap and then returns the other item. With this you replace the value with something else you put in. And since it returns the old value, so you should use it with `let`. Here's a quick example.
+این متود مقادیر رو جا‌به‌جا میکنه و مقدار `src` رو هم برمیگردونه، برای مثال:
 
 ```rust
 use std::mem;
@@ -12932,9 +12931,11 @@ fn main() {
 }
 ```
 
-This prints `The city once called Constantinople is now called Istanbul.`.
+خروجی‌ای که میده: `The city once called Constantinople is now called Istanbul.`
 
-One function called `.take()` is like `.replace()` but it leaves the default value in the item. You will remember that default values are usually things like 0, "", and so on. Here is the signature:
+یک فانکشن دیگه هم به نام `.take()` وجود داره که شبیه به `.replace()` هست، یعنی مقدار که وجود داره رو برمیگردونه و به جاش مقدار `Default` اون نوع رو درش قرار میده.
+
+این خود متود هست:
 
 ```rust
 // 🚧
@@ -12943,8 +12944,7 @@ where
     T: Default,
 ```
 
-So you can do something like this:
-
+مثالی از این متود:
 ```rust
 use std::mem;
 
@@ -12960,15 +12960,18 @@ fn main() {
     println!("{:?}\n{:?}", number_vec, new_vec);
 }
 ```
-
-And as you can see, it replaced all the numbers with 0: no index was deleted.
+همونطور که میبینیم همه‌ی مقادیر رو به `0` که مقدار `Default` نوع های `Integer` هست تغییر داد، و هر بار که این کار رو انجام داد، مقدار اصلی که توش بود رو هم برگردوند:
 
 ```text
 [0, 0, 0, 0, 0, 0]
 [8, 7, 0, 2, 49, 9999]
 ```
 
-Of course, for your own type you can implement `Default` to whatever you want. Let's look at an example where we have a `Bank` and a `Robber`. Every time he robs the `Bank`, he gets the money at the desk. But the desk can take money from the back any time, so it always has 50. We will make our own type for this so it will always have 50. Here is how it works:
+البته ما میتونیم برای نوع هایی که خودمون میسازیم هم مقدار `Default` قرار بدیم. برای اینکار باید `Trait`، `Default` رو پیاده‌سازی کنیم.
+
+بزارید به مثالی نگاه کنیم. در این مثال ما `Bank` و `Robber` رو داریم. هر وقت کسی از بانک دزدی میکنه، پول رو از روی میز برمیداره. اما میز همیشه باید `50` تا پول داشته باشه. پس مقدار پیشفرض `DeskMoney` رو `50` میزاریم.
+
+با اینکه در کل کد بی معنی هست اما میتونیم مفهوم `Default` رو ببینیم:
 
 ```rust
 use std::mem;
@@ -13050,7 +13053,7 @@ fn main() {
 }
 ```
 
-This will print:
+چیزی که پرینت میکنه:
 
 ```text
 There is $5000 in the back and $50 at the desk.
