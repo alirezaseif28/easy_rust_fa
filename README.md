@@ -8437,7 +8437,7 @@ fn main() {}
 
 ## The todo! macro
 
-Sometimes you want to write code in general to help you imagine your project. For example, imagine a simple project to do something with books. Here's what you think as you write it:
+گاهی اوقات نیاز داریم که یک تصور کلی از پروژه داشته باشیم و نمیخوایم همه‌ی بخش ها رو پیاده‌سازی کنیم، برای مثال یک پروژه‌ای رو تصور کنید که میخوایم یه کاری با کتاب ها انجام بدیم، پس ما چنین چیزی رو مینویسیم:
 
 ```rust
 struct Book {} // Okay, first I need a book struct.
@@ -8465,7 +8465,7 @@ fn main() {
 }
 ```
 
-But Rust is not happy with `get_book` and `delete_book`. It says:
+اما انگار `Rust` زیاد با فانکشن های `get_book` و `delete_book` خوشحال نیست:
 
 ```text
 error[E0308]: mismatched types
@@ -8491,7 +8491,7 @@ error[E0308]: mismatched types
            found unit type `()`
 ```
 
-But you don't care about `get_book` and `delete_book` right now. This is where you can use `todo!()`. If you add that to the function, Rust will not complain, and will compile.
+اما در حال حاضر `get_book` و `delete_book` برای ما مهم نیست و نمیخوایم اونها رو پیاده‌سازی کنیم. خب برای اینکار میتونیم از `todo!()` استفاده کنیم. اگه این ماکرو رو به فانکشن ها اضافه کنیم دیگه `Rust` گیر نمیده:
 
 ```rust
 struct Book {}
@@ -8504,14 +8504,18 @@ fn delete_book(book: Book) -> Result<(), String> {
     todo!()
 }
 
-fn main() {}
+fn main() {
+    let book_type = BookType::HardCover;
+    check_book_type(&book_type); // Okay, let's check this function!
+}
 ```
 
-So now the code compiles and you can see the result of `check_book_type`: `It's hardcover`.
+خب الان خب کامپایل میشه و `check_book_type`: `It's hardcover` رو پرینت میکنه.
 
-But careful, because it only compiles - you can't use the function. If you call a function with `todo!()` inside it, it will panic.
+اما خب باید مراقب بود، چون فقط کامپایل میشه، اگه ما از اون فانکشن ها استفاده کنیم و `todo!()` اجرا بشه، برنامه `Panic` میکنه.
 
-Also, `todo!()` functions still need real input and output types. If you just write this, it will not compile:
+
+اما خب باید نوع ورودی و خروجی تعریف شده باشه برای مثال کد زیر کامپایل نمیشه، چون `WorldsBestType` وجود نداره:
 
 ```rust
 struct Book {}
@@ -8523,7 +8527,7 @@ fn get_book(book: &Book) -> WorldsBestType { // ⚠️
 fn main() {}
 ```
 
-It will say:
+خطایی که میده:
 
 ```text
 error[E0412]: cannot find type `WorldsBestType` in this scope
@@ -8533,7 +8537,7 @@ error[E0412]: cannot find type `WorldsBestType` in this scope
    |                             ^^^^^^^^^^^^^^ not found in this scope
 ```
 
-`todo!()` is actually the same as another macro: `unimplemented!()`. Programmers were using `unimplemented!()` a lot but it was long to type, so they created `todo!()` which is shorter.
+ماکروی `todo!()` مثل ماکروی `unimplemented!()` هست. برنامه‌نویس ها قبلا از `unimplemented!()` استفاده میکردند، اما خب تایپ کردنش زمان میبرد، پس `todo!()` درست شد که راحت‌تر نوشته میشه.
 
 ## Rc
 
