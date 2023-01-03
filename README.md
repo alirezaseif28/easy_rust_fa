@@ -13303,14 +13303,15 @@ Did I miss anything?
 اگه کد بالا رو اجرا کنیم برنامه برای `3` ثانیه متوقف میشه.
 
 ### Other macros
+بزارید یکم ماکروی باحال ببینیم.
 
-Let's take a look at some other macros.
 
-`unreachable!()`
+ماکروی `unreachable!()`:
 
-This macro is kind of like `todo!()` except it's for code that you will never do. Maybe you have a `match` in an enum that you know will never choose one of the arms, so the code can never be reached. If that's so, you can write `unreachable!()` so the compiler knows that it can ignore that part.
+این ماکرو مثل ماکروی `todo!()` هست، با این تفاوت که زمانی ازش استفاده میکنیم که هیچوقت قرار نیست کد رو بنویسیم.
 
-For example, let's say you have a program that writes something when you choose a place to live in. They are in Ukraine, and all of them are nice except Chernobyl. Your program doesn't let anyone choose Chernobyl, because it's not a good place to live right now. But the enum was made a long time ago in someone else's code, and you can't change it. So in the `match` arm you can use the macro here. It looks like this:
+
+برای مثال: برنامه که هر وقت یه مکان رو انتخاب کردیم یه چیزی رو پرینت کنه، همه‌ی مکان ها خوب هستند به جز `Chernobyl`. برنامه اجازه نمیده که `Chernobyl` انتخاب بشه، به این دلیل که فعلا مکان خوبی برای زندگی نیست. اما `Enum` خیلی قبلا درست شده و اصلا کس دیگه‌ای درستش کرده و نمیتونیم تغییرش بدیم. پس میتونیم در `match` از ماکروی `unreachable!()` استفاده کنیم:
 
 ```rust
 enum UkrainePlaces {
@@ -13338,11 +13339,11 @@ fn main() {
 }
 ```
 
-This will print `You will live in Kiev`.
+خروجیش: `You will live in Kiev`
 
-`unreachable!()` is also nice for you to read because it reminds you that some part of the code is unreachable. You have to be sure that the code is actually unreachable though. If the compiler ever calls `unreachable!()`, the program will panic.
+البته اگه برنامه به `unreachable!()` برسه، `Panic` میکنه. پس واقعا نباید تحت هیچ شرایطی به اونجای کد برسیم.
 
-Also, if you ever have unreachable code that the compiler knows about, it will tell you. Here is a quick example:
+همچنین اگه کامپایلر بفهمه که یه کدی هیچوقت اجرا نمیشه یه اخطاری بهمون میده، برای مثال:
 
 ```rust
 fn main() {
@@ -13356,7 +13357,7 @@ fn main() {
 }
 ```
 
-It will say:
+اخطاری که میده:
 
 ```text
 warning: unreachable pattern
@@ -13367,18 +13368,17 @@ warning: unreachable pattern
   |
 ```
 
-But `unreachable!()` is for when the compiler can't know, like our other example.
 
-`column!`, `line!`, `file!`, `module_path!`
+ماکرو های: `column!`, `line!`, `file!`, `module_path!`:
 
-These four macros are kind of like `dbg!()` because you just put them in to give you debug information. But they don't take any variables - you just use them with the brackets and nothing else. They are easy to learn together:
+این ماکرو ها شبیه به `dbg!()` هستند به این دلیل که اطلاعاتی در مورد کد بهمون میدن. اما چیزی به عنوان ورودی نمیگیرن:
 
-- `column!()` gives you the column where you wrote it,
-- `file!()` gives you the name of the file where you wrote it,
-- `line!()` gives you the line where you wrote it, and
-- `module_path!()` gives you the module where it is.
+- `column!()` شماره‌ی ستونی که نوشتیمش رو میده
+- `file!()` اسم فایلی که توش نوشتیمش رو میده
+- `line!()` شماره خطی که اون رو توش نوشتیم رو میده
+- `module_path!()` ماژولی که درش هست رو میده
 
-The next code shows all three in a simple example. We will pretend there is a lot more code (mods inside mods), because that is why we would want to use these macros. You can imagine a big Rust program over many mods and files.
+کد زیر نحوه‌ی استفاده از همشون رو نشون میده.
 
 ```rust
 pub mod something {
@@ -13422,7 +13422,7 @@ fn main() {
 }
 ```
 
-It prints this:
+خروجیش:
 
 ```text
 Hello from file src/main.rs
@@ -13431,9 +13431,15 @@ The next country is Czechia on line 32 and column 9.
 The last country is Portugal inside the module rust_book::something::third_mod
 ```
 
-`cfg!`
+ماکروی `cfg!`:
 
-We know that you can use attributes like `#[cfg(test)]` and `#[cfg(windows)]` to tell the compiler what to do in certain cases. When you have `test`, it will run the code when you run Rust under testing mode (if it's on your computer you type `cargo test`). And when you use `windows`, it will run the code if the user is using Windows. But maybe you just want to change one tiny bit of code depending on the operating system, etc. That's when this macro is useful. It returns a `bool`.
+ما قبلا `Attribute` هایی مثل `#[cfg(test)]` و `#[cfg(windows)]` رو دیدیم. میتونیم ازشون استفاده کنیم که به کامپایلر بگیم در فلان شرایط چه کاری انجام بده.
+
+وقتی که از برنامه رو در حالت تست اجرا کنیم کد هایی که زیر `` هستند اجرا میشند.
+
+وقتی که برنامه در سیستم‌عامل ویندوز اجرا بشه، کد هایی که زیر `` نوشته شدند اجرا میشند.
+
+همچنین این ماکروی به عنوان خروجی یک `bool` میده، پس میتونیم ازش در `if` استفاده کنیم:
 
 ```rust
 fn main() {
@@ -13445,14 +13451,13 @@ fn main() {
     );
 }
 ```
-
-This will print differently, depending on your system. The Rust Playground runs on Linux, so it will print:
+کد بالا با توجه به سیستم‌عامل میتونه متن های متفاوتی پرینت کنه. چون `Playgroun` در یک سیستم‌عامل `Linux` اجرا میشه، کد بالا چنین خروجی‌ای رو میده:
 
 ```text
 ...then in your hard drive, type the directory name followed by a slash. Then you...
 ```
 
-`cfg!()` works for any kind of configuration. Here is an example of a function that runs differently when you use it inside a test.
+ماکروی `cfg!()` یک جورایی برای تنظیم کردن کامپایلر هست، برای مثال کد زیر یک استفاده‌ی دیگه از `cfg!()` رو نشون میده:
 
 ```rust
 #[cfg(test)] // cfg! will know to look for the word test
@@ -13482,14 +13487,14 @@ fn main() {
 }
 ```
 
-Now it will run differently depending on the configuration. If you just run the program, it will give you this:
+کد بالا رو اگه در حالت عادی اجرا کنیم،‌ چنین چیزی رو پرینت میکنه:
 
 ```text
 Returning 5. This is not a test
 This shouldn't run, returning 0.
 ```
 
-But if you run it in test mode (`cargo test` for Rust on your computer), it will actually run the test. And because the test always returns 5 in this case, it will pass.
+اما اگه در حالت `test` اجراش کنیم، چیز های دیگه‌ای پرینت میکنه:
 
 ```text
 running 1 test
