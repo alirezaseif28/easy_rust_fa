@@ -9689,7 +9689,7 @@ fn main() {
 
 ### assert_eq
 
-You saw that `assert_eq!` is used when doing testing. You put two items inside the function and the program will panic if they are not equal. Here is a simple example where we need an even number.
+ما `assert_eq!` رو در بخش `Test` دیدیم. ما دوتا متغییر بهش میدیم و اگه مقدار اون دو با هم برابر نباشه، برنامه `Panic` میکنه. برای مثال:
 
 ```rust
 fn main() {
@@ -9703,7 +9703,11 @@ fn prints_number(input: i32) {
 }
 ```
 
-Maybe you don't have any plans to use `assert_eq!` in your code, but it is everywhere in Rust documentation. This is because in a document you would need a lot of room to `println!` everything. Also, you would require `Display` or `Debug` for the things you want to print. That's why documentation has `assert_eq!` everywhere. Here is an example from here [https://doc.rust-lang.org/std/vec/struct.Vec.html](https://doc.rust-lang.org/std/vec/struct.Vec.html) showing how to use a Vec:
+احتمالا ما از `assert_eq!` در کدمون استفاده نمیکنیم، اما در همه‌جای مستندات ازش استفاده میکنیم.
+
+به این دلیل کاربردی هست که اگه بخوایم به اون از `println!` استفاده کنیم باید `Display` یا `Debug` رو برای هر چیزی که داریم تست میکنیم، پیاده‌سازی کنیم. پس استفاده از `aasert_eq!` و بقیه‌ی دوستاش، منطقی هست.
+
+در این [لینک](https://doc.rust-lang.org/std/vec/struct.Vec.html) ما صفحه‌ی مستندات `Vec` رو میبینیم که به ما نشون میده چطور از `Vec` ها استفاده کنیم:
 
 ```rust
 fn main() {
@@ -9729,7 +9733,9 @@ fn main() {
 }
 ```
 
-In these examples, you can just think of `assert_eq!(a, b)` as saying "a is b". Now look at the same example with comments on the right. The comments show what it actually means.
+در کد بالا میتونیم فکر کنیم که کد `assert_eq!(a, b)` به معنای این هست که "ایا `a` برابر با `b` هست".
+
+در کد زیر با کامنت ها کامل متوجه میشیم که کد ها چه کاری انجام میدند:
 
 ```rust
 fn main() {
