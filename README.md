@@ -9685,7 +9685,7 @@ fn main() {
 
 ## Reading Rust documentation
 
-It's important to know how to read documentation in Rust so you can understand what other people wrote. Here are some things to know in Rust documentation:
+مهم هست که بتونیم مستندات رو بخونیم، اگه بتونیم اینکار رو انجام بدیم راحت میتونیم کد هایی که بقیه‌ی افراد نوشتند رو بخونیم و متوجه بشیم، در این قسمت چیز هایی که زیاد در مستندات استفاده میشند رو میبینیم و در موردشون یاد میگیریم.
 
 ### assert_eq
 
