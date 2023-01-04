@@ -9788,7 +9788,12 @@ pub fn with_capacity(capacity: usize) -> String {
 
 ### Information on traits
 
-The important part of the documentation for a trait is "Required Methods" on the left. If you see Required Methods, it probably means that you have to write the method yourself. For example, for `Iterator` you need to write the `.next()` method. And for `From` you need to write the `.from()` method. But some traits can be implemented with just an **attribute**, like we see in `#[derive(Debug)]`. `Debug` needs the `.fmt()` method, but usually you just use `#[derive(Debug)]` unless you want to do it yourself. That's why the page on `std::fmt::Debug` says that "Generally speaking, you should just derive a Debug implementation."
+بخش مهم مستدات درباره یک `Trait`، بخش `Required Methods` هست که در سمت چپ قرار داره. اگه این بخش رو میبینیم به احتمال زیاد باید خودمون اون متود ها رو برای پیاده‌سازی اون `Trait` پیاده‌سازی کنیم. برای مثال برای `Iterator` ما باید متود `.next()` رو بنویسیم. و برای `From` باید متود `.from()` رو بنویسیم. اما بعضی `Trait` ها هم میتونند با استفاده از `Attribute` ها پیاده‌سازی بشند، برای مثال ما کد `#[derive(Debug)]` رو دیدیم.
+
+خب `Debug` به `.fmt()` نیاز داره، اما معمولا ما از `#[derive(Debug)]` استفاده میکنیم و خودمون متود `.fmt()` رو پیاده‌سازی نمیکنیم. به همین دلیل هست که در مستندات `std::fmt::Debug` چنین چیزی نوشته شده:
+```text
+Generally speaking, you should just derive a Debug implementation.
+```
 
 ## صفت/ویژگی ها | Attributes
 
