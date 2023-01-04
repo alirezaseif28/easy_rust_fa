@@ -9763,7 +9763,7 @@ fn main() {
 
 ### Searching
 
-The top bar of a Rust document is the search bar. It shows you results as you type. When you go down a page you can't see the search bar anymore, but if you press the **s** key on the keyboard you can search again. So pressing **s** anywhere lets you search right away.
+در بالای [سایت](https://doc.rust-lang.org/std/index.html) مستدات `Rust`، بخشی وجود داره که میتونیم در اون در مورد هر چیزی که میخوایم جستجو کنیم. اگه به پایین صفحه بریم دیگه اون بخش رو نمیبینیم، اما اگه در همونجا کلید `s` رو فشار بدیم، دوباره میتونیم برگردیم به اون بخش و جستجو کنیم.
 
 ### [src] button
 
