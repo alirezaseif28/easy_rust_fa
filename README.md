@@ -9767,14 +9767,13 @@ fn main() {
 
 ### [src] button
 
-Usually the code for a method, struct, etc. will not be complete. This is because you don't usually need to see the full source to know how it works, and the full code can be confusing. But if you want to know more, you can click on [src] and see everything. For example, on the page for `String` you can see this signature for `.with_capacity()`:
+معمولا کد های `Method`، `Struct`و... ها کامل نیستند. به این دلیل که لازم نداریم که کل کد رو ببینیم که بدونیم چه کاری انجام میدند. اما اگه بخوایم کد رو ببینیم میتونیم روی `[src]` کلیک کنیم. برای مثال در صفحه‌ی `String` ما میتونیم امضای متود `.with_capacity()` رو ببینیم:
 
 ```rust
 // 🚧
 pub fn with_capacity(capacity: usize) -> String
 ```
-
-Okay, so you put a number in and it gives you a `String`. That's easy, but maybe we are curious and want to see more. If you click on [src] you can see this:
+خب پس یا عدد بهش میدیم و اون به ما یک `String` با `Capacity`‌ای برابر با اون عدد بهمون میده. اما اگه کنجکاو باشیم که کد رو ببینیم میتونیم روی `[src]` کلیک کنیم:
 
 ```rust
 // 🚧
@@ -9783,7 +9782,9 @@ pub fn with_capacity(capacity: usize) -> String {
 }
 ```
 
-Interesting! Now you can see that a String is a kind of `Vec`. And actually a `String` is a vector of `u8` bytes, which is interesting to know. You didn't need to know that to use the `with_capacity` method so you only see it if you click [src]. So clicking on [src] is a good idea if the document doesn't have much detail and you want to know more.
+خب جالبه، میتونیم ببینیم که `String` یه جورایی یک `Vec` هست. در حقیقت یک `String` یک `Vec`‌ای هست که مقدار `u8` رو در خودش نگهداری میکنه.
+
+پس اگه در مستندات خوب در مورد کارکرد یک چیز توضیح داده نشده میتونیم روی `[src]` بزنیم و کد اون چیز رو ببینیم.
 
 ### Information on traits
 
