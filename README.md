@@ -8541,7 +8541,7 @@ error[E0412]: cannot find type `WorldsBestType` in this scope
 
 ## Rc
 
-Rc means "reference counter". You know that in Rust, every variable can only have one owner. That is why this doesn't work:
+نوع `Rc` به معنای `Reference Counter`. این رو میدونیم که در `Rust` هر متغییر یک مالک داره. به همین دلیل هست که کد زیر کار نمیکنه:
 
 ```rust
 fn takes_a_string(input: String) {
@@ -8559,10 +8559,9 @@ fn main() {
     also_takes_a_string(user_name); // ⚠️
 }
 ```
+بعد از اینکه `takes_a_string`، متغییر `user_name` رو میگیره. دیگه نمیتونیم ازش استفاده کنیم. خب میتونیم `user_name.clone()` رو بهش بدیم. اما گاهی وقت ها متغییر بخشی از یک `Struct` هست و نمیخوایم که اون رو کپی کنیم. یا شاید `String` خیلی بزرگ هست و هزینه‌ی زیادی رو باید برای کپی کردنش بدیم. اینها دلایلی برای استفاده از `Rc` هستند. `Rc` اجازه میده که متغییر درونش بیشتر از یک مالک داشته باشه. `Rc` مثل یک کارمند اداره هست که همه‌ی مالک ها رو نگهداری میکنه و زمانی که تعداد مالک ها به `0` رسید اون متغییر میتونه از بین بره.
 
-After `takes_a_string` takes `user_name`, you can't use it anymore. Here that is no problem: you can just give it `user_name.clone()`. But sometimes a variable is part of a struct, and maybe you can't clone the struct. Or maybe the `String` is really long and you don't want to clone it. These are some reasons for `Rc`, which lets you have more than one owner. An `Rc` is like a good office worker: `Rc` writes down who has ownership, and how many. Then once the number of owners goes down to 0, the variable can disappear.
-
-Here's how you use an `Rc`. First imagine two structs: one called `City`, and another called `CityData`. `City` has information for one city, and `CityData` puts all the cities together in `Vec`s.
+برای مثال، بزارید فکر کنیم که ما یک `City` داریم و یک `CityData`. `City` اطلاعاتی در مورد یک شهر رو در خودش نگهداری میکنه و `CityData` همه‌ی شهر ها رو در کنار هم نگه میداره:
 
 ```rust
 #[derive(Debug)]
@@ -8595,7 +8594,9 @@ fn main() {
 }
 ```
 
-Of course, it doesn't work because `canada_cities` now owns the data and `calgary` doesn't. It says:
+البته، کد بالا کار نمیکنه، به این دلیل که متغییر `canada_cities` حالا مالک `city_history` هست و دیگه مالکش `calgary` نیست.
+
+خطایی که میده:
 
 ```text
 error[E0382]: borrow of moved value: `calgary.city_history`
@@ -8610,9 +8611,7 @@ error[E0382]: borrow of moved value: `calgary.city_history`
    = note: move occurs because `calgary.city_history` has type `std::string::String`, which does not implement the `Copy` trait
 ```
 
-We can clone the name: `names: vec![calgary.name.clone()]` but we don't want to clone the `city_history`, which is long. So we can use an `Rc`.
-
-Add the `use` declaration:
+ما میتونیم کد `names: vec![calgary.name.clone()]` رو هم بنویسیم. اما خب نمیخوایم که `city_history` رو کپی کنیم به این دلیل که طولانی و بزرگ هست و حافظه‌ی زیادی استفاده میکنه، پس از `Rc` استفاده میکنیم:
 
 ```rust
 use std::rc::Rc;
@@ -8640,10 +8639,11 @@ struct CityData {
 
 fn main() {}
 ```
+برای اینکه یک `Reference` بسازیم، باید `Rc` رو `clone` کنیم. اما مگه ما نمیخواستیم  `clone` نکنیم؟
 
-To add a new reference, you have to `clone` the `Rc`. But hold on, didn't we want to avoid using `.clone()`? Not exactly: we didn't want to clone the whole String. But a clone of an `Rc` just clones the pointer - it's basically free. It's like putting a name sticker on a box of books to show that two people own it, instead of making a whole new box.
+واقعیتش نه، ما نمیخواستیم که `String` رو `clone` کنیم. `clone` کردن یک `Rc` به معنای کپی کردن `Pointer` هست. و عملا هزینه‌ی زیادی نداره. مثل این میمونه که یک برچسب روی یک جعبه‌ی کتاب بزنیم که نشون بدیم رو نفر مالک این کتاب ها هستند. با این کار از ساختن دوباره‌ی کتاب ها جلوگیری میکنیم.
 
-You can clone an `Rc` called `item` with `item.clone()` or with `Rc::clone(&item)`. So calgary.city_history has 2 owners. We can check the number of owners with `Rc::strong_count(&item)`. Also let's add a new owner. Now our code looks like this:
+ما میتونیم یک `Rc` به نام `item` با `item.clone()` یا `Rc::clone(&item)` کپی(`clone`) کنیم. پس `calgary.city_history` دو مالک داره. ما میتونیم تعداد مالک ها رو با `Rc::strong_count(&item)` بفهمیم. بزارید یک مالک دیگه هم اضافه کنیم:
 
 ```rust
 use std::rc::Rc;
@@ -8679,10 +8679,15 @@ fn main() {
     let new_owner = calgary.city_history.clone();
 }
 ```
+دومین `println!` که داریم مقدار `2` رو پرینت میکنه. بعدش `new_owner` هم یک مالک میشه. و اگه بعدش هم یک `println!("{}", Rc::strong_count(&calgary.city_history))` میزاریم مقدار `3` رو میگرفتیم. 
 
-This prints `2`. And `new_owner` is now an `Rc<String>`. Now if we use `println!("{}", Rc::strong_count(&calgary.city_history));`, we get `3`.
+پس اگه `Strong Pointer` وجود داره، ایا `Week Pointer` هم وجود داره؟
 
-So if there are strong pointers, are there weak pointers? Yes, there are. Weak pointers are useful because if two `Rc`s point at each other, they can't die. This is called a "reference cycle". If item 1 has an Rc to item 2, and item 2 has an Rc to item 1, they can't get to 0. In this case you want to use weak references. Then `Rc` will count the references, but if it only has weak references then it can die. You use `Rc::downgrade(&item)` instead of `Rc::clone(&item)` to make weak references. Also, you use `Rc::weak_count(&item)` to see the weak count.
+اره، `Week Pointer` هم وجود داره. `Week Pointer` ها هم کاربردی هستند، برای مثال اگه دو `Rc` به همدیگه `Point` کنند، هیچکدوم نمیتونند از بین برند. به اینکار میگن `Reference Cycle`.
+
+اما اگه `Rc` فقط یک `Week Reference` داشته باشه میتونه از بین بره. پس برای حل `Reference Cycle` میتونیم از `Week Reference` ها استفاده کنیم.
+
+برای ساخت یک `Week Reference` از `Rc::downgrade(&item)` به جای `Rc::clone(&item)` استفاده میکنیم. همچنین میتونیم از `Rc::week_count(&item)` برای گرفتن تعداد `Week Reference` ها استفاده کنیم.
 
 ## Multiple threads
 
