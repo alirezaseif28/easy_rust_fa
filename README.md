@@ -8691,9 +8691,14 @@ fn main() {
 
 ## Multiple threads
 
-If you use multiple threads, you can do many things at the same time. Modern computers have more than one core so they can do more than one thing at the same time, and Rust lets you use them. Rust uses threads that are called "OS threads". OS thread means the operating system creates the thread on a different core. (Some other languages use "green threads", which are less powerful)
+با استفاده از `Thread` ها میتونیم چندین کار رو در یک زمان انجام بدیم. کامپیوتر های مدرن معمولا بیشتر از `1`، `Core` دارند، پس میتونند چندین کار رو در یک زمان انجام بدند. `Rust` از `Thread` هایی استفاده میکنه که بهشون میگیم `OS Thread`. `OS Thread` ها رو سیستم‌عامل روی `Core` های مختلف میسازه و کنترلشون میکنه.
 
-You create threads with `std::thread::spawn` and then a closure to tell it what to do. Threads are interesting because they run at the same time, and you can test it to see what happens. Here is a simple example:
+(بعضی زبان ها از `Green Thread` استفاده میکنند که قدرت کمتری دارند)
+
+
+ما میتونیم با استفاده از `std::thread::spawn` یک `Thread` بسازیم و به عنوان ورودی بهش یک `Closure` بدیم که بهش بگیم باید چه کاری در اون `Thread` انجام بده.
+
+استفاده از `Thread` ها جالب هست به این دلیل که در یک زمان اجرا میشند. برای مثال کد زیر رو ببینید:
 
 ```rust
 fn main() {
@@ -8703,7 +8708,7 @@ fn main() {
 }
 ```
 
-If you run this, it will be different every time. Sometimes it will print, and sometimes it won't print (this depends on your computer speed too). That is because sometimes `main()` finishes before the thread finishes. And when `main()` finishes, the program is over. This is easier to see in a `for` loop:
+اگه کد بالا رو اجرا کنیم، گاهی وقت ها `I am printing something` رو پرینت میکنه و گاهی اوقات هم نمیکنه. این بستگی به سرعت کامپیوتر داره. این به این دلیل هست که گاهی اوقات `main()` زودتر از `Thread` تموم میشه. و خب وقتی هم `main()` تموم بشه کل برنامه تموم میشه، بزارید در یک حلفه برنامه رو اجرا کنیم:
 
 ```rust
 fn main() {
@@ -8715,7 +8720,9 @@ fn main() {
 }       // How many can finish before main() ends here?
 ```
 
-Usually about four threads will print before `main` ends, but it is always different. If your computer is faster then it might not print any. Also, sometimes the threads will panic:
+در کد بالا معولا باید چهار `Thread` بتونند قبل از `main()` اجرا بشند، اما خب همیشه چنین نتیجه‌ای نمیگیریم. برای مثال اگه کامپیوتر سریع باشه حتی میتونه چیزی هم پرینت نشه.
+
+گاهی وقت ها هم برنامه `Panic` میکنه:
 
 ```text
 thread 'thread 'I am printing something
@@ -8724,9 +8731,9 @@ thread '<unnamed><unnamed>thread '' panicked at '<unnamed>I am printing somethin
 shutdown
 ```
 
-This is the error when the thread tries to do something right when the program is shutting down.
+این به دلیل این اتفاق میوفته که برنامه درحال تموم شدن بود اما یک `Thread` سعی داشته کاری انجام بده.
 
-You can give the computer something to do so it won't shut down right away:
+ما میتونیم به برنامه رو مشغول کنیم که `Thread` ها هم بتونند اجرا بشند:
 
 ```rust
 fn main() {
@@ -8741,8 +8748,7 @@ fn main() {
     }
 }
 ```
-
-But that is a silly way to give the threads time to finish. The better way is to bind the threads to a variable. If you add `let`, then you will create a `JoinHandle`. You can see this in the signature for `spawn`:
+اما خب این کار احمقانه‌ای هست. روش بهتر این هست که در هنگام ایجاد یک `Thread` خروجی‌ای که `spawn` میده رو در یک متغییر نگهداری کنیم. خروجی یک `JoinHandle` هست. میتونیم در امضای `spawn` این موضوع رو ببینیم:
 
 ```text
 pub fn spawn<F, T>(f: F) -> JoinHandle<T>
@@ -8751,10 +8757,9 @@ where
     F: Send + 'static,
     T: Send + 'static,
 ```
+(متغییر `f` یک `Closure` هست، برای در مورد اینکه چطوری یک `Closure` رو در فانکشن بگیریم یاد میگیریم)
 
-(`f` is the closure - we will learn how to put closures into our functions later)
-
-So now we have a `JoinHandle` every time.
+پس ما هر بار `JoinHandle` رو میگیریم:
 
 ```rust
 fn main() {
@@ -8767,7 +8772,7 @@ fn main() {
 }
 ```
 
-`handle` is now a `JoinHandle`. What do we do with it? We use a method called `.join()`. This method means "wait until all the threads are done" (it waits for the threads to join it). So now just write `handle.join()` and it will wait for each of the threads to finish.
+الان متغییر `handle` یک `JoinHandle` هست. خب چه کاری باهاش کنیم؟ ما میتونیم از متود `.join()` استفاده کنیم. این متود هر جا که استفاده بشه صبر میکنه تا زمانی که `Thread` کارش تموم بشه، بعد کد های بعدش اجرا میشند. پس ما `handle.join()` رو مینویسیم و صبر میکنیم که هر `Thread` تموم بشه و بعد `Thread` بعدی رو میسازیم:
 
 ```rust
 fn main() {
@@ -8781,15 +8786,17 @@ fn main() {
 }
 ```
 
-Now we will learn about the three types of closures. The three types are:
+خب حالا بزارید در مورد انوع `Closure` ها یاد بگیریم:
 
-- `FnOnce`: takes the whole value
-- `FnMut`: takes a mutable reference
-- `Fn`: takes a regular reference
+- `FnOnce`: کل مقدارها رو میگیره و مالکش میشه
+- `FnMut`: یک `Mutable Reference` به مقدار ها میگیره
+- `Fn`: یک `Reference` به مقدارها میگیره
 
-A closure will try to use `Fn` if it can. But if it needs to change the value it will use `FnMut`, and if it needs to take the whole value, it will use `FnOnce`. `FnOnce` is a good name because it explains what it does: it takes the value once, and then it can't take it again.
+یک `Closure` سعی میکنه که از `Fn` استفاده کنه. اما اگه نیاز داشته باشه مقدار رو تغییر بشه از `FnMut` استفاده میکنه. و اگه بخواد یک بار مالک مقدار بشه از `FnOnce` استفاده میکنه.
 
-Here is an example:
+نوع `FnOnce` اسم خوبی هم داره، به این دلیل که یک بار مقدار ها رو میگیره و دیگه هم اونها بعدش قابل استفاده نیستند.
+
+برای مثال:
 
 ```rust
 fn main() {
@@ -8800,9 +8807,9 @@ fn main() {
 }
 ```
 
-`String` is not `Copy`, so `my_closure()` is `Fn`: it takes a reference.
+نوع `String` یک `Copy` رو پیاده‌سازی نمیکنه، پس `my_closure()` یک `Fn` هست، پس یعنی فقط `Reference` به مقدار ها رو میگیره:
 
-If we change `my_string`, it will be `FnMut`.
+اگه ما در `Closure` مقدار `my_string` رو تغییر بدیم، نوع اون `Closure`، `FnMut` میشه:
 
 ```rust
 fn main() {
@@ -8816,14 +8823,14 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 I will go into the closure now
 I will go into the closure now now
 ```
 
-And if you take by value, then it will be `FnOnce`.
+و اگه مالک اون متغییر ها بشیم، نوعش `FnOnce` میشه:
 
 ```rust
 fn main() {
@@ -8840,9 +8847,11 @@ fn main() {
 }
 ```
 
-We took by value, so we can't run `my_closure()` more than once. That is where the name comes from.
+در کد بالا ما متغییر ها رو با مقدار گرفتیم و مالکشون شدیم، پس نمیتونیم `my_closure()` رو دوباره اجرا کنیم. دلیل اسم `FnOnce` هم از همین جا میاد.
 
-So now back to threads. Let's try to use a value from outside:
+
+
+خب حالا برگردیم به `Thread` ها. بزارید از یک متغییری که بیرون `Closure` هست استفاده کنیم:
 
 ```rust
 fn main() {
@@ -8856,7 +8865,7 @@ fn main() {
 }
 ```
 
-The compiler says that this won't work.
+کامپایلر چنین خطایی میده:
 
 ```text
 error[E0373]: closure may outlive the current function, but it borrows `my_string`, which is owned by the current function
@@ -8881,10 +8890,9 @@ help: to force the closure to take ownership of `my_string` (and any other refer
    |                                     ^^^^^^^
 ```
 
-It is a long message, but helpful: it says to ``use the `move` keyword``. The problem is that we can do anything to `my_string` while the thread is using it, but it doesn't own it. That would be unsafe.
+پیام طولانی‌ای هست اما بخش مهمش ``use the `move` keyword`` هست. مشکل اینجاست که ما میتونیم از `my_string` در `Thread` استفاده کنیم، اما `Thread` مالک اون نیست. و این همچین امن نیست.
 
-Let's try something else that doesn't work:
-
+کد زیر هم کار نمیکنه:
 ```rust
 fn main() {
     let mut my_string = String::from("Can I go inside the thread?");
@@ -8899,6 +8907,7 @@ fn main() {
 }
 ```
 
+پس ما مجبور هستیم که با استفاده از کلمه‌کلیدی `move` متغییر ها رو به `Thread` بدیم. الان کد امن هست، اینطوری مالک متغییر `Thread` میشه، اما همچنان کد زیر کار نمیکنه:
 So you have to take the value with `move`. Now it is safe:
 
 ```rust
@@ -8915,7 +8924,7 @@ fn main() {
 }
 ```
 
-So we delete the `std::mem::drop`, and now it is okay. `handle` takes `my_string` and our code is safe.
+مالک متغییر `my_string`، `Thread` هست و ما سعی داریم که با `` از بین ببریمش که خب امکانش وجود نداره. پس اون کد رو حذف میکنیم:
 
 ```rust
 fn main() {
@@ -8929,7 +8938,7 @@ fn main() {
 }
 ```
 
-So just remember: if you need a value in a thread from outside the thread, you need to use `move`.
+پس باید یادمون باشه که اگه میخوایم از یک متغییر بیرون `Closure` استفاده کنیم باید از `move` استفاده کنیم.
 
 ## Closures in functions
 
