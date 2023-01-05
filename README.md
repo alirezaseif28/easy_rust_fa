@@ -10236,7 +10236,11 @@ fn returns_errors(input: u8) -> Result<String, Error> {
 
 ## Default and the builder pattern
 
-You can implement the `Default` trait to give values to a `struct` or `enum` that you think will be most common. The builder pattern works nicely with this to let users easily make changes when they want. First let's look at `Default`. Actually, most general types in Rust already have `Default`. They are not surprising: 0, "" (empty strings), `false`, etc.
+ما میتونیم با پیاده‌سازی `Default` مقدار های پیشفرضی به `Struct` ها یا `Enum` ها بدیم.
+
+الگوی `Builder` الگویی هست که به کاربر اجازه میده یک نوع رو در هنگام ساخت مقدار دهی کنند.
+
+اول بزارید به `Default` نگاهی بندازیم. در حقیقت اکثر نوع ها در `Rust`، `Default` رو پیاده‌سازی کردند. برای مثال `0` برای `Integer Type` ها، `""` برای `String` ها، `false` برای `bool` ها و...
 
 ```rust
 fn main() {
@@ -10248,9 +10252,9 @@ fn main() {
 }
 ```
 
-This prints `'0', '', 'false'`.
+خروجیش میشه: `'0', '', 'false'`
 
-So `Default` is like the `new` function except you don't have to enter anything. First we will make a `struct` that doesn't implement `Default` yet. It has a `new` function which we use to make a character named Billy with some stats.
+پس `Default` تقریبا شبیه به `new` هست، با این تفاوت که نیازی ندایم چیزی بهش به عنوان ورودی بدیم. بزارید یک ساختار درست کنیم که `Default` رو پیاده‌سازی نکرده. اما `new` رو پیاده‌سازی کرده. ما یک `Character` به نام `Billy` میسازیم و یکسری `Stat` هم بهش میدیم:
 
 ```rust
 struct Character {
@@ -10285,7 +10289,7 @@ fn main() {
 }
 ```
 
-But maybe in our world we want most of the characters to be named Billy, age 15, height 170, weight 70, and alive. We can implement `Default` so that we can just write `Character::default()`. It looks like this:
+اما تصور کنید که در دنیایی که داریم کد میزنیم اکثر `Character` ها اسمشون `Billy` هست و سنشون `15` و قدشون `170` و وزنشون `70` هست. پس ما میتونیم `Default` رو پیاده‌سازی کنیم که برای ساخت یک `Character` با خصوصیاتی که گفتیم فقط از کد `Character::default()` استفاده کنیم:
 
 ```rust
 #[derive(Debug)]
@@ -10343,9 +10347,10 @@ fn main() {
 }
 ```
 
-It prints `The character "Billy" is 15 years old.` Much easier!
+چیزی که پرینت میکنه: `The character "Billy" is 15 years old.`
 
-Now comes the builder pattern. We will have many Billys, so we will keep the default. But a lot of other characters will be only a bit different. The builder pattern lets us chain very small methods to change one value each time. Here is one such method for `Character`:
+
+خب برسیم به الگوی `Builder`. ما `Default` رو نگه میداریم. اما بعضی `Character` ها کمی تفاوت دارند، پس ما کاری میکنیم که بشه در هنگام ساخت مقادیر رو تغییر هم داد. الگوی `Builder` به ما اجازه میده که متود ها رو به هم مثل زنجیر وصل کنیم:
 
 ```rust
 fn height(mut self, height: u32) -> Self {    // 🚧
@@ -10353,10 +10358,7 @@ fn height(mut self, height: u32) -> Self {    // 🚧
     self
 }
 ```
-
-Make sure to notice that it takes a `mut self`. We saw this once before, and it is not a mutable reference (`&mut self`). It takes ownership of `Self` and with `mut` it will be mutable, even if it wasn't mutable before. That's because `.height()` has full ownership and nobody else can touch it, so it is safe to be mutable. Then it just changes `self.height` and returns `Self` (which is `Character`).
-
-So let's have three of these builder methods. They are almost the same:
+حتما متوجه شدید که `mut self` میگیره. خب این `&mut self` نیست. در حقیقت `mut self` مالکیت `Self` رو `Mutable` میگیره، حتی اگه قبلا `Mutable` نبوده باشه. این بدلیل این هست که `.height()` مالکیت رو میگیره و چیز دیگه‌ای هم کاری به `Self` نداره، پس مشکلی نیست که `Mutable` باشه. بعد ما `self.height` رو مقداردهی میکنیم و دوباره `Self` رو برمیگردونیم:
 
 ```rust
 fn height(mut self, height: u32) -> Self {     // 🚧
@@ -10375,7 +10377,9 @@ fn name(mut self, name: &str) -> Self {
 }
 ```
 
-Each one of those changes one variable and gives `Self` back: this is what you see in the builder pattern. So now we can write something like this to make a character: `let character_1 = Character::default().height(180).weight(60).name("Bobby");`. If you are building a library for someone else to use, this can make it easy for them. It's easy for the end user because it almost looks like natural English: "Give me a default character but with height of 180, weight of 60, and name of Bobby." So far our code looks like this:
+هر کدوم از این متود ها یک متغییر `Self` میگیرند و برمیگردونند، این چیزی هست که الگوی `Builder` اتفاق میوقته. پس الان میتونیم کدی شبیه به `let character_1 = Character::default().height(180).weight(60).name("Bobby")` بنویسیم.
+
+اگه داریم یک `Library` برای استفاده دیگران میسازیم، ایده‌ی خوبی هست که از الگوی `Builder` استفاده کنیم، به این دلیل که استفاده راحت میشه و کد هم راحت‌تر خونده میشه:
 
 ```rust
 #[derive(Debug)]
@@ -10445,9 +10449,9 @@ fn main() {
 }
 ```
 
-One last method to add is usually called `.build()`. This method is a sort of final check. When you give a user a method like `.height()` you can make sure that they only put in a `u32()`, but what if they enter 5000 for height? That might not be okay in the game you are making. We will use a final method called `.build()` that returns a `Result`. Inside it we will check if the user input is okay, and if it is, we will return an `Ok(Self)`.
+معمولا اخرین متودی استفاده میشه `.build()` هست. این متود یک جورایی چک میکنه که همه‌ی مقادیر معتبر باشند. به همین دلیل `.build()` یک `Result` برمیگردونه. اگه مشکلی با مقادیر وجود نداشت `Ok(Self)` رو برمیگردونیم.
 
-First though let's change the `.new()` method. We don't want users to be free to create any kind of character anymore. So we'll move the values from `impl Default` to `.new()`. And now `.new()` doesn't take any input.
+اول بزارید `.new()` رو تغییر بدیم. نمیخوایم که کاربر بتونه هر چیزی رو بدون اینکه اعتبار‌سنجی بشه بسازه. پس کد های `.default()` رو در `.new()` مینویسیم و الان `.new()` ورودی هم نمیگیره:
 
 ```rust
     fn new() -> Self {    // 🚧
@@ -10461,9 +10465,9 @@ First though let's change the `.new()` method. We don't want users to be free to
     }
 ```
 
-That means we don't need `impl Default` anymore, because `.new()` has all the default values. So we can delete `impl Default`.
+خب ما `Defult` رو هم پیاده‌سازی نمیکنیم، به این دلیل که `.new()` مقدار های پیشفرض رو به ما میده.
 
-Now our code looks like this:
+کدمون چنین چیزی شده:
 
 ```rust
 #[derive(Debug)]
@@ -10517,9 +10521,11 @@ fn main() {
 }
 ```
 
-This prints the same thing: `Character { name: "Bobby", age: 15, height: 180, weight: 60, lifestate: Alive }`.
+چیزی که پرینت میکنه: `Character { name: "Bobby", age: 15, height: 180, weight: 60, lifestate: Alive }`
 
-We are almost ready to write the method `.build()`, but there is one problem: how do we make the user use it? Right now a user can write `let x = Character::new().height(76767);` and get a `Character`. There are many ways to do this, and maybe you can imagine your own. But we will add a `can_use: bool` value to `Character`.
+خب ما تقریبا اماده هستیم که متود `.build()` رو بنویسیم، اما یک مشکل داریم، چطوری کاربر رو مجبور کنیم که حتما از `.build()` استفاده کنه؟ الان کاربر میتونه کد `let x = Character::new().height(76767)` رو بنویسه و `Character` رو بگیره.
+
+خب راه های زیادی برای اینکار هست، اما خب در ساده‌ترین حالت میتونیم یک `can_use: bool` به `Character` اضافه کنیم که این مقدار فقط در `.build()` تغییر میکنه:
 
 ```rust
 #[derive(Debug)]       // 🚧
@@ -10546,9 +10552,9 @@ struct Character {
     }
 ```
 
-And for the other methods like `.height()`, we will set `can_use` to `false`. Only `.build()` will set it to `true` again, so now the user has to do a final check with `.build()`. We will make sure that `height` is not above 200 and `weight` is not above 300. Also, in our game there is a bad word called `smurf` that we don't want characters to use.
+برای بقیه متود ها مثل `.height()` ما `can_use` رو به `false` تغییر میدیم. پس فقط `.build()` میتونه `can_use` رو `true` کنه. پس ما کاربر رو یک جورایی مجبور کردیم که از `.build()` استفاده کنه. و حالا میتونیم در `.build()` مقدار ها رو اعتبار سنجی کنیم:
 
-Our `.build()` method looks like this:
+کد متود `.build()` چیزی شبیه به این هست:
 
 ```rust
 fn build(mut self) -> Result<Character, String> {      // 🚧
@@ -10565,11 +10571,11 @@ fn build(mut self) -> Result<Character, String> {      // 🚧
 }
 ```
 
-`!self.name.to_lowercase().contains("smurf")` makes sure that the user doesn't write something like "SMURF" or "IamSmurf" . It makes the whole `String` lowercase (small letters), and checks for `.contains()` instead of `==`. And the `!` in front means "not".
+کد `!self.name.to_lowercase().contains("smurf")` باعث میشه که اطمینان پیدا کنیم کاربر از کلمه‌ی `smurf` در اسم شخصیت استف اده نکرده. متود `.lowecase()` یک `String` رو تبدیل به حروف کوچیک میکنه و بعد ما با `.contais()` چک میکنیم که ایا `String` شامل `smurf` هست یا خیر.
 
-If everything is okay, we set `can_use` to `true`, and give the character to the user inside `Ok`.
+اگه چیزی مشکلی نداشت ما `can_use` رو به تغییر `true` تغییر میدیم و `Character` رو درون `Ok` برمیگردونیم.
 
-Now that our code is done, we will create three characters that don't work, and one character that does work. The final code looks like this:
+خب الان کدمون کار میکنه، برای مثال ما چند `Character` میسازیم که معتبر نیستند و...:
 
 ```rust
 #[derive(Debug)]
@@ -10657,7 +10663,7 @@ fn main() {
 }
 ```
 
-This will print:
+خروجی کد بالا:
 
 ```text
 Could not create character. Characters must have:
@@ -10680,9 +10686,9 @@ Character { name: "Billybrobby", age: 15, height: 180, weight: 100, lifestate: A
 
 ## Deref and DerefMut
 
-`Deref` is the trait that lets you use `*` to dereference something. We saw the word `Deref` before when using a tuple struct to make a new type, and now it's time to learn it.
+خب `Deref` یک `Trait` هست که به ما اجازه میده از `*` روی یک نوع استفاده کنیم که `Dereference` کنیمش.
 
-We know that a reference is not the same as a value:
+میدونیم که یک `Reference` با نوعی که بهش اشاره میکنه فرق میکنه، پس نمیتونه با اون نوع مقایسه بشه:
 
 ```rust
 // ⚠️
@@ -10692,8 +10698,7 @@ fn main() {
     println!("{}", value == reference);
 }
 ```
-
-And Rust won't even give a `false` because it won't even compare the two.
+در کد بالا حتی `false` رو نمیبینیم، به این دلیل که کامپایلر اجازه کامپایل شدن برنامه رو نمیده چون نمیتونه نوع `i32` رو با `&i32` مقایسه کنه:
 
 ```text
 error[E0277]: can't compare `{integer}` with `&{integer}`
@@ -10703,7 +10708,7 @@ error[E0277]: can't compare `{integer}` with `&{integer}`
   |                          ^^ no implementation for `{integer} == &{integer}`
 ```
 
-Of course, the solution here is `*`. So this will print `true`:
+البته خب برای اینکه مقدار یک `Reference` رو بگیریم میتونیم از `*` استفاده کنیم:
 
 ```rust
 fn main() {
@@ -10713,10 +10718,9 @@ fn main() {
 }
 ```
 
-Now let's imagine a simple type that just holds a number. It will be like a `Box`, and we have some ideas for some extra functions for it. But if we just give it a number, it won't be able to do much with it.
+حالا بزارید یک ساختار بسازیم که فقط یک عدد رو نگه میداره. چیزی شبیه به `Box` مبشه، و ما میخوایم یکسری قابلیت ها بهش اضافه کنیم.
 
-We can't use `*` like we can with `Box`:
-
+ما نمیتونیم از `*` روی `HoldsANumber` استفاده کنیم، چون این نوع `Deref` رو پیاده‌سازی نکرده:
 ```rust
 // ⚠️
 struct HoldsANumber(u8);
@@ -10727,7 +10731,7 @@ fn main() {
 }
 ```
 
-The error is:
+چنین خطایی رو میده:
 
 ```text
 error[E0614]: type `HoldsANumber` cannot be dereferenced
@@ -10736,11 +10740,15 @@ error[E0614]: type `HoldsANumber` cannot be dereferenced
 24 |     println!("{:?}", *my_number + 20);
 ```
 
-We can of course do this: `println!("{:?}", my_number.0 + 20);`. But then we are just adding a separate `u8` to the 20. It would be nice if we could just add them together. The message `cannot be dereferenced` gives us a clue: we need to implement `Deref`. Something simple that implements `Deref` is sometimes called a "smart pointer". A smart pointer can point to its item, has information about it, and can use its methods. Because right now we can add `my_number.0`, which is a `u8`, but we can't do much else with a `HoldsANumber`: all it has so far is `Debug`.
+البته ما میتونیم چنین کاری کنیم: `println!("{:?}", my_number.0 + 20)`
 
-Interesting fact: `String` is actually a smart pointer to `&str` and `Vec` is a smart pointer to array (or other types). So we have actually been using smart pointers since the beginning.
+اما میخوایم که مستقیم `Derefrence`اش کنیم. دیدیم که خطای ``type `HoldsANumber` cannot be dereferenced`` رو به ما داد، پس ما باید `Deref` رو براش پیاده‌سازی کنیم.
 
-Implementing `Deref` is not too hard and the examples in the standard library are easy. [Here's the sample code from the standard library](https://doc.rust-lang.org/std/ops/trait.Deref.html):
+گاهی اوقات به چیزی که `Deref` رو پیاده‌سازی میکنه، میگیم `Smart Pointer`. یک `Smart Pointer` میتونه به یک چیزی اشاره کنه و یکسری اطلاعات هم در مورد اون چیز داره و یکسری قابلیت ها هم به ما میده.
+
+حقیقت جالب: نوع `String` یک `Smart Pointer` به `&str` هست. همچنین `Vec` هم یک `Smart Pointer` به `Array`(یا نوع های دیگه) هست. ما خیلی وقت هست که درحال استفاده از `Smart Pointer` هستیم.
+
+پیاده‌سازی `Deref` زیاد سخت نیست، میتونیم مثال هایی که در [`Standard Library](https://doc.rust-lang.org/std/ops/trait.Deref.html) هست رو ببینیم:
 
 ```rust
 use std::ops::Deref;
@@ -10763,7 +10771,7 @@ fn main() {
 }
 ```
 
-So we follow that and now our `Deref` looks like this:
+خب با الهام گرفتن از همون مثال، میایم که `HoldsANumber` رو تبدیل به `Smart Pointer` کنیم:
 
 ```rust
 // 🚧
@@ -10777,7 +10785,7 @@ impl Deref for HoldsANumber {
 }
 ```
 
-So now we can do this with `*`:
+خب الان میتونیم از `*` روی `HoldsANumber` استفاده کنیم:
 
 ```rust
 use std::ops::Deref;
@@ -10797,8 +10805,11 @@ fn main() {
     println!("{:?}", *my_number + 20);
 }
 ```
+خب چیزی که کد بالا پرینت میکنه، `` هست. ما دیگه ما لازم نیست `my_number.0` رو بنویسیم.
 
-So that will print `40` and we didn't need to write `my_number.0`. That means we get the methods of `u8` and we can write our own methods for `HoldsANumber`. We will add our own simple method and use another method we get from `u8` called `.checked_sub()`. The `.checked_sub()` method is a safe subtraction that returns an `Option`. If it can do the subtraction then it gives it to you inside `Some`, and if it can't do it then it gives a `None`. Remember, a `u8` can't be negative so it's safer to do `.checked_sub()` so we don't panic.
+همچنین این به این معنی هست که ما متود های `u8` رو میتونیم استفاده کنیم، همچنین میتونیم برای `HoldsANumber` هم متود بسازیم.
+
+برای مثال ما متود `checked_sub()` رو میسازیم که یک متودی هست که سعی میکنه تفریق انجام بده و مقدار بازگشتیش هم یک `Option` هست:
 
 ```rust
 use std::ops::Deref;
@@ -10826,14 +10837,14 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 None
 40
 ```
 
-We can also implement `DerefMut` so we can change the values through `*`. It looks almost the same. You need `Deref` before you can implement `DerefMut`.
+همچنین میتونیم `DerefMut` رو پیاده‌سازی کنیم که بتونیم مقدار رو با استفاده از `*` تغییر هم بدیم. همچنین بهتره یادمون باشه که برای اینکه `DerefMut` رو پیاده‌سازی کنیم باید از قبل `Deref` رو پیاده‌سازی کرده باشیم:
 
 ```rust
 use std::ops::{Deref, DerefMut};
@@ -10868,9 +10879,13 @@ fn main() {
 }
 ```
 
-So you can see that `Deref` gives your type a lot of power.
+خب میبینیم که `Deref` قابلیت های جالبی به نوع ما داد.
 
-This is also why the standard library says: `Deref should only be implemented for smart pointers to avoid confusion`. That's because you can do some strange things with `Deref` for a complicated type. Let's imagine a really confusing example to understand what they mean. We'll start with `Character` struct for a game. A new `Character` needs some stats like intelligence and strength. So here is our first character:
+به همین دلیل هست که در `Standard Library` میبینیم که چنین چیزی گفته شده: 
+
+این به دلیل این هست که ما میتونیم با پیاده‌سازی `Deref` کار های عجیبی هم انجام بدیم که میتونه باعث بالا رفتن پیچیدگی بشه.
+
+برای مثال درک کد زیر خیلی سخت هست، ما یک ساختار به نام `Character` ساختیم. یک `Character` چندین ویژگی داره مثل `intelligence` و `strength`. بزارید کد رو ببینیم:
 
 ```rust
 struct Character {
@@ -10922,7 +10937,7 @@ fn main() {
 }
 ```
 
-Now let's imagine that we want to keep character hit points in a big vec. Maybe we'll put monster data in there too, and keep it all together. Since `hit_points` is an `i8`, we implement `Deref` so we can do all sorts of math on it. But look at how strange it looks in our `main()` function now:
+خب بیاید تصور کنیم که ما میخوایم نقاط ضریه‌ی شخصیت رو در یک `Vec` نگهداری کنیم. شاید داده‌های هیولا بازی رو هم درش نگهداری کردیم. از اونجایی که `hit_points` یک `i8` هست. ما `Deref` رو براش پیاده‌سازی کردیم که بتونیم کار های ریاضی روش انجام بدیم. اما کدمون خیلی عجیب شده:
 
 ```rust
 use std::ops::Deref;
@@ -10993,10 +11008,13 @@ fn main() {
     println!("{:?}", hit_points_vec);
 }
 ```
+خروجی کد بالا میشه: `[5, 5]`
 
-This just prints `[5, 5]`. Our code is now very strange for someone to read. We can read `Deref` just above `main()` and figure out that `*billy` means `i8`, but what if there was a lot of code? Maybe our code is 2000 lines long, and suddenly we have to figure out why we are `.push()`ing `*billy`. `Character` is certainly more than just a smart pointer for `i8`.
+اما کدمون خیلی سخت توسط فرد دیگه‌ای خونده میشه. ما باید `Deref` بالای `main()` رو بخونیم تا بفهمیم که `*billy` یک `i8` هست. اما با همین روش یک کد های زیادی بنویسیم واقعا خوندنش سخت میشه که باعث میشه نتونیم کد رو بفهمیم.
 
-Of course, it is not illegal to write `hit_points_vec.push(*billy)`, but it makes the code look very strange. Probably a simple `.get_hp()` method would be much better, or another struct that holds the characters. Then you could iterate through and push the `hit_points` for each one. `Deref` gives a lot of power but it's good to make sure that the code is logical.
+البته این روش غیرمجاز نیست اما خب کد رو عجیب میکنه، اما خب از اول بهتر بود به جای پیاده‌سازی `Deref` یک متودی مثل `.get_hp()` مینوشتیم.
+
+پیاده‌سازی `Deref` قابلیت های زیادی به ما میده اما باید منطقی ازش استفاده کنیم.
 
 ## Crates and modules
 
