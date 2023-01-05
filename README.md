@@ -8942,9 +8942,11 @@ fn main() {
 
 ## Closures in functions
 
-Closures are great. So how do we put them into our own functions?
+خب `Closure` ها عالی هستند، اما چطور ازشون در یک فانکشن استفاده کنیم؟
 
-You can make your own functions that take closures, but inside them it is less free and you have to decide the type. Outside a function a closure can decide by itself between `Fn`, `FnMut` and `FnOnce`, but inside you have to choose one. The best way to understand is to look at a few function signatures. Here is the one for `.all()`. We remember that it checks an iterator to see if everything is `true` (depending on what you decide is `true` or `false`). Part of its signature says this:
+ما میتونیم فانکشن هایی بسازیم که به عنوان ورودی `Closure` دریافت میکنند، بیرون یک فانکشن بر اساس کاری که `Closure` انجام میده نوعش مشخص میشه، اما در یک فانکشن ما باید مشخص کنیم که چه نوعی از `Closure` میخوایم.
+
+برای فهم بهتر، خوب هست که به چند فانکشن نگاهی کنیم، در زیر امضای متود `.all()` رو میبینیم:
 
 ```rust
     fn all<F>(&mut self, f: F) -> bool    // 🚧
@@ -8952,13 +8954,13 @@ You can make your own functions that take closures, but inside them it is less f
         F: FnMut(Self::Item) -> bool,
 ```
 
-`fn all<F>`: this tells you that there is a generic type `F`. A closure is always generic because every time it is a different type.
+عبارت `fn all<F>` میگه که یک `Generic` وجود داره به نام `F`. یک `Closure` همیشه یک `Generic` هست، به این دلیل که نوعش هر بار میتونه تغییر کنه.
 
-`(&mut self, f: F)`: `&mut self` tells you that it's a method. `f: F` is usually what you see for a closure: this is the variable name and the type.  Of course, there is nothing special about `f` and `F` and they could be different names. You could write `my_closure: Closure` if you wanted - it doesn't matter. But in signatures you almost always see `f: F`.
+در عبارت `(&mut self, f: F)` بخش `&mut self` میگه که این یک متود هست. `f: F` معمولا چیزی هست که برای `Closure` ها ازش استفاده میکنیم. البته هر اسمی که میخوایم میتونیم بزاریم. اما معمولا در امضا های متود/فانکشن ها ما `f: F` رو میبینیم.
 
-Next is the part about the closure: `F: FnMut(Self::Item) -> bool`. Here it decides that the closure is `FnMut`, so it can change the values. It changes the values of `Self::Item`, which is the iterator that it takes. And it has to return `true` or `false`.
+بخش بعدی `F: FnMut(Self::Item) -> bool` هست که در اینحا نوع اون `Generic` که `Closure` ما هست مشخص میشه. در این متود نوع `Closure` باید `FnMut` باشه. پس میتونه مقدار های ایتم ها رو تغییر بده و به عنوان خروجی یک `bool` برمیگردونه.
 
-Here is a much simpler signature with a closure:
+در زیر یک امضای ساده‌تر از فانکشنی که `Closure` میگیره رو میبینیم:
 
 ```rust
 fn do_something<F>(f: F)    // 🚧
@@ -8969,7 +8971,7 @@ where
 }
 ```
 
-This just says that it takes a closure, takes the value (`FnOnce` = takes the value), and doesn't return anything. So now we can call this closure that takes nothing and do whatever we like. We will create a `Vec` and then iterate over it just to show what we can do now.
+این فقط میگه که فانکشن یک `Closure` میگیره که نوعش `FnOnce` هست، چیزی هم بر نمیگردونه و در نهایت درون فانکشن هم اون `Closure` ورودی رو اجرا میکنه. پس این `Closure` چیزی نمیگیره و چیزی هم برنمیگردونه. ما یک `Vec` میسازیم بعد روش `Iterate` میکنیم و مقدار ایتم که روش هستیم رو هم پرینت میکنیم:
 
 ```rust
 fn do_something<F>(f: F)
@@ -8989,9 +8991,9 @@ fn main() {
 }
 ```
 
-For a more real example, we will create a `City` struct again. This time the `City` struct has more data about years and populations. It has a `Vec<u32>` for all the years, and another `Vec<u32>` for all the populations.
+برای یک مثال واقعی‌تر ما یک `City` میسازیم. این دفعه `City` یک ساختاری هست که اطلاعات زیادی در مورد سال و جمعیت رو در خودش نگهداری میکنه. یک `Vec<u32>` برای نگهداری سال ها داره و یک `Vec<u32>` برای نگهداری جمعیت:
 
-`City` has two functions: `new()` to create a new `City`, and `.city_data()` which has a closure. When we use `.city_data()`, it gives us the years and the populations and a closure, so we can do what we want with the data. The closure type is `FnMut` so we can change the data. It looks like this:
+ساختار `City` دو فانکشن داره، یکی `new()` که یک `City` جدید درست میکنه و `.city_data()` که یک `Closure` میگیره. اون `Closure` دو `Vec<u32>` به عنوان ورودی میگیره و یه کاری با اونها انجام میده و چیزی هم بر نمیگردونه، نوع `Closure` هم `FnMut` هست، پس میتونه مقادیر رو هم تغییر بده:
 
 ```rust
 #[derive(Debug)]
@@ -9072,7 +9074,7 @@ fn main() {
 }
 ```
 
-This will print the result of all the times we called `.city_data().` It is:
+کد بالا چنین چیزی رو پرینت میکنه:
 
 ```text
 [(1372, 3250), (1834, 15300), (1851, 24000), (1881, 45900), (1897, 58800)]
