@@ -9083,7 +9083,9 @@ Populations left are [3250, 24000, 45900, 58800, 119800, 283071, 478974, 400378,
 
 ## impl Trait
 
-`impl Trait` is similar to generics. You remember that generics use a type `T` (or any other name) which then gets decided when the program compiles. First let's look at a concrete type:
+خب `impl Trait` شبیه به `Generic` ها هست. یادمون هست که در `Generic` ها ما یک اسم مثل `T` میدادیم که نوع اون در زمان کامپایل مشخص میشد.
+
+اول بزارید به `Concrete Type` ها نگاهی بندازیم:
 
 ```rust
 fn gives_higher_i32(one: i32, two: i32) {
@@ -9096,9 +9098,9 @@ fn main() {
 }
 ```
 
-This prints: `10 is higher.`.
+خروجیش میشه: `10 is higher.`
 
-But this only takes `i32`, so now we will make it generic. We need to compare and we need to print with `{}`, so our type T needs `PartialOrd` and `Display`. Remember, this means "only take types that already have `PartialOrd` and `Display`".
+اما این فانکشن فقط میتونه نوع `i32` رو بگیره. خب حالا بیاید این فانکشن رو `Generic` کنیم. ما نیاز داریم که اون نوعی که میاد رو مقایسه کنیم و همچنین پرینتش کنیم. پس نوعی که میگیریم باید `PartialOrd` و `Display` رو پیاده‌سازی کرده باشه:
 
 ```rust
 use std::fmt::Display;
@@ -9113,7 +9115,7 @@ fn main() {
 }
 ```
 
-Now let's look at `impl Trait`, which is similar. Instead of a type `T`, we can bring in a type `impl Trait`. Then it will take in a type that implements that trait. It is almost the same:
+خب حالا بزارید به `impl Trait` نگاهی بندازیم که شبیه به `Generic` هست. ما به جای `T` میتونیم از `impl Trait` استفاده کنیم. تقریبا شبیه به `Generic` هست:
 
 ```rust
 fn prints_it(input: impl Into<String> + std::fmt::Display) { // Takes anything that can turn into a String and has Display
@@ -9128,7 +9130,7 @@ fn main() {
 }
 ```
 
-However, the more interesting part is that we can return `impl Trait`, and that lets us return closures because their function signatures are traits. You can see this in the signatures for methods that have them. For example, this is the signature for `.map()`:
+با این حال، بخش جالبش اینجاست که ما میتونیم یک `impl Trait` رو برگردونیم، که این یعنی میتونیم حتی یک `Closure` برگردونیم، به این دلیل که امضای اونها `Trait` ها هستند. بزارید به امضای فانکشن `.map()` یک نگاهی بندازیم:
 
 ```rust
 fn map<B, F>(self, f: F) -> Map<Self, F>     // 🚧
@@ -9140,9 +9142,9 @@ fn map<B, F>(self, f: F) -> Map<Self, F>     // 🚧
     }
 ```
 
-`fn map<B, F>(self, f: F)` mean that it takes two generic types. `F` is a function that takes one item from the container implementing `.map()` and `B` is the return type of that function. Then after the `where` we see the trait bounds. ("Trait bound" means "it must have this trait".) One is `Sized`, and the next is the closure signature. It must be an `FnMut`, and do the closure on `Self::Item`, which is the iterator that you give it. Then it returns `B`.
+خب `fn map<B, F>(self, f: F)` یعنی دو تا `Generic` میگیره. `F` یک فانکشن هست که یک ایتم از چیزی `.map()` روش اجرا میشه رو میگیره. `B` نوعی هست که فانکشن برمیگردونه. بعد ما `Trait Bound` داریم. یکیش `Sized` هست و بعدی امضای `Closure` هست. `Closure` باید یک `FnMut` باشه و باید یک `Self::Item` رو بگیره که `Iterator` بهش میده، بعدش هم باید نوع `B` رو برگردونه.
 
-So we can do the same thing to return a closure. To return a closure, use `impl` and then the closure signature. Once you return it, you can use it just like a function. Here is a small example of a function that gives you a closure depending on the text you put in. If you put "double" or "triple" in then it multiplies it by 2 or 3, and otherwise it gives you the same number. Because it's a closure we can do anything we want, so we also print a message.
+پس ما میتونیم برای برگردوندن یک `Closure` هم همین کار رو انجام بدیم. میتونیم از `impl` استفاده کنیم و بعد امضای `Closure` رو مشخص کنیم. خب چون خروجی `Closure` هست میتونیم ازش مثل یک فانکشن استفاده کنیم. در زیر یک مثالی میبینیم که یک فانکشنی داریم که یک `Closure` رو بر اساس ورودی به ما میده. اگه ورودی `double` یا `triple` رو بدیم،‌ به ما یک `Closure`‌ای میده که میتونه ورودی ها رو با `2` یا `3` ضرب کنه. در غیر این صورت به ما یک `Closure`ای میده که فقط ورودی رو برمیگردونه. به این دلیل که یک `Closure` هست ما میتونیم هر کاری درش انجام بدیم، برای مثال میتونیم درش چیزی رو پرینت کنیم:
 
 ```rust
 fn returns_a_closure(input: &str) -> impl FnMut(i32) -> i32 {
@@ -9178,7 +9180,7 @@ fn main() {
 }
 ```
 
-Here is a bit longer example. Let's imagine a game where your character is facing monsters that are stronger at night. We can make an enum called `TimeOfDay` to keep track of the day. Your character is named Simon and has a number called `character_fear`, which is an `f64`. It goes up at night and down during the day. We will make a `change_fear` function that changes his fear, but also does other things like write messages. It could look like this:
+در زیر یک مثال طولانی‌تر میبینیم. بزارید یک بازی رو تصور کنیم که شخصیت بازی با هیولا هایی مواجه میشه که در شب قدرتشون بیشتر میشه. ما میتونیم یک `Enum` به نام `TimeOfDay` درست کنیم که بتونیم زمان روز رو باهاش مشخص کنیم. اسم شخصیت ما `Simon` هست و یک چیزی داره به نام `character_fear` که یک `f64` هست. اون مقدار در طول شب بشتر میشه و در طول روز کمتر میشه. ما یک فانکشن به نام `change_fear` میسازیم که مقدار `character_fear` رو تغییر میده اما خب کار های دیگه‌ای مثال پرینت کردن پیام هم انجام میده:
 
 ```rust
 enum TimeOfDay { // just a simple enum
@@ -9235,7 +9237,7 @@ fn main() {
 }
 ```
 
-This prints:
+خروجی کد بالا این میشه:
 
 ```text
 What a nice day. Maybe put your feet up and rest a bit.
