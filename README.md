@@ -9486,14 +9486,16 @@ fn main() {
 
 ## Channels
 
-A channel is an easy way to use many threads that send to one place. They are fairly popular because they are pretty simple to put together. You can create a channel in Rust with `std::sync::mpsc`. `mpsc` means "multiple producer, single consumer", so "many threads sending to one place". To start a channel, you use `channel()`. This creates a `Sender` and a `Receiver` that are tied together. You can see this in the function signature:
+در `Rust` چیزی به نام `Channel` وجود داره، ما با استفاده از `Channel` ها میتونیم کاری کنیم نتیجه‌ی چندین `Thread` در یک جا نگهداری بشند. `Channel` ها محبوب هستند به این دلیل که خیلی راحت میشه ازشون استفاده کرد.
+
+ما میتونیم با استفاده از `std::sync::mpsc` یک `Channel` بسازیم. `mpsc` به معنای `Multiple producer, Single consumer` هست. برای ایجاد یک `Channel` میتونیم از `channel()` استفاده کنیم، به ما یک `Sender` و یک `Receiver` میده، این ها همیشه در کنار هم هستند، بزارید امضای فانکشن `channel()` رو ببینیم:
 
 ```rust
 // 🚧
 pub fn channel<T>() -> (Sender<T>, Receiver<T>)
 ```
 
-So you have to choose one name for the sender and one for the receiver. Usually you see something like `let (sender, receiver) = channel();` to start. Because it's generic, Rust won't know the type if that is all you write:
+پس ما برای `Sender` و `Receiver` باید اسم انتخاب کنیم. معمولا اسم های منطقی `sender` و `receiver` رو انتخاب میکنیم. اما اگه کد زیر رو اجرا کنیم کامپایلر خطا میده، به این دلیل که اونها `Generic` هستند و ما باید نوعشون رو مشخص کنیم:
 
 ```rust
 use std::sync::mpsc::channel;
@@ -9503,7 +9505,7 @@ fn main() {
 }
 ```
 
-The compiler says:
+خطایی که کامپایلر میده:
 
 ```text
 error[E0282]: type annotations needed for `(std::sync::mpsc::Sender<T>, std::sync::mpsc::Receiver<T>)`
@@ -9516,7 +9518,7 @@ error[E0282]: type annotations needed for `(std::sync::mpsc::Sender<T>, std::syn
 the type parameter `T` is specified
 ```
 
-It suggests adding a type for the `Sender` and `Receiver`. You can do that if you want:
+میبینیم که به ما پیشنهاد میکنه که نوع های `Sender` و `Receiver` رو مشخص کنیم، پس میتونیم چنین کاری رو انجام بدیم:
 
 ```rust
 use std::sync::mpsc::{channel, Sender, Receiver}; // Added Sender and Receiver here
@@ -9526,9 +9528,7 @@ fn main() {
 }
 ```
 
-but you don't have to. Once you start using the `Sender` and `Receiver`, Rust can guess the type.
-
-So let's look at the simplest way to use a channel.
+اما خب مجبور نیستیم، به محض اینکه از `Sender` و `Receiver` استفاده کنیم، `Rust` خودش میتونه نوع هاشون رو مشخص کنه:
 
 ```rust
 use std::sync::mpsc::channel;
@@ -9540,8 +9540,9 @@ fn main() {
     receiver.recv(); // recv = receive, not "rec v"
 }
 ```
+الان نوع `sender` یک `Result<(), SendError<i32>>` هست و نوع `receiver` یک `Result<(), ‌RecvError<i32>>` هست.
 
-Now the compiler knows the type. `sender` is a `Result<(), SendError<i32>>` and `receiver` is a `Result<i32, RecvError>`. So you can use `.unwrap()` to see if the sending works, or use better error handling. Let's add `.unwrap()` and also `println!` to see what we get:
+پس میتونیم از `.unwrap()` استفاده کنیم که ببینیم مقدار فرستاده شده یا خیر، یا حتی بهتر این هست که خطا های احتمالی رو کنترل کنیم:
 
 ```rust
 use std::sync::mpsc::channel;
@@ -9554,9 +9555,9 @@ fn main() {
 }
 ```
 
-This prints `5`.
+خروجی کد بالا: `5`
 
-A `channel` is like an `Arc` because you can clone it and send the clones into other threads. Let's make two threads and send values to `receiver`. This code will work, but it is not exactly what we want.
+یک `Channel` شبیه به `Arc` هست، به این دلیل که میتونیم `Clone` کنیمش و بفرستیمش به `Thread` ها. بزارید دو `Thread` بسازیم و مقدار ها رو به `receiver` بفرستیم. این کد کار میکنه اما چیزی که ما میخوایم رو انجام نمیده:
 
 ```rust
 use std::sync::mpsc::channel;
@@ -9576,8 +9577,7 @@ fn main() {
     println!("{}", receiver.recv().unwrap());
 }
 ```
-
-The two threads start sending, and then we `println!`. It might say `Send a &str this time` or `And here is another &str`, depending on which thread finished first. Let's make a join handle to make them wait.
+دو `Thread` مقدار ها رو میفرستند و ما بعد مقدار ها رو چاپ میکنیم،‌ شاید `Send a &str this time` پرینت بشه یا شاید هم `And here is another &str` پرینت بشه، در حقیقت بستگی به این داره که کدوم `Thread` زودتر تموم شده، و خب بعدش هم `main()` به اتمام میرسه که این یعنی برنامه تموم میشه. خب ما میتونیم با استفاده از `.join()` منتطر `Thread` ها بمونیم:
 
 ```rust
 use std::sync::mpsc::channel;
@@ -9600,15 +9600,14 @@ fn main() {
     }
 }
 ```
-
-This prints:
+خروجیش:
 
 ```text
 "Send a &str this time"
 "And here is another &str"
 ```
 
-Now let's make a `results_vec` instead of printing.
+خب حالا بیاید به جای اینکه مقادیر رو پرینت کنیم اونها رو درون `results_vec` بریزیم.
 
 ```rust
 use std::sync::mpsc::channel;
@@ -9635,9 +9634,9 @@ fn main() {
 }
 ```
 
-Now the results are in our vec: `["Send a &str this time", "And here is another &str"]`.
+مقادیری که در `results_vec` قرار دارند، اینها هستند: `["Send a &str this time", "And here is another &str"]`
 
-Now let's pretend that we have a lot of work to do, and want to use threads. We have a big vec with 1 million items, all 0. We want to change each 0 to a 1. We will use ten threads, and each thread will do one tenth of the work. We will create a new vec and use `.extend()` to put the work in.
+خب بیاید تظاهر کنیم که ما کار های زیادی برای انجام دارم و میخوایم از `Thread` ها استفاده کنیم. ما یک `Vec` داریم که یک میلیون ایتم داره، مقدار همه‌ی ایتم ها هم `0` هستند. ما میخوایم که مقادیر همه‌ی ایتم ها رو به `1` تغییر بدیم. برای اینکار از `Thread` ها استفاده میکنیم. هر `Thread` یک دهم کار را انجام میدهد، در نهایت ما یک `Vec` جدید میسازیم و از `.extend()` استفاده میکنیم که نتایج رو درش بریزیم:
 
 ```rust
 use std::sync::mpsc::channel;
