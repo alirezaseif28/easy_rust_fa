@@ -9252,7 +9252,7 @@ Your fear is now 7
 
 ## Arc
 
-You remember that we used an `Rc` to give a variable more than one owner. If we are doing the same thing in a thread, we need an `Arc`. `Arc` means "atomic reference counter". Atomic means that it uses the computer's processor so that data only gets written once each time. This is important because if two threads write data at the same time, you will get the wrong result. For example, imagine if you could do this in Rust:
+یادمون هست که `Rc` به ما اجازه میداد یک متغییر بیشتر از یک مالک داشته باشه. اگه بخوایم از چنین چیزی در `Thread` ها استفاده کنیم، باید از `Arc` استفاده کنیم. `Arc` به معنای `Atomic Reference Counter` هست. `Atomic` اینجا به معنی این هست که از پردازنده‌ی کامپیوتر استفاده میکنه که داده ها فقط یک در یک زمان بتونند روی حافظه نوشته بشند. یعنی اجازه نمیده که دو `Thread` بخوان با هم در یک زمان یک داده‌ای رو در یک جای کامپیوتر بنویسند. این باعث میشه که `Data Race` رخ نده. این به این دلیل مهم هست که اگه دو `Thread` بخوان همزمان داده‌ای رو در یک جای حافظه بنویسند، احتمال داره که نتیجه‌ی اشتباهی بگیریم. برای مثال فکر کنید که چنین کاری رو در `Rust` انجام بدیم:
 
 ```rust
 // 🚧
@@ -9266,16 +9266,17 @@ for i in 0..10 { // Thread 2
 }
 ```
 
+اگه `Thread` شماره یک و شماره دو با هم اجرا بشند امکان داره چنین حالتی رخ بده:
+- `Thread` شماره یک مقدار `10` رو میبینه، بعد `Thread` شماره دو مقدار `11` رو میبینه و مقدار `12` رو روش مینویسه، که خب تا اینجا مشکلی نیست
+- `Thread` یک مقدار `12` رو میبینه، در همین زمان، `Thread` شماره دو مقدار `12` رو میبینه، بعد `Thread` شماره یک مقدار `13` رو مینویسه. حالا ما مقدار `13` رو داریم، اما باید `14` میبود. و این یک مشکل بزرگ هست.
 If Thread 1 and Thread 2 just start together, maybe this will happen:
 
-- Thread 1 sees 10, writes 11. Then Thread 2 sees 11, writes 12. No problem so far.
-- Thread 1 sees 12. At the same time, Thread 2 sees 12. Thread 1 writes 13. And Thread 2 writes 13. Now we have 13, but it should be 14. That's a big problem.
 
-An `Arc` uses the processor to make sure this doesn't happen, so it is the method you must use when you have threads. You don't want an `Arc` for just one thread though, because `Rc` is a bit faster.
+یک `Arc` از پردازنده‌ی کامپیوتر استفاده میکنه که جلوی چنین حالتی رو بگیره. پس وقتی داریم از `Thread` ها استفاده میکنیم باید از این روش استفاده کنیم. البته برای یک `Thread` نیازی به `Arc` نداریم و میتونیم از `Rc` استفاده کنیم که از `Arc` سریع‌تر هست.
 
-You can't change data with just an `Arc` though. So you wrap the data in a `Mutex`, and then you wrap the `Mutex` in an `Arc`.
+البته نمیتونیم فقط با `Arc` مقدار رو تغییر بدیم، پس باید از `Mutex` استفاده کنیم.
 
-So let's use a `Mutex` inside an `Arc` to change the value of a number. First let's set up one thread:
+پس بزارید یک مثالی رو ببینیم که از `Mutex` درون `Arc` استفاده کردیم که مقدار چیزی رو تغییر بدیم. اول بزارید یک `Thread` بسازیم:
 
 ```rust
 fn main() {
@@ -9289,14 +9290,14 @@ fn main() {
 }
 ```
 
-So far this just prints:
+تا اینجا خروجی برنامه چنین چیزی میشه:
 
 ```text
 The thread is working!
 Exiting the program
 ```
 
-Good. Now let's put it in a `for` loop for `0..5`:
+خب حالا بیاید یک حلقه‌ی `for` بسازیم:
 
 ```rust
 fn main() {
@@ -9312,7 +9313,7 @@ fn main() {
 }
 ```
 
-This works too. We get the following:
+خروجیش تا الان چنین چیزی میشه:
 
 ```text
 The thread is working!
@@ -9323,7 +9324,7 @@ The thread is working!
 Exiting the program
 ```
 
-Now let's make one more thread. Each thread will do the same thing. You can see that the threads are working at the same time. Sometimes it will say `Thread 1 is working!` first, but other times `Thread 2 is working!` is first. This is called **concurrency**, which means "running together".
+خب حالا بزارید بیشتر از یک `Thread` درست کنیم. هر `Thread` کاری شبیه به اون یکی انجام میده. میتونیم ببینیم که `Thread` ها همزمان اجرا میشند. گاهی‌ اوقات اول `Thread 1 is working!` رو پرینت میکنه و گاهی اوقات `Thread 2 is working!` رو پرینت میکنه. به این میگن `Concurrency` که به معنای اجرای همزمان هست:
 
 ```rust
 fn main() {
@@ -9346,7 +9347,7 @@ fn main() {
 }
 ```
 
-This will print:
+چیزی که پرینت کرد:
 
 ```text
 Thread 1 is working!
@@ -9362,14 +9363,14 @@ Thread 2 is working!
 Exiting the program
 ```
 
-Now we want to change the value of `my_number`. Right now it is an `i32`. We will change it to an `Arc<Mutex<i32>>`: an `i32` that can be changed, protected by an `Arc`.
+خب حالا میخوایم مقدار `my_number` رو تغییر بدیم که یک `i32` هست. ما اون رو به `Arc<Mutex<i32>>` تغییر میدیم. الان یک `i32`‌ای هست که توسط `Arc` از `Data Race` مراقبت میشه و چون در یک `Mutex` هست میتونه با امنیت تغییر کنه:
 
 ```rust
 // 🚧
 let my_number = Arc::new(Mutex::new(0));
 ```
 
-Now that we have this, we can clone it. Each clone can go into a different thread. We have two threads, so we will make two clones:
+خب حالا که چنین چیزی داریم میتونیم `Clone` کنیمش. هر `Clone` میره توی یک `Thread`. ما دو `Thread` داریم، پس دو `Clone` ازش میسازیم:
 
 ```rust
 // 🚧
@@ -9379,7 +9380,7 @@ let my_number1 = Arc::clone(&my_number); // This clone goes into Thread 1
 let my_number2 = Arc::clone(&my_number); // This clone goes into Thread 2
 ```
 
-Now that we have safe clones attached to `my_number`, we can `move` them into other threads with no problem.
+خب حالا ما `Clone` های امنی از `my_number` داریم که میتونیم به خیال راحت با استفاده از `move` به `Thread` رو بدیمش:
 
 ```rust
 use std::sync::{Arc, Mutex};
@@ -9409,18 +9410,18 @@ fn main() {
 }
 ```
 
-The program prints:
+خروجیش:
 
 ```text
 Value is: Mutex { data: 20 }
 Exiting the program
 ```
 
-So it was a success.
+خب پس موفق شدیم.
 
-Then we can join the two threads together in a single `for` loop, and make the code smaller.
+بعد ما میتونیم دو `Thread` رو در یک `for` به هم `Join` کنیم. که کد یکم کمتر بشه.(این هم یک نوع `Refactoring` هست)
 
-We need to save the handles so we can call `.join()` on each one outside of the loop. If we do this inside the loop, it will wait for the first thread to finish before starting the new one.
+ما باید دو `Handle`‌ای که برای `Thread` ها هستند رو بگیریم که بتونیم از `.join()` بیرون از `loop` استفاده کنیم. اگه در `loop` از `.join()` استفاده کنیم. برنامه همونجا وای میسته تا زمانی که `Thread`ای که ساخته شده تموم بشه و بعد `Thread` بعدی رو میسازه.
 
 ```rust
 use std::sync::{Arc, Mutex};
@@ -9445,9 +9446,9 @@ fn main() {
 }
 ```
 
-Finally this prints `Mutex { data: 20 }`.
+در نهایت چنین چیزی پرینت میشه: `Mutex { data: 20 }`
 
-This looks complicated but `Arc<Mutex<SomeType>>>` is used very often in Rust, so it becomes natural. Also, you can always write your code to make it cleaner. Here is the same code with one more `use` statement and two functions. The functions don't do anything new, but they move some code out of `main()`. You can try rewriting code like this if it is hard to read.
+عبارت `Arc<Mutex<SomeType>>>` به نظر پیچیده میاد، اما خیلی در `Rust` استفاده میشه. همچنین همیشه میتونیم کد رو بهتر بنویسیم، برای مثال میتونیم از `use` استفاده کنیم که کد کمتری بنویسیم. فانکشن هایی که در کد زیر میبینید کار عچیبی جدیدی انجام نمیدند اما خب کد قابل فهم‌تر شده و حتی استفاده ازش هم راحت‌تر شده:
 
 ```rust
 use std::sync::{Arc, Mutex};
