@@ -10040,7 +10040,7 @@ fn main() {
 
 ## Box around traits
 
-`Box` is very useful for returning traits. You know that you can write traits in generic functions like in this example:
+نوع `Box` برای برگردوندن `Trait` ها کاربردی هست. میدونیم که میتونم از `Trait` ها در ساختن فانکشن `Generic` استفاده کنیم:
 
 ```rust
 use std::fmt::Display;
@@ -10054,9 +10054,9 @@ fn displays_it<T: Display>(input: T) {
 fn main() {}
 ```
 
-This only takes something with `Display`, so it can't accept our struct `DoesntImplementDisplay`. But it can take in a lot of others like `String`.
+در کد بالا فانکشن `displays_it` هر چیزی که `Display` رو پیاده‌سازی کرده باشه رو میتونه به عنوان ورودی بگیره. پس نمیتونه نوع `DoesntImplementDisplay` رو بگیره، چون `Display` رو پیاده‌سازی نکرده. اما میتونه نوع های دیگه‌ای که `Display` رو پیاده‌سازی کردند رو بگیره.
 
-You also saw that we can use `impl Trait` to return other traits, or closures. `Box` can be used in a similar way. You can use a `Box` because otherwise the compiler won't know the size of the value. This example shows that a trait can be used on something of any size:
+همچنین قبلا دیدیم که میتونیم از `impl Trait` استفاده کنیم که یک `Trait` یا حتی یک `Closure` رو برگردونیم. `Box` هم میتونه برای اینکار استفاده بشه. اگه از `Box` استفاده نکنیم، کامپایلر سایز نوعی که میخوایم برگردونیم رو نمیدونه. در مثال زیر میتونیم ببینیم که چیزی که یک `Trait` رو پیاده‌سازی میکنه میتونه هر سایزی داشته باشه:
 
 ```rust
 #![allow(dead_code)] // Tell the compiler to be quiet
@@ -10110,8 +10110,9 @@ fn main() {
     );
 }
 ```
+خروجی برنامه میشه: `2, 3, 32, 32, 1002`
 
-When we print the size of these, we get `2, 3, 32, 32, 1002`. So if you were to do this, it would give an error:
+پس اگه چنین کاری رو بکنیم خطا میگیریم:
 
 ```rust
 // ⚠️
@@ -10121,7 +10122,7 @@ fn returns_just_a_trait() -> JustATrait {
 }
 ```
 
-It says:
+خطایی که میده:
 
 ```text
 error[E0746]: return type cannot have an unboxed trait object
@@ -10131,9 +10132,11 @@ error[E0746]: return type cannot have an unboxed trait object
    |                              ^^^^^^^^^^ doesn't have a size known at compile-time
 ```
 
-And this is true, because the size could be 2, 3, 32, 1002, or anything else. So we put it in a `Box` instead. Here we also add the keyword `dyn`. `dyn` is a word that shows you that you are talking about a trait, not a struct or anything else.
+و خب خطایی که میده منطقی هست، به این دلیل که سایز چیزی که `JustATrait` رو پیاده‌سازی کرده میتونه هر چیزی باشه، برای مثال همونطور که دیدیم میتونه `2`، `3`، `32`، `1002` یا هر چیز دیگه باشه.
 
-So you can change the function to this:
+پس ما از `Box` استفاده میکنیم، همچنین کلمه‌کلیدی `dyn` رو هم استفاده میکنیم. وقتی از `dyn` استفاده میکنیمبه کامپایلر میگیم که داریم در مورد `Trait` ها صحبت میکنیم و در حال صحبت در مورد یک ساختار یا هر چیز دیگه‌ای نیستیم.
+
+پس فانکشن رو به چنین چیزی تغییر میدیم:
 
 ```rust
 // 🚧
@@ -10143,13 +10146,12 @@ fn returns_just_a_trait() -> Box<dyn JustATrait> {
 }
 ```
 
-And now it works, because on the stack is just a `Box` and we know the size of `Box`.
+و خب کدی که نوشتیم کار میکنه چون در قسمت `Stack` فقط نوع `Box` وجود داره و خب کامپایلر سایز `Box` رو میدونه.
 
-You see this a lot in the form `Box<dyn Error>`, because sometimes you can have more than one possible error.
 
-We can quickly create two error types to show this. To make an official error type, you have to implement `std::error::Error` for it. That part is easy: just write `impl std::error::Error {}`. But errors also need `Debug` and `Display` so they can give information on the problem. `Debug` is easy with `#[derive(Debug)]` but `Display` needs the `.fmt()` method. We did this once before.
+ما معولا کد `Box<dyn Error>` رو زیاد میبینیم، چون گاهی وقت ها احتمال داره بیشتر چند `Error` رخ بده.
 
-The code looks like this:
+ما میتونیم سریع چند نوع `Error` بسازیم که این موضوع رو نشون بدیم. برای اینکه یک نوع رسمی `Error` بسازیم، باید `std::error::Error` رو پیاده‌سازی کنیم. برای اینکار فقط باید کد `impl std::error:Error {}` رو بنویسیم. اما `Error` ها باید `Debug` و `Display` رو هم پیاده‌سازی کنند که بتونند اطلاعاتی رو نشون بدن. `Debug` رو میتونیم با `#[derive(Debug)]` پیاده‌سازی کنیم. اما برای پیاده‌سازی `Display` نیاز داریم که `.fmt()` رو پیاده‌سازی کنیم:
 
 ```rust
 use std::error::Error;
@@ -10202,7 +10204,7 @@ fn main() {
 }
 ```
 
-This will print:
+چیزی که پرینت میکنه:
 
 ```text
 You got the first error!
@@ -10210,7 +10212,7 @@ You got the second error!
 Looks fine to me
 ```
 
-If we didn't have a `Box<dyn Error>` and wrote this, we would have a problem:
+اگه از `Box<dyn Error>` استفاده نکنیم، به مشکل میخوریم:
 
 ```rust
 // ⚠️
@@ -10223,14 +10225,14 @@ fn returns_errors(input: u8) -> Result<String, Error> {
 }
 ```
 
-It will tell you:
+خطایی که میده:
 
 ```text
 21  | fn returns_errors(input: u8) -> Result<String, Error> {
     |                                 ^^^^^^^^^^^^^^^^^^^^^ doesn't have a size known at compile-time
 ```
 
-This is not surprising, because we know that a trait can work on many things, and they each have different sizes.
+این موضوع شگفت‌انگیز نیست چون میدونیم که نوع هایی که یک `Trait` رو پیاده‌سازی میکنند میتونند سایز های مختلفی داشته باشند.
 
 ## Default and the builder pattern
 
