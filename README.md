@@ -9950,7 +9950,7 @@ fn main() {
 
 ## Box
 
-`Box` is a very convenient type in Rust. When you use a `Box`, you can put a type on the heap instead of the stack. To make a new `Box`, just use `Box::new()` and put the item inside.
+میتونیم با استفاده از `Box` یک مقدار رو در `Heap` به جای `Stack` قرار بدیم. برای ایجاد یک `Box` از `Box::new()` استفاده میکنیم:
 
 ```rust
 fn just_takes_a_variable<T>(item: T) {} // Takes anything and drops it.
@@ -9966,7 +9966,9 @@ fn main() {
 }
 ```
 
-At first it is hard to imagine where to use it, but you use it in Rust a lot. You remember that `&` is used for `str` because the compiler doesn't know the size of a `str`: it can be any length. But the `&` reference is always the same length, so the compiler can use it. `Box` is similar. Also, you can use `*` on a `Box` to get to the value, just like with `&`:
+در اولین مواجهه با این نوع تصورش سخته که کجا باید ازش استفاده کنیم، اما در `Rust` خیلی ما ازش استفاده میکنیم.
+
+خب ما یادمون هست که ما از `&` برای `str` استفاده میکنیم به این دلیل که کامپایلر سایز `str` رو نمیدونه، چون `str` میتونه هر سایزی داشته باشه، اما سایز `&` همیشه ثابت هست، پس کامپایلر ازش استفاده میکنه. `Box` هم شبیه به همین هست، ما میتونیم از `*` روی `Box` استفاده کنیم که مقدار رو بگیریم:
 
 ```rust
 fn main() {
@@ -9977,17 +9979,18 @@ fn main() {
 }
 ```
 
-This is why Box is called a "smart pointer", because it is like a `&` reference (a kind of pointer) but can do more things.
+به همین دلیل هست که به `Box` میگیم `Smart Pointer`. چون شبیه به `&` هست که `&` خودش یک نوع `Pointer` هست، اما در عین حال `Box` میتونه کار های بیشتری هم انجام بده.
 
-You can also use a Box to create structs with the same struct inside. These are called *recursive*, which means that inside Struct A is maybe another Struct A. Sometimes you can use Boxes to create linked lists, although these lists are not very popular in Rust. But if you want to create a recursive struct, you can use a `Box`. Here's what happens if you try without a `Box`:
+ما همچنین میتونیم از `Box` برای ساختن ساختار هایی که خودشون در خودشون دارند، استفاده کنیم. به این ساختار ها میگیم `Recursive` که یعنی ساختار `A` میتونه یک ساختار `A` در خودش داشته باشه. میتونیم از `Box` برای ساخت `Linked List` استفاده کنیم. با اینکه این ساختارداده در `Rust` همچین محبوب نیست.
+
+پس اگه بخوایم یک `Recursive Struct` بسازیم میتونیم از `Box` استفاده کنیم. اگه از `Box` استفاده نکنیم چنین اتفاقی میوفته:
 
 ```rust
 struct List {
     item: Option<List>, // ⚠️
 }
 ```
-
-This simple `List` has one item, that may be `Some<List>` (another list), or `None`. Because you can choose `None`, it will not be recursive forever. But the compiler still doesn't know the size:
+کد بالا یک ساختار ساده هست که یک ایتم داره که میتونه `Some<List>` باشه یا `None` باشه. به این دلیل که میتونه `None` باشه این ساختار تا ابد `Recursive` نیست. اما با این حال کامپایلر همچنان سایز رو نمیدونه:
 
 ```text
 error[E0072]: recursive type `List` has infinite size
@@ -10001,7 +10004,7 @@ error[E0072]: recursive type `List` has infinite size
    = help: insert indirection (e.g., a `Box`, `Rc`, or `&`) at some point to make `List` representable
 ```
 
-You can see that it even suggests trying a `Box`. So let's put a `Box` around List:
+میبینیم که کامپایلر پیشنهاد میکنه که از `Box` استفاده کنیم. پس بزارید از `Box` استفاده کنیم:
 
 ```rust
 struct List {
@@ -10010,7 +10013,9 @@ struct List {
 fn main() {}
 ```
 
-Now the compiler is fine with the `List`, because everything is behind a `Box`, and it knows the size of a `Box`. Then a very simple list might look like this:
+الان کامپایلر مشکلی با کدمون نداره، به این دلیل که همه‌چیز پشت یک `Box` هست. و خب کامپایلر سایز `Box` رو میدونه.
+
+پس لیست ساده میتونه چنین چیزی باشه:
 
 ```rust
 struct List {
@@ -10029,10 +10034,9 @@ fn main() {
     let mut my_list = List::new();
 }
 ```
+هرچند بدون داده یکم پیچیده هست. `Rust` هم زیاد از این الگو استفاده نمیکنه. این قضیه به این دلیل هست که `Rust` خیلی روی `Borrowing` و `Ownership` سخت‌گیر هست. اما اگه بخوایم یک `Linked List` بسازیم میتونیم از `Box` کمک بگیریم.
 
-Even without data it is a bit complicated, and Rust does not use this type of pattern very much. This is because Rust has strict rules on borrowing and ownership, as you know. But if you want to start a list like this (a linked list), `Box` can help.
-
-A `Box` also lets you use `std::mem::drop` on it, because it's on the heap. That can be convenient sometimes.
+همچنین یک `Box` اجازه میده که از `std::mem::drop` استفاده کنیم. به این دلیل که مقدار در قسمت `Heap` حافظه قرار میگیره.
 
 ## Box around traits
 
