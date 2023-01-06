@@ -11018,13 +11018,20 @@ fn main() {
 
 ## Crates and modules
 
-Every time you write code in Rust, you are writing it in a `crate`. A `crate` is the file, or files, that go together for your code. Inside the file you write you can also make a `mod`. A `mod` is a space for functions, structs, etc. and is used for a few reasons:
+هر وقت که در حال نوشتن کدی در `Rust` هستیم، داریم اون رو در یک `crate` مینویسیم.
 
-- Building your code: it helps you think about the general structure of your code. This can be important as your code gets larger and larger.
-- Reading your code: people can understand your code more easily. For example, the name `std::collections::HashMap` tells you that it's in `std` inside the module `collections`. This gives you a hint that maybe there are more collection types inside `collections` that you can try.
-- Privacy: everything starts out as private. That lets you keep users from using functions directly.
+یک `crate` میتونه یک فایل یا چند فایل باشه.
 
-To make a `mod`, just write `mod` and start a code block with `{}`. We will make a mod called `print_things` that has some printing-related functions.
+در یک `crate` میتونیم با استفاده از `mod`، یک `module` بسازیم.
+
+خب `module` جایی هست که میتونیم درش `Function` ها، `Struct` ها و... رو درش قرار بدیم.
+
+استفاده از `modoule` ها چنین قابلیت هایی رو میده:
+- میتونیم بهتر به ساختار کلی کد نگاه کنیم، این خیلی مهم هست، بخصوص زمانی که مقدار کد ها زیاد میشه
+- میتونیم راحت‌تر کد رو بخونیم، این کمک میکنه که بشه روی کد کار کرد، وقتی کد راحت قابل درک باشه بقیه افراد میتونند به راحتی کد رو توسعه بدند، برای مثال اسم `std::collections::HashMap` به ما میگه که درون `std` در ماژول `collections`، نوع `HashMap` وجود داره، که خب میتونیم بفهمیم احتمالا درون ماژول `collections` نوع های دیگه‌ای هم وجود داره
+- حریم خصوصی هم میاره، میتونیم فانکشن ها و... هایی رو که کاربر نیاز داره رو خصوصی(`Private`) کنیم
+
+برای ساخت یک ماژول میتونیم از کلمه‌کلیدی `mod` کمک بگیریم و بعد کد ها رو درون `{}` بنویسیم. برای مثال در کد زیر ما یک ماژول به نام `print_things` درست کردیم که فانکشن هایی که به پرینت کردن مربوط هست رو داره:
 
 ```rust
 mod print_things {
@@ -11038,7 +11045,7 @@ mod print_things {
 fn main() {}
 ```
 
-You can see that we wrote `use std::fmt::Display;` inside `print_things`, because it is a separate space. If you wrote `use std::fmt::Display;` inside `main()` it wouldn't help. Also, we can't call it from `main()` right now. Without the `pub` keyword in front of `fn` it will stay private. Let's try to call it without `pub`. Here's one way to write it:
+دیدیم که ما کد `use std::fmt::Display` رو درون `print_things` نوشتیم، به این دلیل که از `main` جدا هست. و اگه `use std::fmt::Display` رو در `main` مینوشتیم نمیتونستیم ازش در `print_things` استفاده کنیم و برعکس. همچنین تا زمانی که از `pub` قبل از `fn` استفاده نکنیم، نمیتونیم از `prints_one_thing` بیرون از این ماژول استفاده کنیم، به این دلیل که خصوصی هست. بزارید بدون `pub` سعی کنیم ازش استفاده کنیم:
 
 ```rust
 // 🚧
@@ -11046,8 +11053,7 @@ fn main() {
     crate::print_things::prints_one_thing(6);
 }
 ```
-
-`crate` means "inside this project", but for our simple example it's the same as "inside this file". Inside that is the mod `print_things`, then finally the `prints_one_thing()` function. You can write that every time, or you can write `use` to import it. Now we can see the error that says that it's private:
+کلمه‌کلیدی `crate` در کد بالا، به معنای "همین پروژه" هست ولی در کد بالا به معنای همین فایل هم هست، چون چیز دیگه‌ای به جز این فایل وجود نداره. درون این `crate` ما ماژول `print_things` رو داریم، بعد هم `prints_one_thing` رو داریم. میتونیم هر بار این رو بنویسیم یا با استفاده از `use` این ماژول رو `Import` کنیم، خب میدونیم که `prints_one_thing` خصوصی هست به همین دلیل نمیتونیم ازش استفاده کنیم، اما بزارید خطایی که میده رو هم ببینیم:
 
 ```rust
 // ⚠️
@@ -11067,7 +11073,7 @@ fn main() {
 }
 ```
 
-Here's the error:
+خطایی که کامپایلر میده:
 
 ```text
 error[E0603]: function `prints_one_thing` is private
@@ -11083,9 +11089,9 @@ note: the function `prints_one_thing` is defined here
    |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 ```
 
-It's easy to understand that function `prints_one_thing` is private. It also shows us with `src\main.rs:4:5` where to find the function. This is helpful because you can write `mod`s not just in one file, but over a lot of files as well.
+خب راحت میتونیم بفهمیم که `prints_one_thing` خصوصی هست. همچنین میگه که فانکشن در مسیر `src\main.rs:4:5` وجود داره. این ادرس دهی کاربردی هست به این دلیل که ما میتونیم در چند فایل یک ماژول رو بنویسیم.
 
-Now we just write `pub fn` instead of `fn` and everything works.
+خب حالا بزارید با استفاده از کلمه‌کلیدی `pub` فانکشن `prints_one_thing` رو عمومی(`Public`) کنیم:
 
 ```rust
 mod print_things {
@@ -11104,20 +11110,19 @@ fn main() {
 }
 ```
 
-This prints:
+چیزی که پرینت میکنه:
 
 ```text
 6
 Trying to print a string...
 ```
 
-How about `pub` for a struct, enum, trait, or module? `pub` works like this for them:
+کلمه‌کلیدی `pub` برای `Struct` ها `Enum` ها `Trait` ها هم میتونه استفاده بشه:
+- کلمه‌کلیدی `pub` برای `Struct`: باعث میشه که ساختار `Public` بشه، اما ایتم های ساختار `Public` نمیشند، برای اینکه اونها هم `Public` بشند باید کلمه‌کلیدی `pub` رو برای اونها هم بنویسیم
+- کلمه‌کلیدی `pub` برای `Enum` یا `Trait`: همه‌چی `Public` میشه، این منطقی هست به این دلیل که `Trait` ها یک رفتار رو به یک نوع میدند پس باید بتونیم از اون رفتار استفاده کنیم و `Enum` ها هم درباره‌ی انتخاب بین چندین حالت هستند، پس باید بتونیم به حالت ها دسترسی داشته بشیم
+- کلمه‌کلیدی `pub` برای یک `Module`: اعضای `Public` اون مازول قابل دسترسی میشند اما اگه یک ماژول درون یک ماژول دیگه باشه، `Public`نمیشه و برای اون هم باید از `pub` استفاده کرد
 
-- `pub` for a struct: it makes the struct public, but the items are not public. To make an item public, you have to write `pub` for each one too.
-- `pub` for an enum or trait: everything becomes public. This makes sense because traits are about giving the same behaviour to something. And enums are about choosing between items, and you need to see them all to choose them.
-- `pub` for a module: a top level module will be `pub` because if it isn't pub then nobody can touch anything in it at all. But modules inside modules need `pub` to be public.
-
-So let's put a struct named `Billy` inside `print_things`. This struct will be almost all public, but not quite. The struct is public so it will say `pub struct Billy`. Inside it will have a `name` and `times_to_print`. `name` will not be public, because we only want the user to create structs named `"Billy".to_string()`. But the user can select the number of times to print, so that will be public. It looks like this:
+خب بزارید داخل `print_things` یک ساختار به نام `Billy` بسازیم. این ساختار تقریبا `Public` میشه، اما نه کاملا. برای اینکه خود ساختار رو `Public` کنیم باید قبلش از `pub‍` استفاده کنیم. درون ساختار ما `name` و `times_to_print` رو داریم. فیلد `name`، `Public` نمیشه، به این دلیل که ما میخوایم فقط بشه ساختار رو با اسم `Billy` ساخت که این کار در `new` انجام میشه. اما باید بتونیم که تعداد بار هایی که باید پرینت بشه رو تنظیم کنیم، پس `times_to_print` باید `Public` باشه:
 
 ```rust
 mod print_things {
@@ -11157,7 +11162,7 @@ fn main() {
 }
 ```
 
-This will print:
+چیزی که پرینت میکنه:
 
 ```text
 "Billy"
@@ -11165,11 +11170,11 @@ This will print:
 "Billy"
 ```
 
-By the way, the `*` to import everything is called the "glob operator". Glob means "global", so it means everything.
+در ضمن، از `*` هم استفاده کردیم که بهش در اینجا بهش میگیم `Glob Operator`. `Glob` به معنای `Global` هست، پس یعنی همه‌چی.
 
-Inside a `mod` you can create other mods. A child mod (a mod inside of a mod) can always use anything inside a parent mod. You can see this in the next example where we have a `mod city` inside a `mod province` inside a `mod country`.
+درون یک ماژول ما میتونیم ماژول های دیگه‌ای رو هم بسازیم. به ماژولی که درون یک ماژول دیگه هست میگیم `Child Module`. یک `Child Module` همیشه میتونه از چیز هایی که در ماژول که خودش درش ساخته شده استفاده کنه.
 
-You can think of the structure like this: even if you are in a country, you might not be in a province. And even if you are in a province, you might not be in a city. But if you are in a city, you are in its province and you are in its country.
+برای مثال در کد زیر ما ماژول `city` رو درون `province` ساختیم که خود `province` در ماژول `country` هست:
 
 ```rust
 mod country { // The main mod doesn't need pub
@@ -11197,9 +11202,11 @@ fn main() {
 }
 ```
 
-The interesting part is that `print_city` can access `print_province` and `print_country`. That's because `mod city` is inside the other mods. It doesn't need `pub` in front of `print_province` to use it. And that makes sense: a city doesn't need to do anything to be inside a province and inside a country.
+بخش جالبش اینجاست که `print_city` میشه به `print_province` و `print_country` دسترسی داشته باشه. این به دلیل این هست که `city` درون ماژول های دیگه هست. به `pub` هم جلوی `print_province` نیازی نداریم که بتونیم ازش استفاده کنیم.
 
-You probably noticed that `crate::country::province::print_province(province);` is very long. When we are inside a module we can use `super` to bring in items from above. Actually the word super itself means "above", like in "superior". In our example we only used the function once, but if you use it more then it is a good idea to import. It can also be a good idea if it makes your code easier to read, even if you only use the function once. The code is almost the same now, but a bit easier to read:
+خب احتمالا متوجه شدید که `` خیلی طولانی هست. خب وقتی که درون یک ماژول هستیم میتونیم از `super` برای دسترسی به ماژول بالایی استفاده کنیم.
+
+در مثال، ما فقط یک بار از فانکشن استفاده کردیم اگه نیاز داشتیم چندین بار ازش استفاده کنیم ایده‌ی خوبی بود که اعضای اون ماژول رو `Import` کنیم، چون هم راحت‌تر میتونیم کد بنویسیم و هم کد راحت‌تر خونده میشه، پس ازش استفاده میکنیم چون کد راحت‌تر خونده میشه:
 
 ```rust
 mod country {
