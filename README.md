@@ -13572,9 +13572,11 @@ test result: ok. 1 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
 
 ## Writing macros
 
-Writing macros can be very complicated. You almost never need to write one, but sometimes you might want to because they are very convenient. Writing macros is interesting because they are almost a different language. To write one, you actually use another macro called `macro_rules!`. Then you add your macro name and open a `{}` block. Inside is sort of like a `match` statement.
+نوشتن ماکرو میتونه پیچیده باشه. احتمالا هیچوقت نیازی نداریم که ماکرو بنویسیم، اما شاید گاهی اوقات بخوایم بنویسیم چون استفاده ازشون خیلی راحت هست. نوشتن ماکرو جالب هست به این دلیل که تقریبا انگار یک زبان دیگه هست.
 
-Here's one that only takes `()`, then just returns 6:
+برای نوشتن یک ماکرو ما باید از ماکروی دیگه به نام `macro_rules!` استفاده کنیم. بعد اسم ماکرو و بعد هم کد های ماکرو رو باید درون `{}` بنویسیم. یکجورایی شبیه به `match` هست.
+
+در زیر یک ماکرویی رو میبینیم که یک `()` به عنوان ورودی میگیره و `6` رو برمیگردونه:
 
 ```rust
 macro_rules! give_six {
@@ -13589,7 +13591,7 @@ fn main() {
 }
 ```
 
-But it's not the same as a `match` statement, because a macro actually doesn't compile anything. It just takes an input and gives an output. Then the compiler checks to see if it makes sense. That's why a macro is like "code that writes code". You will remember that a true `match` statement needs to give the same type, so this won't work:
+اما برابر با `match` نیست. به این دلیل که ماکرو ها چیزی رو کامپایل نمیکنند، فقط ورودی میگیرند و خروجی میدند، بعد کامپایلر اونها رو چک میکنه که ببینه با عقل جور در میاد یا نه. به همین دلیل هست که ماکرو ها شبیه کدی که کد مینویسه هستند. یادمون هست که یک `match` باید خروجی‌ای از یک نوع بده، به همین دلیل هست که کد زیر کار نمیکنه:
 
 ```rust
 fn main() {
@@ -13602,7 +13604,7 @@ fn main() {
 }
 ```
 
-It will complain that you want to return `()` in one case, and `i32` in the other.
+کامپایلر گیر میده که یه جایی `()` برمیگرده و یه جایی دیگه `i32` برمیگردونه، اینو درستش کن:
 
 ```text
 error[E0308]: `match` arms have incompatible types
@@ -13617,7 +13619,7 @@ error[E0308]: `match` arms have incompatible types
   | |_____- `match` arms have incompatible types
 ```
 
-But a macro doesn't care, because it's just giving an output. It's not a compiler - it's code before code. So you can do this:
+اما در ماکرو این مهم نیست، چون فقط قراره خروجی بده و به نوعش کاری نداره، پس میتونیم چنین کاری کنیم:
 
 ```rust
 macro_rules! six_or_print {
@@ -13634,9 +13636,9 @@ fn main() {
     six_or_print!();
 }
 ```
+کد بالا مشکلی نداره و `You didn't give me 6.` رو پرینت میکنه میتونیم ببینیم که شبیه به `Match Arm` ها هم نیست، چون `_` درش وجود نداره. همچنین ما فقط میتونیم بهش `(6)` یا `()` بدیم، هر چیزی غیر از این باعث خطا میشه. حتی `6`‌ای که بهش میدیم یک `i32` نیست، فقط یک `6` هست.
 
-This is just fine, and prints `You didn't give me 6.`. You can also see that it's not a match arm because there's no `_` case. We can only give it `(6)`, or `()`. Anything else will make an error. And the `6` we give it isn't even an `i32`, it's just an input 6. You can actually set anything as the input for a macro, because it's just looking at input to see what it gets. For example:
-
+یک مثال دیگه:
 ```rust
 macro_rules! might_print {
     (THis is strange input 하하はは哈哈 but it still works) => {
@@ -13653,14 +13655,14 @@ fn main() {
 }
 ```
 
-So this strange macro only responds to two things: `()` and `(THis is strange input 하하はは哈哈 but it still works)`. Nothing else. It prints:
+این یک ماکروی عجیب هست که فقط به ورودی های `()` و `(THis is strange input 하하はは哈哈 but it still works)` جواب میده. خروجی که میده:
 
 ```text
 You guessed the secret message!
 You didn't guess it
 ```
 
-So a macro isn't exactly Rust syntax. But a macro can also understand different types of input that you give it. Take this example:
+پس ماکرو از `Syntax` زبان `Rust` استفاده نمیکنه. اما همچنان ماکرو ها میتونند نوع ها رو درک کنند، برای مثال:
 
 ```rust
 macro_rules! might_print {
@@ -13673,8 +13675,11 @@ fn main() {
     might_print!(6);
 }
 ```
+کد بالا چنین خروجی‌ای میده: 
 
-This will print `You gave me: 6`. The `$input:expr` part is important. It means "for an expression, give it the variable name $input". In macros, variables start with a `$`. In this macro, if you give it one expression, it will print it. Let's try it out some more:
+بخش `$input:expr` مهم هست، این بخش به معنای این هست که "هر `Expression` رو به یک متغییر به نام `$input` بده".
+
+در ماکرو ها نام متغییر با `$` شروع میشه. برای مثال در ماکروی بالا اگه بهش یک `Expression` بدیم، ماکرو اون `Expression` رو پرینت میکنه:
 
 ```rust
 macro_rules! might_print {
@@ -13690,7 +13695,7 @@ fn main() {
 }
 ```
 
-This will print:
+چیزی که پرینت میکنه:
 
 ```text
 You gave me: ()
@@ -13698,29 +13703,32 @@ You gave me: 6
 You gave me: [8, 9, 7, 10]
 ```
 
-Also note that we wrote `{:?}`, but it won't check to see if `&input` implements `Debug`. It'll just write the code and try to make it compile, and if it doesn't then it gives an error.
+همچنین باید به این نکته توجه کرد که ما `{:?}` رو نوشتیم، اما در ماکرو اینکه ایا `&input` نوع `Debug` رو پرینت کرده چک نمیشه، فقط کد رو مینویسه و سعی میکنه که کامپایلش کنه، اگه نشد خطا میده.
 
-So what can a macro see besides `expr`? They are: `block | expr | ident | item | lifetime | literal  | meta | pat | path | stmt | tt | ty | vis`. This is the complicated part. You can see what each of them means [here](https://doc.rust-lang.org/beta/reference/macros-by-example.html), where it says:
+خب یک ماکرو دیگه جه چیز هایی رو به جز `expr` متوجه میشه؟
 
+خب ماکرو ها عبارت های `block | expr | ident | item | lifetime | literal  | meta | pat | path | stmt | tt | ty | vis` رو متوجه میشند. این بخش کمی پیچیده هست.
+
+میتونیم معنای هر کدوم رو در این [لینک](https://doc.rust-lang.org/beta/reference/macros-by-example.html) ببینیم:
 ```text
-item: an Item
-block: a BlockExpression
-stmt: a Statement without the trailing semicolon (except for item statements that require semicolons)
-pat: a Pattern
-expr: an Expression
-ty: a Type
-ident: an IDENTIFIER_OR_KEYWORD
-path: a TypePath style path
-tt: a TokenTree (a single token or tokens in matching delimiters (), [], or {})
-meta: an Attr, the contents of an attribute
-lifetime: a LIFETIME_TOKEN
-vis: a possibly empty Visibility qualifier
-literal: matches -?LiteralExpression
+item: یک ایتم
+block: یک BlockExpression
+stmt: یک Statement‌ که بدون سمیکالن هست(البته به جز اونهایی که به سمیکالن نیاز دارند)
+pat: یک الگو
+expr: یک Expression
+ty: یک نوع
+ident: یک IDENTIFIER_OR_KEYWORD
+path: یک TypePath به سبک مسیر
+tt: یک TokenTree (یک یا چند Token در Delimiter ها)
+meta: یک Attr یا محتوای یک Attribute
+lifetime: یک LIFETIME_TOKEN
+vis: یک نشانگر جای خالی
+literal: matches - ?LiteralExpression
 ```
 
-There is another good site called cheats.rs that explains them [here](https://cheats.rs/#macros-attributes) and gives examples for each.
+یک سایت خوبی هم به نام `cheats.rs` وجود داره که در مورد این مبحث همه توضیح داده، میتونیم در این [لینک](https://cheats.rs/#macros-attributes) در موردشون بخونیم، در ضمن برای هر کدوم مثال هم زده.
 
-However, for most macros you will use `expr`, `ident`, and `tt`. `ident` means identifier and is for variable or function names. `tt` means token tree and sort of means any type of input. Let's try a simple macro with both.
+با این حال، برای اکثر ماکرو ها ما از `expr` و `ident` و `tt` استفاده میکنیم. `ident` به معنای یک مشخص‌کننده هست و به اسم متغییر ها یا اسم فانکشن ها اشاره میکنه. `tt` به معنای یک `Token Tree` هست، همچنین یجورایی به معنای هر نوعی از ورودی هست. بزارید با استفاده از هر دوتای اینها یک ماکروی ساده بسازیم:
 
 ```rust
 macro_rules! check {
@@ -13743,7 +13751,7 @@ fn main() {
 }
 ```
 
-So this will take one `ident` (like a variable name) and an expression and see if they are the same. It prints:
+ماکروی بالا یک `ident` و یک `Expression` میگیره و میگه که ایا اینها برابر هستند یا خیر، خروجی کد بالا چنین چیزی میشه:
 
 ```text
 Is 6 equal to 6? true
@@ -13751,7 +13759,7 @@ Is [7, 8, 9] equal to [7, 8, 9]? true
 Is 6 equal to 10? false
 ```
 
-And here's one macro that takes a `tt` and prints it. It uses a macro called `stringify!` to make a string first.
+در زیر هم یک ماکرو میبینیم که یک `tt` میگیره و پرینت میکنه. از یک ماکرو به نام `stringfy!` استفاده میکنه که یک `String` درست کنه:
 
 ```rust
 macro_rules! print_anything {
@@ -13767,20 +13775,19 @@ fn main() {
 }
 ```
 
-This prints:
+چیزی که پرینت میکنه:
 
 ```text
 ththdoetd
 87575oehq75onth
 ```
 
-But it won't print if we give it something with spaces, commas, etc. It will think that we are giving it more than one item or extra information, so it will be confused.
+اما اگه چیزی که `Space`، `Comma`و... بهش بدیم چیزی پرینت نمیکنه. چون فکر میکنه که داریم بهش بیشتر از یک ایتم بهش میدیم، پس گیج میشه.
 
-This is where macros start to get difficult.
+اینجا همون جایی هست که ماکرو ها پیچیده میشند.
+برای اینکه به یک ماکرو در یک زمان بیشتر از یک ایتم بدیم، باید از یک `Syntax` متفاوت استفاده کنیم.برای مثال به جای `$input` باید از `$($input1),*` استفاده کنیم. این به معنای این "صفر یا بیشتر" هست که با `,` جدا شدند(تعداد ایتم ها رو `*` مشخص کرده). اگه میخوایم تعداد ایتم هایی که میگیریم "یکی یا بیشتر‌" باشه، باید از `+` به جای `*` استفاده کنیم.
 
-To give a macro more than one item at a time, we have to use a different syntax. Instead of `$input`, it will be `$($input1),*`. This means zero or more (this is what * means), separated by a comma. If you want one or more, use `+` instead of `*`.
-
-Now our macro looks like this:
+الان ماکرو چنین چیزی شده:
 
 ```rust
 macro_rules! print_anything {
@@ -13798,7 +13805,7 @@ fn main() {
 }
 ```
 
-So it takes any token tree separated by commas, and uses `stringify!` to make it into a string. Then it prints it. It prints:
+پس این ماکرو هر `Token Tree` میگیره که با `,` جدا شده باشند و از `stringfy!` استفاده میکنه که `String` بسازه و در نهایت پرینتش میکنه، برای مثال چیزی که پرینت میکنه:
 
 ```text
 ththdoetd, rcofe
@@ -13806,9 +13813,9 @@ ththdoetd, rcofe
 87575oehq75onth, ntohe, 987987o, 097
 ```
 
-If we used `+` instead of `*` it would give an error, because one time we gave it no input. So `*` is a bit safer option.
+اگه ما به جای `*` از `+` استفاده میکردیم، به ما خطا میداد، به این دلیل که ما یک بار ورودی بهش ندادیم.
 
-So now we can start to see the power of macros. In this next example we can actually make our own functions:
+خب الان میتونیم قدرت ماکرو ها رو ببینیم. برای مثال در کد زیر ماکرو یک فانکشن به عنوان خروجی میده:
 
 ```rust
 macro_rules! make_a_function {
@@ -13829,14 +13836,14 @@ fn main() {
 }
 ```
 
-This prints:
+خروجیش:
 
 ```text
 5, 5, 6, I
 this, is, really, nice
 ```
 
-So now we can start to understand other macros. You can see that some of the macros we've already been using are pretty simple. Here's the one for `write!` that we used to write to files:
+خب الان میتونیم بقیه ماکرو ها رو درک کنیم. میتونیم ببینیم که بعضی از ماکرو هایی که داشتیم استفاده میکردیم خیلی ساده هستند. برای مثال این کد ماکروی `write!` هست:
 
 ```rust
 macro_rules! write {
@@ -13844,14 +13851,13 @@ macro_rules! write {
 }
 ```
 
-So to use it, you enter this:
+خب برای انکه از ماکروی بالا استفاده کنیم باید چنین چیز هایی رو بهش بدیم:
+- یک `Expression` (`expr`) که اسم متغییر درش هست
+- هر چیزی، اگه `$arg:tt` مینوشتیم فقط یکی میگرفت، اما به این دلیل که ما `$($arg::tt)*` نوشتیم، الان هیچی یا هر چند تا میگیره
 
-- an expression (`expr`) that gets the variable name `$dst`.
-- everything after that. If it wrote `$arg:tt` then it would only take one, but because it wrote `$($arg:tt)*` it takes zero, one, or any number.
+بعدش از `write_fmt` استفاده میکنه توی `$dst`، `arg` ها رو بنویسه در اون از یک ماکروی دیگه به نام `format_args!` استفاده میکنه که همه‌ی `arg` ها رو میگیره.
 
-Then it takes `$dst` and uses a method called `write_fmt` on it. Inside that, it uses another macro called `format_args!` that takes all `$($arg)*`, or all the arguments we put in.
-
-Now let's take a look at the `todo!` macro. That's the one you use when you want the program to compile but haven't written your code yet. It looks like this:
+خب بزارید حالا به `todo!` نگاهی بندازیم. این ماکرو زمانی استفاده میشه که کد رو ننوشتیم اما میخوایم برنامه کامپایل بشه:
 
 ```rust
 macro_rules! todo {
@@ -13860,12 +13866,11 @@ macro_rules! todo {
 }
 ```
 
-This one has two options: you can enter `()`, or a number of token trees (`tt`).
+این ماکرو دو حالت داره، ما میتونیم هم `()` بهش بدیم یا اینکه چند `Token Tree`(`tt`) بهش بدیم:
+- اگه `()` بهش بدیم، از `panic!` و یک پیام برای استفاده میکنه، پس انگاری ما کد `panic!("not yet implemented)` رو بجاش نوشتیم
+- اگه بهش ارگومان بدیم، سعی میکنه که اونها رو هم در `panic!` استفاده کنه. ما فانکشن `format_args!` رو هم داخلش میبینیم. مثل `println!` کار میکنه
 
-- If you enter `()`, it just uses `panic!` with a message. So you could actually just write `panic!("not yet implemented")` instead of `todo!` and it would be the same.
-- If you enter some arguments, it will try to print them. You can see the same `format_args!` macro inside, which works like `println!`.
-
-So if you write this, it will work too:
+پس اگه این کد رو هم بنویسیم همون کار رو انجام میده:
 
 ```rust
 fn not_done() {
@@ -13879,13 +13884,13 @@ fn main() {
 }
 ```
 
-This will print:
+چنین چیزی پرینت میکنه:
 
 ```text
 thread 'main' panicked at 'not yet implemented: Not done yet because of lack of time. Check back in 8 hours', src/main.rs:4:5
 ```
 
-Inside a macro you can even call the same macro. Here's one:
+درون یک ماکرو میتونیم از خود اون ماکرو هم استفاده کنیم:
 
 ```rust
 macro_rules! my_macro {
@@ -13908,9 +13913,9 @@ fn main() {
 }
 ```
 
-This one takes either `()`, or one expression, or many expressions. But it ignores all the expressions no matter what you put in, and just calls `my_macro!` on `()`. So the output is just `Let's print this`, four times.
+این یا `()` میگیره یا یک `Expression` یا چند `Expression`. اما هر `Expression` که بهش دادیم رو نادیده میگیره و از `my_macro!` استفاده میکنیم و ورودی `()` رو هم بهش میدیم. پس همیشه خروجی `Let's print this.` میشه.
 
-You can see the same thing in the `dbg!` macro, which also calls itself.
+ما میتونیم همچین چیزی رو در `dbg!` هم ببینیم:
 
 ```rust
 macro_rules! dbg {
@@ -13936,9 +13941,9 @@ macro_rules! dbg {
 }
 ```
 
-(`eprintln!` is the same as `println!` except it prints to `io::stderr` instead of `io::stdout`. There is also `eprint!` that doesn't add a new line)
+(ماکروی `eprintln!` هم شبیه به `println!` هست، فقط تفاوتش این هست که در `io::stderr` به جای `io::stdout` پرینت میکنه، همچنین `eprint!` هم وجود داره که بعد اینکه نوشت نمیره ته خط)
 
-So we can try this out ourself.
+پس میتونیم خودمون تستش کنیم:
 
 ```rust
 fn main() {
@@ -13946,9 +13951,9 @@ fn main() {
 }
 ```
 
-That matches the first arm, so it will print the file name and line name with the `file!` and `line!` macros. It prints `[src/main.rs:2]`.
+این اولین `Arm` رو اجرا میکنه، پس اسم فایل و خط رو با `file!` و `line!` پرینت میکنه. خروجیش میشه `src/main.rs:2`.
 
-Let's try it with this:
+بزارید این رو امتحان کنیم:
 
 ```rust
 fn main() {
@@ -13956,7 +13961,7 @@ fn main() {
 }
 ```
 
-This will match the next arm, because it's one expression. It will then call the input `tmp` and use this code: `$crate::eprintln!("[{}:{}] {} = {:#?}", $crate::file!(), $crate::line!(), $crate::stringify!($val), &tmp);`. So it will print with `file!` and `line!`, then `$val` made into a `String`, and pretty print with `{:#?}` for `tmp`. So for our input it will write this:
+این `Arm` بعدی رو اجرا میکنه که در نتیجه کد `$crate::eprintln!("[{}:{}] {} = {:#?}", $crate::file!(), $crate::line!(), $crate::stringify!($val), &tmp)` اجرا میشه. پس با `file!` و `line!` پرینت میکنه و بعد `$val` رو تبدیل به `String` میکنه و بعدش هم `Pretty Print` میکنه، پس برای ورودی ما چین خروجی‌ای میده:
 
 ```text
 [src/main.rs:2] vec![8, 9, 10] = [
@@ -13966,9 +13971,9 @@ This will match the next arm, because it's one expression. It will then call the
 ]
 ```
 
-And for the rest of it it just calls `dbg!` on itself even if you put in an extra comma.
+و برای بقیه‌ی حالت ها هم فقط `dbg!` رو صدا میزنه.
 
-As you can see, macros are very complicated! Usually you only want a macro to automatically do something that a simple function can't do very well. The best way to learn about macros is to look at other macro examples. Not many people can quickly write macros without problems. So don't think that you need to know everything about macros to know how to write in Rust. But if you read other macros, and change them a little, you can easily borrow their power. Then you might start to get comfortable with writing your own.
+همونطور که دیدیم ماکرو ها میتونند خیلی پیجیده باشند. معمولا ما از ماکرو استفاده میکنیم که یک کار ساده رو به طور خودکار انجام بدیم و در عین حال اون کار رو یک فانکشن معمولی نمیتونه انجام بده. بهترین روش یادگیری ماکرو ها خوندن ماکرو ها با مثال هست. افراد زیادی نیستند که بتونند به راحتی ماکرو بنویسند، بدون اینکه با مشکلی مواجه بشند. پس فکر نکنید که باید همه‌چیز رو درباره‌ی ماکرو ها بدونید که بتونید با زبان `Rust` کد بزنید. همچنین میتونیم برای نوشتن ماکروی خودمون از ماکرو های دیگه کپی کنیم و کمی تغییرشون بدیم، اینطوری در نهایت میتونیم به راحتی ماکرو های خودمون رو بنویسیم.
 
 # بخش دوم - راست روی کامپیوتر
 
